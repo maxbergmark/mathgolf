@@ -1,0 +1,255 @@
+☺
+☻ : push 16
+♥ : push 32
+♦ : push 64
+♣ : push 128
+♠ : push 256
+• : push 512
+◘ : push 1024
+○ : push 2048
+◙ : push 4096
+♂ : push 10
+♀ : push 100
+♪ : push 1000
+♫ : push 10000
+☼ : push 100000
+► : push 1000000
+◄ : push 10000000
+↕ : push 100000000
+‼
+¶ : is_prime(n)
+§
+▬
+↨
+↑
+↓
+→
+←
+∟
+↔
+▲
+▼
+S
+! : gamma(n+1)
+" : string notation
+# : pop a, b : push(a**b)
+$
+% : modulo
+&
+' : push single character
+( : decrement
+) : increment
+* : pop a, b : push(a*b)
++ : pop a, b : push(a+b)
+,
+- : pop a, b : push(a-b)
+.
+/
+0 : push digit
+1 : push digit
+2 : push digit
+3 : push digit
+4 : push digit
+5 : push digit
+6 : push digit
+7 : push digit
+8 : push digit
+9 : push digit
+:
+; : discard TOS
+< : pop(a, b), push(a<b)
+= : pop(a, b), push(a==b)
+> : pop(a, b), push(a>b)
+? : rot3
+@ : rrot3
+A : push 11
+B : push 12
+C : push 13
+D : push 14
+E : push 15
+F : push 17
+G : push 18
+H : push 19
+I : push 20
+J : push 21
+K : push 22
+L : push 23
+M : push 24
+N : push 25
+O : push 26
+P : push 27
+Q : push 28
+R : push 29
+S : push 30
+T : push 31
+U : push 33
+V : push 34
+W : push 35
+X : push 36
+Y : push 37
+Z : push 38
+[ : start array
+\ : swap top elements
+] : end array / wrap stack in array
+^
+_
+`
+a : wrap in array
+b : -1
+c : -2
+d : -3
+e : e (2.71828...)
+f : fibonacci(n)
+g : filter array
+h : length of array/string without popping
+i : convert to integer (implicit map)
+j : read float from input
+k : read integer from input
+l : read string from input
+m : explicit map
+n : newline char, or map array with newlines
+o : print TOS without popping
+p : print with newline
+q : print without newline
+r : range(0, n)
+s : sort(array)
+t : unix timestamp as integer milliseconds
+u
+v
+w
+x
+y
+z : reverse sort(array)
+{ : start block or arbitrary length
+|
+} : end block
+~ : evaluate string, dump array, negate integer
+⌂
+Ç
+ü
+é
+â : convert to binary
+ä : convert from binary
+à : convert to binary string
+å : convert from binary string
+ç
+ê
+ë
+è
+ï
+î
+ì
+Ä : start block of length 1
+Å : start block of length 2
+É : start block of length 3
+æ : start block of length 4
+Æ : start block of length 5
+ô
+ö
+ò
+û
+ù
+ÿ
+Ö
+Ü
+¢
+£
+¥
+₧
+ƒ
+á
+í
+ó
+ú
+ñ
+Ñ
+ª : [1]
+º : [0]
+¿
+⌐ : rotate entire stack
+¬ : rotate entire stack in reverse
+½ : pop a : push(a//2 if int else a/2)
+¼ : pop a : push(a//4 if int else a/4)
+¡ : not equal
+« : pop a, b : push a<<b (should be changed)
+» : pop a, b : push a>>b (should be changed)
+░
+▒
+▓
+│
+┤
+╡
+╢
+╖
+╕
+╣
+║
+╗
+╝
+╜
+╛
+┐
+└
+┴
+┬
+├
+─
+┼
+╞
+╟
+╚
+╔
+╩
+╦
+╠
+═
+╬
+╧
+╨
+╤
+╥
+╙
+╘
+╒
+╓
+╫
+╪
+┘
+┌
+█
+▄
+▌
+▐
+▀
+α
+ß
+Γ
+π : pi (3.14159...)
+Σ : sum(list)
+σ
+µ
+τ : tau (2*pi)
+Φ
+Θ
+Ω
+δ
+∞
+φ : golden ratio (1.618...)
+ε
+∩
+≡
+±
+≥
+≤
+⌠ : increment twice
+⌡ : decrement twice
+÷
+≈
+° : duplicate TOS
+∙ : triplicate TOS
+· : quadruplicate TOS
+√ : pop a : push(sqrt(a))
+ⁿ : pop a : push(a*a*a)
+² : pop a : push(a*a)
+■ : cartesian product with itself for lists
+ 
