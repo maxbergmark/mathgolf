@@ -12,6 +12,16 @@ code_page = "☺☻♥♦♣♠•◘○◙♂♀♪♫☼►◄↕‼¶§▬↨
 + "üéâäàåçêëèïîìÄÅÉæÆôöòûùÿÖÜ¢£¥₧ƒáíóúñÑªº¿⌐¬½¼¡«»░▒▓│┤╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞" \
 + "╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪┘┌█▄▌▐▀αßΓπΣσµτΦΘΩδ∞φε∩≡±≥≤⌠⌡÷≈°∙·√ⁿ²■ "
 
+class StdIn():
+
+	def __init__(self, lst):
+		self.index = 0
+		self.list = lst
+
+	def pop(self):
+		ret = self.list[self.index]
+		self.index = (self.index+1) % len(self.list)
+		return ret
 
 def fibonnaci(n):
 	a, b = 0, 1
@@ -81,11 +91,64 @@ def quadruplicate(a):
 	for i in range(4):
 		yield a
 
-def evaluate(code, stdin, level = 0):
-	stack = []
-	monads = {"¶": is_prime, "°": duplicate, "∙": triplicate, "·": quadruplicate}
+def is_truthy(a):
+	if is_num(a):
+		return a != 0
+	elif is_str(a):
+		return len(a) > 0
+	elif is_list(a):
+		return any(map(is_truthy, a))
+
+def is_falsey(a):
+	if is_num(a):
+		return a == 0
+	elif is_str(a):
+		return a == ""
+	elif is_list(a):
+		return not any(is_truthy(n) for n in a)
+
+def while_true_no_pop(stack):
+	i = 0
+	while stack and stack[-1]:
+		yield i
+		i += 1
+
+def while_false_no_pop(stack):
+	i = 0
+	while stack and not stack[-1]:
+		yield i
+		i += 1
+
+def while_true_pop(stack):
+	i = 0
+	while stack and stack.pop():
+		yield i
+		i += 1
+
+def while_false_pop(stack):
+	i = 0
+	while stack and not stack.pop():
+		yield i
+		i += 1
+
+def for_looping(n):
+	for i in range(n):
+		yield i
+
+def evaluate(code, stdin, stack = [], level = 0):
+	# stack = []
+	monads = {"¶": is_prime, "_": duplicate, "∙": triplicate, "·": quadruplicate}
 	binary_monads = {"â": to_base, "ä": from_base}
 	dinads = {"<": is_less, "=": is_equal, ">": is_greater, "¡": is_not}
+	loop_handlers = {
+		"↑": while_true_no_pop,
+		"↓": while_false_no_pop,
+		"→": while_true_pop,
+		"←": while_false_pop
+	}
+	loop_types = set("↑↓→←*")
+	block_creators = set("ÄÅÉæÆ{")
+	loop_counter = 0
 
 	while code:
 		arg = code.pop()
@@ -95,6 +158,16 @@ def evaluate(code, stdin, level = 0):
 			stack.append(10**(arg.code-10))
 		elif arg.char == "¶":
 			stack.append(is_prime(stack.pop()))
+		elif arg.char == "§":
+			a = stack.pop()
+			b = stack.pop()
+			if is_num(a) and is_list(b):
+				stack.append(b[a % len(b)])
+			elif is_list(a) and is_num(b):
+				stack.append(a[b % len(a)])
+			else:
+				raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
+
 		elif arg.char == "!":
 			a = stack.pop()
 			if is_num(a):
@@ -169,6 +242,8 @@ def evaluate(code, stdin, level = 0):
 				stack.append(a*b)
 			elif is_list(a) and is_num(b):
 				stack.append([n*b for n in a])
+			elif is_list(a) and is_str(b):
+				stack.append([n*b for n in a])
 			elif is_list(a) and is_list(b):
 				stack.append([list(n) for n in itertools.product(a, b)])
 			else:
@@ -205,13 +280,13 @@ def evaluate(code, stdin, level = 0):
 
 		elif arg.char == "<":
 			a, b = stack.pop(), stack.pop()
-			stack.append(all(is_less(a, b)))
+			stack.append(int(all(is_less(a, b))))
 		elif arg.char == "=":
 			a, b = stack.pop(), stack.pop()
-			stack.append(all(is_equal(a, b)))
+			stack.append(int(all(is_equal(a, b))))
 		elif arg.char == ">":
 			a, b = stack.pop(), stack.pop()
-			stack.append(all(is_greater(a, b)))
+			stack.append(int(all(is_greater(a, b))))
 
 		elif arg.char == "?":
 			stack.append(stack.pop(-3))
@@ -230,7 +305,8 @@ def evaluate(code, stdin, level = 0):
 			stack.append(val)
 
 		elif arg.char == "[":
-			stack.append(evaluate(code, stdin, level+1))
+			ret = evaluate(code, stdin, [], level+1)
+			stack.append(ret)
 		elif arg.char == "\\":
 			stack.append(stack.pop(-2))
 		elif arg.char == "]":
@@ -296,13 +372,13 @@ def evaluate(code, stdin, level = 0):
 				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
 		elif arg.char == "j":
-			v = float(stdin.pop(0))
+			v = float(stdin.pop())
 			stack.append(v)
 		elif arg.char == "k":
-			v = float(stdin.pop(0))
+			v = float(stdin.pop())
 			stack.append(int(v))
 		elif arg.char == "l":
-			v = stdin.pop(0)
+			v = stdin.pop()
 			stack.append(v)
 
 		elif arg.char == "m":
@@ -369,7 +445,7 @@ def evaluate(code, stdin, level = 0):
 			elif is_str(a):
 				str_commands = [code_page.index(c)+1 for c in a]
 				str_code_list = [Argument(char, c) for char, c in zip(a, str_commands)][::-1]
-				[stack.append(n) for n in evaluate(str_code_list, stdin, level+1)]
+				stack = evaluate(str_code_list, stdin, stack, level+1)
 			else:
 				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
@@ -407,6 +483,68 @@ def evaluate(code, stdin, level = 0):
 				stack.append([from_base_string(n, 2) for n in a])
 			elif is_str(a):
 				stack.append(from_base_string(a, 2))
+			else:
+				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+		elif arg.char == "ç":
+			a = stack.pop()
+			if is_list(a):
+				if not is_falsey(a):
+					stack.append([n for n in a if not is_falsey(n)])
+			elif is_str(a):
+				if not is_falsey(a):
+					stack.append(a)
+			elif is_num(a):
+				if not is_falsey(a):
+					stack.append(a)
+			else:
+				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+		elif arg.char == "ï":
+			stack.append(loop_counter)
+
+
+		elif arg.char in block_creators:
+			if arg.char == "Ä":
+				c = code[-1:]
+				code = code[:-1]
+			elif arg.char == "Å":
+				c = code[-2:]
+				code = code[:-2]
+			elif arg.char == "É":
+				c = code[-3:]
+				code = code[:-3]
+			elif arg.char == "æ":
+				c = code[-4:]
+				code = code[:-4]
+			elif arg.char == "Æ":
+				c = code[-5:]
+				code = code[:-5]
+			elif arg.char == "{":
+				c = []
+				temp = [] if not code else code.pop()
+				while temp.char != "}" and code:
+					c.append(temp)
+					temp = code.pop()
+				c = c[::-1]
+			loop_type = code.pop()
+
+			if loop_type.char in loop_types:
+				if loop_type.char == "*":
+					limit = stack.pop()
+					for i in for_looping(limit):
+						loop_counter = i
+						stack = evaluate(c[:], stdin, stack, level+1)
+				else:
+					# stack.append(0)
+					for i in loop_handlers[loop_type.char](stack):
+						loop_counter = i
+						stack = evaluate(c[:], stdin, stack, level+1)
+
+		elif arg.char == "¥":
+			a = stack.pop()
+			if is_num(a):
+				stack.append(a % 2)
 			else:
 				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
@@ -462,6 +600,41 @@ def evaluate(code, stdin, level = 0):
 			else:
 				raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
 
+		elif arg.char == "╤":
+			a = stack.pop()
+			if is_num(a):
+				stack.append(list(range(-int(a), int(a)+1)))
+		elif arg.char == "╒":
+			a = stack.pop()
+			if is_num(a):
+				stack.append(list(range(1, int(a)+1)))
+
+
+		elif arg.char == "▌":
+			b = stack.pop()
+			a = stack.pop()
+			if is_num(a) and is_list(b):
+				stack.append([a] + b)
+			elif is_list(a) and is_num(b):
+				stack.append([b] + a)
+			else:
+				raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
+		elif arg.char == "▐":
+			b = stack.pop()
+			a = stack.pop()
+			if is_num(a) and is_list(b):
+				stack.append(b + [a])
+			elif is_list(a) and is_num(b):
+				stack.append(a + [b])
+			else:
+				raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
+
+		elif arg.char == "α":
+			b = stack.pop()
+			a = stack.pop()
+			stack.append([a, b])
+
+
 		elif arg.char == "π":
 			stack.append(math.pi)
 		elif arg.char == "τ":
@@ -492,7 +665,7 @@ def evaluate(code, stdin, level = 0):
 			else:
 				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-		elif arg.char == "°":
+		elif arg.char == "_":
 			a = stack.pop()
 			for n in duplicate(a):
 				stack.append(n)
@@ -534,6 +707,7 @@ def evaluate(code, stdin, level = 0):
 			raise ValueError("Not yet implemented: " + arg.char)
 		if DEBUG:
 			print(stack, arg)
+			time.sleep(0.1)
 
 	return stack
 
@@ -553,7 +727,7 @@ if __name__ == '__main__':
 	code = open(sys.argv[1], 'r').read()
 	commands = [code_page.index(c)+1 for c in code]
 	code_list = [Argument(char, c) for char, c in zip(code, commands)][::-1]
-	stdin = list('' if sys.stdin.isatty() else sys.stdin.read().split())
+	stdin = StdIn(list('' if sys.stdin.isatty() else sys.stdin.read().split()))
 	result = evaluate(code_list, stdin)
 	print(print_list(result))
 

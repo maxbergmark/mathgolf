@@ -18,13 +18,13 @@
 ↕ : push 100000000
 ‼
 ¶ : is_prime(n)
-§
+§ : get from array
 ▬
 ↨
-↑
-↓
-→
-←
+↑ : while true without popping
+↓ : while false without popping
+→ : while true with pop
+← : while false with pop
 ∟
 ↔
 ▲
@@ -92,7 +92,7 @@ Z : push 38
 \ : swap top elements
 ] : end array / wrap stack in array
 ^
-_
+_ : duplicate TOS
 `
 a : wrap in array
 b : -1
@@ -132,11 +132,11 @@ z : reverse sort(array)
 ä : convert from binary
 à : convert to binary string
 å : convert from binary string
-ç
+ç : implicit faulty filter
 ê
 ë
 è
-ï
+ï : index of current loop, or length of last loop
 î
 ì
 Ä : start block of length 1
@@ -154,7 +154,7 @@ z : reverse sort(array)
 Ü
 ¢
 £
-¥
+¥ : modulo 2
 ₧
 ƒ
 á
@@ -206,11 +206,11 @@ z : reverse sort(array)
 ╬
 ╧
 ╨
-╤
+╤ : range(-n, n+1)
 ╥
 ╙
 ╘
-╒
+╒ : range(1,n+1)
 ╓
 ╫
 ╪
@@ -218,10 +218,10 @@ z : reverse sort(array)
 ┌
 █
 ▄
-▌
-▐
+▌ : prepend to start of list
+▐ : append to end of list
 ▀
-α
+α : wrap last two elements in array
 ß
 Γ
 π : pi (3.14159...)
@@ -245,7 +245,7 @@ z : reverse sort(array)
 ⌡ : decrement twice
 ÷
 ≈
-° : duplicate TOS
+°
 ∙ : triplicate TOS
 · : quadruplicate TOS
 √ : pop a : push(sqrt(a))
