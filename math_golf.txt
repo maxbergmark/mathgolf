@@ -25,10 +25,10 @@
 ↓ : while false without popping
 → : while true with pop
 ← : while false with pop
-∟
-↔
-▲
-▼
+∟ : do while true without popping
+↔ : do while false without popping
+▲ : do while true with pop
+▼ : do while false with pop
 S
 ! : gamma(n+1)
 " : string notation
@@ -45,16 +45,16 @@ $
 - : pop a, b : push(a-b)
 .
 /
-0 : push digit
-1 : push digit
-2 : push digit
-3 : push digit
-4 : push digit
-5 : push digit
-6 : push digit
-7 : push digit
-8 : push digit
-9 : push digit
+0 : push 0
+1 : push 1
+2 : push 2
+3 : push 3
+4 : push 4
+5 : push 5
+6 : push 6
+7 : push 7
+8 : push 8
+9 : push 9
 :
 ; : discard TOS
 < : pop(a, b), push(a<b)
@@ -114,7 +114,7 @@ q : print without newline
 r : range(0, n)
 s : sort(array)
 t : unix timestamp as integer milliseconds
-u
+u : join with separator
 v
 w
 x
@@ -161,7 +161,7 @@ z : reverse sort(array)
 í
 ó
 ú
-ñ
+ñ : palindromize string/list/number
 Ñ
 ª : [1]
 º : [0]
@@ -177,8 +177,8 @@ z : reverse sort(array)
 ▒
 ▓
 │
-┤
-╡
+┤ : pop from right of string/array
+╡ : discard from right of string/array
 ╢
 ╖
 ╕
@@ -188,14 +188,14 @@ z : reverse sort(array)
 ╝
 ╜
 ╛
-┐
-└
+┐ : push TOS-1 without popping
+└ : push TOS+1 without popping
 ┴
 ┬
-├
+├ : pop from left of string/array
 ─
 ┼
-╞
+╞ : discard from left of string/array
 ╟
 ╚
 ╔
@@ -222,7 +222,7 @@ z : reverse sort(array)
 ▐ : append to end of list
 ▀
 α : wrap last two elements in array
-ß
+ß : wrap last three elements in array
 Γ
 π : pi (3.14159...)
 Σ : sum(list)
@@ -248,8 +248,8 @@ z : reverse sort(array)
 °
 ∙ : triplicate TOS
 · : quadruplicate TOS
-√ : pop a : push(sqrt(a))
+√ : pop a : push(sqrt(a)), split string to list
 ⁿ : pop a : push(a*a*a)
 ² : pop a : push(a*a)
-■ : cartesian product with itself for lists
- 
+■ : cartesian product with itself for lists, next collatz item for numbers
+  : space character

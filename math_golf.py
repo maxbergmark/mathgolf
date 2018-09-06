@@ -46,7 +46,7 @@ def is_num(n):
 	return type(n) is int or type(n) is float
 
 def is_int(n):
-	return is_num(n) and float(n).is_integer()
+	return type(n) is int or is_num(n) and float(n).is_integer()
 
 def is_list(n):
 	return type(n) is list
@@ -131,11 +131,43 @@ def while_false_pop(stack):
 		yield i
 		i += 1
 
+def do_while_true_no_pop(stack):
+	i = 0
+	while True:
+		yield i
+		i += 1
+		if not (stack and stack[-1]):
+			break
+
+def do_while_false_no_pop(stack):
+	i = 0
+	while True:
+		yield i
+		i += 1
+		if not (stack and not stack[-1]):
+			break
+
+def do_while_true_pop(stack):
+	i = 0
+	while True:
+		yield i
+		i += 1
+		if not (stack and stack.pop()):
+			break
+
+def do_while_false_pop(stack):
+	i = 0
+	while True:
+		yield i
+		i += 1
+		if not (stack and not stack.pop()):
+			break
+
 def for_looping(n):
 	for i in range(n):
 		yield i
 
-def evaluate(code, stdin, stack = [], level = 0):
+def evaluate(code, stdin, stack = [], level = 0, loop_counter = 0):
 	# stack = []
 	monads = {"¶": is_prime, "_": duplicate, "∙": triplicate, "·": quadruplicate}
 	binary_monads = {"â": to_base, "ä": from_base}
@@ -144,11 +176,15 @@ def evaluate(code, stdin, stack = [], level = 0):
 		"↑": while_true_no_pop,
 		"↓": while_false_no_pop,
 		"→": while_true_pop,
-		"←": while_false_pop
+		"←": while_false_pop,
+		"∟" : do_while_true_no_pop,
+		"↔" : do_while_false_no_pop,
+		"▲" : do_while_true_pop,
+		"▼" : do_while_false_pop
 	}
-	loop_types = set("↑↓→←*")
+	loop_types = set("↑↓→←∟↔▲▼*")
 	block_creators = set("ÄÅÉæÆ{")
-	loop_counter = 0
+	# loop_counter = 0
 
 	while code:
 		arg = code.pop()
@@ -375,8 +411,8 @@ def evaluate(code, stdin, stack = [], level = 0):
 			v = float(stdin.pop())
 			stack.append(v)
 		elif arg.char == "k":
-			v = float(stdin.pop())
-			stack.append(int(v))
+			v = int(stdin.pop())
+			stack.append(v)
 		elif arg.char == "l":
 			v = stdin.pop()
 			stack.append(v)
@@ -429,6 +465,21 @@ def evaluate(code, stdin, stack = [], level = 0):
 			stack.append(int(
 				time.mktime(now.timetuple())*1e3 + now.microsecond//1e3
 			))
+
+		elif arg.char == "u":
+			b = stack.pop()
+			a = stack.pop()
+			if is_list(a) and is_str(b):
+				stack.append(b.join(a))
+			elif is_str(a) and is_list(b):
+				stack.append(a.join(b))
+			elif(is_str(a) and is_str(b)):
+				stack.append(b.join(list(a)))
+			elif is_list(a) and is_list(b):
+				stack.append([n.join(a) for n in b])
+			else:
+				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
 		elif arg.char == "z":
 			a = stack.pop()
 			if is_list(a):
@@ -534,12 +585,12 @@ def evaluate(code, stdin, stack = [], level = 0):
 					limit = stack.pop()
 					for i in for_looping(limit):
 						loop_counter = i
-						stack = evaluate(c[:], stdin, stack, level+1)
+						stack = evaluate(c[:], stdin, stack, level+1, loop_counter)
 				else:
 					# stack.append(0)
 					for i in loop_handlers[loop_type.char](stack):
 						loop_counter = i
-						stack = evaluate(c[:], stdin, stack, level+1)
+						stack = evaluate(c[:], stdin, stack, level+1, loop_counter)
 
 		elif arg.char == "¥":
 			a = stack.pop()
@@ -547,6 +598,20 @@ def evaluate(code, stdin, stack = [], level = 0):
 				stack.append(a % 2)
 			else:
 				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+		elif arg.char == "ñ":
+			a = stack.pop()
+			if is_int(a):
+				a = str(a)
+				stack.append(int(a+a[::-1][1:]))
+			elif is_list(a):
+				stack.append(a+a[::-1][1:])
+			elif is_str(a):
+				stack.append(a+a[::-1][1:])
+			else:
+				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+
 
 		elif arg.char == "ª":
 			stack.append([1])
@@ -600,6 +665,59 @@ def evaluate(code, stdin, stack = [], level = 0):
 			else:
 				raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
 
+		elif arg.char == "┤":
+			a = stack.pop()
+			if is_str(a):
+				stack.append(a[:-1])
+				stack.append(a[-1])
+			elif is_list(a):
+				stack.append(a[:-1])
+				stack.append(a[-1])
+			else:
+				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+		elif arg.char == "╡":
+			a = stack.pop()
+			if is_str(a):
+				stack.append(a[:-1])
+			elif is_list(a):
+				stack.append(a[:-1])
+			else:
+				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+		elif arg.char == "┐":
+			a = stack.pop()
+			if is_num(a):
+				stack.append(a)
+				stack.append(a-1)
+			else:
+				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+		elif arg.char == "└":
+			a = stack.pop()
+			if is_num(a):
+				stack.append(a)
+				stack.append(a+1)
+			else:
+				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+		elif arg.char == "├":
+			a = stack.pop()
+			if is_str(a):
+				stack.append(a[1:])
+				stack.append(a[0])
+			elif is_list(a):
+				stack.append(a[1:])
+				stack.append(a[0])
+			else:
+				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+		elif arg.char == "╞":
+			a = stack.pop()
+			if is_str(a):
+				stack.append(a[1:])
+			elif is_list(a):
+				stack.append(a[1:])
+			else:
+				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
 		elif arg.char == "╤":
 			a = stack.pop()
 			if is_num(a):
@@ -633,6 +751,11 @@ def evaluate(code, stdin, stack = [], level = 0):
 			b = stack.pop()
 			a = stack.pop()
 			stack.append([a, b])
+		elif arg.char == "ß":
+			c = stack.pop()
+			b = stack.pop()
+			a = stack.pop()
+			stack.append([a, b, c])
 
 
 		elif arg.char == "π":
@@ -684,6 +807,8 @@ def evaluate(code, stdin, stack = [], level = 0):
 				stack.append(math.sqrt(a))
 			elif is_list(a):
 				stack.append([math.sqrt(n) for n in a])
+			elif is_str(a):
+				stack.append(list(a))
 
 		elif arg.char == "ⁿ":
 			a = stack.pop()
@@ -701,6 +826,13 @@ def evaluate(code, stdin, stack = [], level = 0):
 			a = stack.pop()
 			if is_list(a):
 				stack.append([list(n) for n in itertools.product(a, a)])
+			if is_int(a):
+				if a % 2 == 0:
+					stack.append(a//2)
+				else:
+					stack.append(3*a+1)
+		elif arg.char == " ":
+			stack.append(" ")
 
 
 		else:
