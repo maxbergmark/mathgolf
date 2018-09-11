@@ -66,15 +66,15 @@ Here we will take an integer as input, and print a triangle to standard output o
 	  î 						Push loop counter (1-indexed)
 	   ÿfizz 					Push "fizz"
 	        ÿbuzz 				Push "buzz"
-				 ` 				Duplicate top 2 elements of stack
-				  + 			Add (creating "fizzbuzz")
-				   Γ 			Wrap top 4 elements of stack in array
-					î 			Push loop counter (1-indexed)
-					 3 			Push 3
-					  5 		Push 5
-					   α 		Wrap last 2 elements in array
-						÷ 		Check divisibility (implicit mapping)
-						 ä 		Convert from binary to int
-						  § 	Get array item
-						   p 	print
-							}* 	End block, "*" means for loop
+	             ` 				Duplicate top 2 elements of stack
+	              + 			Add (creating "fizzbuzz")
+	               Γ 			Wrap top 4 elements of stack in array
+	                î 			Push loop counter (1-indexed)
+	                 3 			Push 3
+	                  5 		Push 5
+	                   α 		Wrap last 2 elements in array
+	                    ÷ 		Check divisibility (implicit mapping)
+	                     ä 		Convert from binary to int
+	                      § 	Get array item
+	                       p 	print
+	                        }* 	End block, "*" means for loop
