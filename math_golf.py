@@ -903,6 +903,12 @@ def evaluate(code, stdin, stack = [], level = 0, loop_counter = 0):
 			b = stack.pop()
 			a = stack.pop()
 			stack.append([a, b, c])
+		elif arg.char == "Γ":
+			d = stack.pop()
+			c = stack.pop()
+			b = stack.pop()
+			a = stack.pop()
+			stack.append([a, b, c, d])
 
 		elif arg.char == "π":
 			stack.append(math.pi)
@@ -979,6 +985,9 @@ def evaluate(code, stdin, stack = [], level = 0, loop_counter = 0):
 			a = stack.pop()
 			for n in duplicate(a):
 				stack.append(n)
+		elif arg.char == "`":
+			stack.append(stack[-2])
+			stack.append(stack[-2])
 		elif arg.char == "°":
 			a = stack.pop()
 			if is_int(a):

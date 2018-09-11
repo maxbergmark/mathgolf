@@ -1,3 +1,5 @@
+These are all the operations that have been defined so far. It is still very much a work in progress.
+
 ☺
 ☻ : push 16
 ♥ : push 32
@@ -93,7 +95,7 @@ Z : push 38
 ] : end array / wrap stack in array
 ^
 _ : duplicate TOS
-`
+` : duplicate the top two items
 a : wrap in array
 b : push -1
 c : push -2
@@ -223,7 +225,7 @@ y
 ▀
 α : wrap last two elements in array
 ß : wrap last three elements in array
-Γ
+Γ : wrap last four elements in array
 π : pi (3.14159...)
 	Σ : sum(list), digit sum(int)
 σ
@@ -256,6 +258,11 @@ y
 
 
 
+Note: "x" means that there is an implementation for the operator in combination with the data type
+i: integer
+f: float
+l: list
+s: string
 															+-+-+-+-+
 Monads:														|i|f|l|s|
 															+-+-+-+-+
