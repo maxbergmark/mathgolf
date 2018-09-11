@@ -17,8 +17,8 @@
 ◄ : push 10000000
 ↕ : push 100000000
 ‼
-¶ : is_prime(n)
-§ : get from array
+	¶ : is_prime(n)
+		§ : get from array
 ▬
 ↨
 ↑ : while true without popping
@@ -29,22 +29,22 @@
 ↔ : do while false without popping
 ▲ : do while true with pop
 ▼ : do while false with pop
-S
-! : gamma(n+1)
+  : space character
+	! : gamma(n+1)
 " : string notation
-# : pop a, b : push(a**b)
+		# : pop a, b : push(a**b)
 $
-% : modulo
+		% : modulo
 &
 ' : push single character
-( : decrement
-) : increment
-* : pop a, b : push(a*b)
-+ : pop a, b : push(a+b)
+	( : decrement
+	) : increment
+		* : pop a, b : push(a*b)
+		+ : pop a, b : push(a+b)
 ,
-- : pop a, b : push(a-b)
+		- : pop a, b : push(a-b)
 .
-/
+		/ : pop a, b : push(a/b), split strings
 0 : push 0
 1 : push 1
 2 : push 2
@@ -57,9 +57,9 @@ $
 9 : push 9
 :
 ; : discard TOS
-< : pop(a, b), push(a<b)
-= : pop(a, b), push(a==b)
-> : pop(a, b), push(a>b)
+		< : pop(a, b), push(a<b)
+		= : pop(a, b), push(a==b)
+		> : pop(a, b), push(a>b)
 ? : rot3
 @ : rrot3
 A : push 11
@@ -95,90 +95,90 @@ Z : push 38
 _ : duplicate TOS
 `
 a : wrap in array
-b : -1
-c : -2
-d : -3
-e : e (2.71828...)
-f : fibonacci(n)
-g : filter array
-h : length of array/string without popping
-i : convert to integer (implicit map)
+b : push -1
+c : push -2
+d : push -3
+e : push e (2.71828...)
+	f : pop a, push fibonacci(a)
+		g : pop a, (b), pop operator from code, filter
+	h : length of array/string without popping
+	i : convert to integer (implicit map)
 j : read float from input
 k : read integer from input
 l : read string from input
-m : explicit map
-n : newline char, or map array with newlines
+		m : explicit map
+	n : newline char, or map array with newlines
 o : print TOS without popping
 p : print with newline
 q : print without newline
-r : range(0, n)
-s : sort(array)
+	r : range(0, n)
+	s : sort(array)
 t : unix timestamp as integer milliseconds
-u : join with separator
+		u : join with separator
 v
 w
 x
 y
-z : reverse sort(array)
+	z : reverse sort(array)
 { : start block or arbitrary length
 |
 } : end block
-~ : evaluate string, dump array, negate integer
+	~ : evaluate string, dump array, negate integer
 ⌂
 Ç
 ü
 é
-â : convert to binary
-ä : convert from binary
-à : convert to binary string
-å : convert from binary string
-ç : implicit faulty filter
+	â : convert to binary
+	ä : convert from binary
+	à : convert to binary string
+	å : convert from binary string
+	ç : implicit faulty filter
 ê
 ë
 è
 ï : index of current loop, or length of last loop
-î
+î : index of current loop (1-based)
 ì
 Ä : start block of length 1
 Å : start block of length 2
 É : start block of length 3
 æ : start block of length 4
 Æ : start block of length 5
-ô
-ö
-ò
-û
-ù
-ÿ
+ô : start block of length 6
+ö : start block of length 7
+ò : start block of length 8
+û : start string of length 2
+ù : start string of length 3
+ÿ : start string of length 4
 Ö
 Ü
 ¢
 £
-¥ : modulo 2
+	¥ : modulo 2
 ₧
 ƒ
 á
 í
 ó
 ú
-ñ : palindromize string/list/number
+	ñ : pop(a), push palindromize(a) string/list/number
 Ñ
-ª : [1]
-º : [0]
+ª : push [1]
+º : push [0]
 ¿
 ⌐ : rotate entire stack
 ¬ : rotate entire stack in reverse
-½ : pop a : push(a//2 if int else a/2)
-¼ : pop a : push(a//4 if int else a/4)
-¡ : not equal
-« : pop a, b : push a<<b (should be changed)
-» : pop a, b : push a>>b (should be changed)
-░
+	½ : pop a : push(a//2 if int else a/2)
+	¼ : pop a : push(a//4 if int else a/4)
+		¡ : push a, b, push a != b
+«
+»
+	░ : convert to string (implicit map)
 ▒
 ▓
 │
-┤ : pop from right of string/array
-╡ : discard from right of string/array
+	┤ : pop from right of string/array
+	╡ : discard from right of string/array
 ╢
 ╖
 ╕
@@ -188,14 +188,14 @@ z : reverse sort(array)
 ╝
 ╜
 ╛
-┐ : push TOS-1 without popping
-└ : push TOS+1 without popping
+	┐ : push TOS-1 without popping
+	└ : push TOS+1 without popping
 ┴
 ┬
-├ : pop from left of string/array
-─
+	├ : pop from left of string/array
+	─ : flatten array
 ┼
-╞ : discard from left of string/array
+	╞ : discard from left of string/array
 ╟
 ╚
 ╔
@@ -206,26 +206,26 @@ z : reverse sort(array)
 ╬
 ╧
 ╨
-╤ : range(-n, n+1)
+	╤ : range(-n, n+1)
 ╥
 ╙
 ╘
-╒ : range(1,n+1)
+	╒ : range(1,n+1)
 ╓
 ╫
 ╪
-┘
-┌
+	┘ : convert to boolean
+	┌ : convert to inverted boolean
 █
 ▄
-▌ : prepend to start of list
-▐ : append to end of list
+		▌ : prepend to start of list
+		▐ : append to end of list
 ▀
 α : wrap last two elements in array
 ß : wrap last three elements in array
 Γ
 π : pi (3.14159...)
-Σ : sum(list)
+	Σ : sum(list), digit sum(int)
 σ
 µ
 τ : tau (2*pi)
@@ -241,15 +241,87 @@ z : reverse sort(array)
 ±
 ≥
 ≤
-⌠ : increment twice
-⌡ : decrement twice
-÷
+	⌠ : increment twice
+	⌡ : decrement twice
+		÷ : is divisible
 ≈
-°
+	° : is perfect square
 ∙ : triplicate TOS
 · : quadruplicate TOS
-√ : pop a : push(sqrt(a)), split string to list
-ⁿ : pop a : push(a*a*a)
-² : pop a : push(a*a)
-■ : cartesian product with itself for lists, next collatz item for numbers
-  : space character
+	√ : pop a : push(sqrt(a)), split string to list
+	ⁿ : pop a : push(a*a*a)
+	² : pop a : push(a*a)
+	■ : cartesian product with itself for lists, next collatz item for numbers
+  : non-breaking space
+
+
+
+															+-+-+-+-+
+Monads:														|i|f|l|s|
+															+-+-+-+-+
+	¶ : is_prime(n)											|x| |x| |
+	! : gamma(n+1)											|x|x|x| |
+	( : decrement											|x|x|x| |
+	) : increment											|x|x|x| |
+	f : pop a, push fibonacci(a)							|x| |x| |
+	h : length of array/string without popping				| | |x|x|
+	i : convert to integer (implicit map)					|x|x|x|x|
+	n : newline char, or map array with newlines			| | |x| |
+	r : range(0, n)											|x| |x| |
+	s : sort(array)											| | |x|x|
+	z : reverse sort(array)									| | |x|x|
+	~ : evaluate string, dump array, negate integer			|x| |x|x|
+	â : convert to binary									|x| |x| |
+	ä : convert from binary									|x| |x| |
+	à : convert to binary string							|x| |x| |
+	å : convert from binary string							|x| |x| |
+	ç : implicit faulty filter								|x|x|x|x|
+	¥ : modulo 2											|x|x|x| |
+	ñ : pop(a), push palindromize(a)						|x| |x|x|
+	½ : pop a : push(a//2 if int else a/2)					|x|x|x| |
+	¼ : pop a : push(a//4 if int else a/4)					|x|x|x| |
+	░ : convert to string (implicit map) 					|x|x|x| |
+	┤ : pop from right of string/array						| | |x|x|
+	╡ : discard from right of string/array					| | |x|x|
+	┐ : push TOS-1 without popping							|x|x| | |
+	└ : push TOS+1 without popping							|x|x| | |
+	├ : pop from left of string/array						| | |x|x|
+	╞ : discard from left of string/array					| | |x|x|
+	─ : flatten array/ get divisors							|x| |x| |
+	╤ : range(-n, n+1)										|x| | | |
+	╒ : range(1,n+1)										|x| | | |
+	┘ : convert to boolean 									|x| |x| |
+	┌ : convert to inverted boolean 						|x| |x| |
+	Σ : sum(list), digit sum(int)							|x| |x| |
+	⌠ : increment twice										|x| |x| |
+	⌡ : decrement twice										|x| |x| |
+	° : is perfect square 									|x| | | |
+	√ : pop a : push(sqrt(a)), split string to list			|x|x|x|x|
+	ⁿ : pop a : push(a*a*a)									|x|x|x| |
+	² : pop a : push(a*a)									|x|x|x| |
+	■ : cartesian product with itself, next collatz number	|x| |x| |
+															+-+-+-+-+
+
+
+															+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+															|i|i|i|i|f|f|f|f|l|l|l|l|s|s|s|s|
+Dinads:														|i|f|l|s|i|f|l|s|i|f|l|s|i|f|l|s|
+															+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+		§ : get from array									| | |x|x| | | | |x| | | |x| | | |
+		# : pop a, b : push(a**b)							|x| |x| | | | | |x| | | | | | | |
+		% : modulo											|x| |x|x| | | | |x| | | | | | | |
+		* : pop a, b : push(a*b)							|x| |x|x| | | | |x| |x|x|x| | | |
+		+ : pop a, b : push(a+b)							|x| |x|x| | | | |x| |x|x|x| |x|x|
+		- : pop a, b : push(a-b)							|x| |x| | | | | |x| |x| | | | | |
+		/ : pop a, b : push(a/b)							|x| |x| | | | | |x| |x| | | | | |
+		< : pop(a, b), push(a<b)							|x| | | | | | | | | | | | | | | |
+		= : pop(a, b), push(a==b)							|x| | | | | | | | | | | | | | | |
+		> : pop(a, b), push(a>b)							|x| | | | | | | | | | | | | | | |
+		g : pop a, (b), pop op from code, filter			| | | | | | | | | | | | | | | | |
+		m : explicit map									| | | | | | | | | | | | | | | | |
+		u : join with separator								| | | | | | | | | | |x|x| | |x|x|
+		¡ : push a, b, push a != b							|x| | | | | | | | | |x| | | | |x|
+		▌ : prepend to start of list						| | |x| | | | | |x| | |x| | |x| |
+		▐ : append to end of list							| | |x| | | | | |x| | |x| | |x| |
+		÷ : is divisible 									|x| |x| | | | | |x| | | | | | | |
+															+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
