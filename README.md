@@ -49,11 +49,11 @@ Here we will take an integer as input, and print a triangle to standard output o
 
 #### Explanation
 
-	k         Read integer from standard input
-	 ╒         Create list(range(1, a+1))
-	  '* 	Push asterisk as single character string
-	    * 	Multiply string and list with implicit mapping
-	     n 	Implicit '\n'.join(a) and output
+	k       Read integer from standard input
+	 ╒      Create list(range(1, a+1))
+	  '*    Push asterisk as single character string
+	    *   Multiply string and list with implicit mapping
+	     n  Implicit '\n'.join(a) and output
 
 ### FizzBuzz
 
