@@ -208,8 +208,8 @@ def evaluate(code, stdin, stack = [], level = 0, loop_counter = 0):
 	block_creators = set("ÄÅÉæÆ{ôöò")
 	string_creators = set("ûùÿ╢╖╕╣║╗")
 	string_terminators = set("\"«»")
-	compressed_letters_0 = "etaoinsrhluczbfp"
-	compressed_letters_1 = "gwymvkxjqd_?*#.,"
+	compressed_letters_0 = "etaoinsrdluczbfp"
+	compressed_letters_1 = "gwymvkxjqh ?*#.,"
 	# loop_counter = 0
 
 	while code:
@@ -259,7 +259,9 @@ def evaluate(code, stdin, stack = [], level = 0, loop_counter = 0):
 				else:
 					s += c
 				c = code.pop().char
-			if c == "\"":
+			if c == "\"" or not code:
+				if not code:
+					s += c
 				stack.append(s)
 			else:
 				if c == "«":
