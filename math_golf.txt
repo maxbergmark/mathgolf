@@ -117,8 +117,8 @@ q : print without newline
 	s : sort(array)
 t : unix timestamp as integer milliseconds
 		u : join with separator
-v
-w
+v : random integer in 
+	w : random integer in range, random item from list
 x
 y
 	z : reverse sort(array)
@@ -198,9 +198,9 @@ y
 	─ : flatten array
 ┼
 	╞ : discard from left of string/array
-╟
-╚
-╔
+╟ : push 60
+╚ : push 3600
+╔ : push 86400
 ╩
 ╦
 ╠
@@ -228,14 +228,14 @@ y
 Γ : wrap last four elements in array
 π : pi (3.14159...)
 	Σ : sum(list), digit sum(int)
-σ
+	σ : remove leading zeroes
 µ
 τ : tau (2*pi)
-Φ
-Θ
+	Φ : increment array/string item
+	Θ : decrement array/string item
 Ω
 δ
-∞
+	∞ : pop a, push 2*a
 φ : golden ratio (1.618...)
 ε
 ∩
@@ -276,6 +276,7 @@ Monads:														|i|f|l|s|
 	n : newline char, or map array with newlines			| | |x| |
 	r : range(0, n)											|x| |x| |
 	s : sort(array)											| | |x|x|
+	w : random integer in range, random item from list 		|x| |x| |
 	z : reverse sort(array)									| | |x|x|
 	~ : evaluate string, dump array, negate integer			|x| |x|x|
 	â : convert to binary									|x| |x| |
@@ -300,6 +301,8 @@ Monads:														|i|f|l|s|
 	┘ : convert to boolean 									|x| |x| |
 	┌ : convert to inverted boolean 						|x| |x| |
 	Σ : sum(list), digit sum(int)							|x| |x| |
+	σ : remove leading zeroes 								| | |x|x|
+	∞ : pop a, push 2*a 									|x|x| | |
 	⌠ : increment twice										|x| |x| |
 	⌡ : decrement twice										|x| |x| |
 	° : is perfect square 									|x| | | |
@@ -330,5 +333,7 @@ Dinads:														|i|f|l|s|i|f|l|s|i|f|l|s|i|f|l|s|
 		¡ : push a, b, push a != b							|x| | | | | | | | | |x| | | | |x|
 		▌ : prepend to start of list						| | |x| | | | | |x| | |x| | |x| |
 		▐ : append to end of list							| | |x| | | | | |x| | |x| | |x| |
+		Φ : increment array/string item 					| | |x|x| | | | |x| | | |x| | | |
+		Θ : decrement array/string item 					| | |x|x| | | | |x| | | |x| | | |
 		÷ : is divisible 									|x| |x| | | | | |x| | | | | | | |
 															+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+

@@ -3,6 +3,7 @@ import sys
 from collections import namedtuple
 import datetime, time
 import itertools
+import random
 
 Argument = namedtuple("Argument", ["char", "code"])
 DEBUG = False
@@ -610,6 +611,20 @@ def evaluate(code, stdin, stack = [], level = 0, loop_counter = 0):
 				stack.append([n.join(a) for n in b])
 			else:
 				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+		elif arg.char == "v":
+			stack.append(random.randint(-2**31, 2**31-1))
+
+		elif arg.char == "w":
+			a = stack.pop()
+			if is_int(a):
+				stack.append(random.randint(0, a))
+			elif is_list(a):
+				stack.append(random.choice(a))
+			elif is_str(a):
+				stack.append(random.choice(a))
+			else:
+				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
 
 		elif arg.char == "z":
 			a = stack.pop()
@@ -883,6 +898,13 @@ def evaluate(code, stdin, stack = [], level = 0, loop_counter = 0):
 			else:
 				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
+		elif arg.char == "╟":
+			stack.append(60)
+		elif arg.char == "╚":
+			stack.append(3600)
+		elif arg.char == "╔":
+			stack.append(86400)
+
 		elif arg.char == "╤":
 			a = stack.pop()
 			if is_num(a):
@@ -975,6 +997,53 @@ def evaluate(code, stdin, stack = [], level = 0, loop_counter = 0):
 					stack.append(''.join(a))
 				else:
 					stack.append(0)
+			else:
+				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+		elif arg.char == "σ":
+			a = stack.pop()
+			if is_str(a):
+				stack.append(a.lstrip("0"))
+			elif is_list(a):
+				if len(a) > 0 and is_int(a[0]):
+					stack.append(["" if n == 0 else str(n) for n in a])
+				elif len(a) > 0 and is_str(a[0]):
+					stack.append([n.lstrip("0") for n in a])
+				else:
+					stack.append([])
+			else:
+				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+		elif arg.char == "Φ":
+			b = stack.pop()
+			a = stack.pop()
+			if is_int(a) and is_list(b):
+				b[a % len(b)] += 1
+				stack.append(b)
+			elif is_list(a) and is_int(b):
+				a[b % len(a)] += 1
+				stack.append(a)
+			else:
+				raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
+
+		elif arg.char == "Θ":
+			b = stack.pop()
+			a = stack.pop()
+			if is_int(a) and is_list(b):
+				b[a % len(b)] -= 1
+				stack.append(b)
+			elif is_list(a) and is_int(b):
+				a[b % len(a)] -= 1
+				stack.append(a)
+			else:
+				raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
+
+		elif arg.char == "∞":
+			a = stack.pop()
+			if is_num(a):
+				stack.append(a*2)
+			elif is_list(a):
+				stack.append([n*2 for n in a])
 			else:
 				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
