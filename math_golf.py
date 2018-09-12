@@ -175,6 +175,16 @@ def do_while_false_pop(stack):
 		if not (stack and not stack.pop()):
 			break
 
+def decompress(string, compressed):
+	decompressed = ""
+	for i in range(len(string)):
+		letter_idx = code_page.index(string[i])+1
+		string_idx = (letter_idx >> 4) & 0xf
+		decompressed += compressed[string_idx]
+		string_idx = (letter_idx >> 0) & 0xf
+		decompressed += compressed[string_idx]
+	return decompressed
+
 def for_looping(n):
 	for i in range(n):
 		yield i
@@ -196,7 +206,10 @@ def evaluate(code, stdin, stack = [], level = 0, loop_counter = 0):
 	}
 	loop_types = set("↑↓→←∟↔▲▼*")
 	block_creators = set("ÄÅÉæÆ{ôöò")
-	string_creators = set("ûùÿ")
+	string_creators = set("ûùÿ╢╖╕╣║╗")
+	string_terminators = set("\"«»")
+	compressed_letters_0 = "etaoinsrhluczbfp"
+	compressed_letters_1 = "gwymvkxjqd_?*#.,"
 	# loop_counter = 0
 
 	while code:
@@ -240,17 +253,27 @@ def evaluate(code, stdin, stack = [], level = 0, loop_counter = 0):
 		elif arg.char == "\"":
 			s = ""
 			c = "" if not code else code.pop().char
-			while c != "\"" and code:
+			while c not in  string_terminators and code:
 				if c == "\\":
 					s += code.pop().char
 				else:
 					s += c
 				c = code.pop().char
-			stack.append(s)
+			if c == "\"":
+				stack.append(s)
+			else:
+				if c == "«":
+					compressed = "etaoinsrhluczbfp"
+				elif c == "":
+					compressed = "gwymvkxjqd_?*#.,"
+
+				stack.append(decompress(s, compressed))
 
 		elif arg.char in string_creators:
 			s = ""
-			if arg.char == "û":
+			if arg.char in "╢╣":
+				s += code.pop().char
+			elif arg.char in "û╖║╕╗":
 				s += code.pop().char
 				s += code.pop().char
 			elif arg.char == "ù":
@@ -262,6 +285,12 @@ def evaluate(code, stdin, stack = [], level = 0, loop_counter = 0):
 				s += code.pop().char
 				s += code.pop().char
 				s += code.pop().char
+			if arg.char in  "╢╖╕":
+				s = decompress(s, compressed_letters_0)
+			elif arg.char in "╣║╗":
+				s = decompress(s, compressed_letters_1)
+			if arg.char in "╖║":
+				s = s[:3]
 			stack.append(s)
 
 		elif arg.char == "#":

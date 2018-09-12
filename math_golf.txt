@@ -173,20 +173,20 @@ y
 	½ : pop a : push(a//2 if int else a/2)
 	¼ : pop a : push(a//4 if int else a/4)
 		¡ : push a, b, push a != b
-«
-»
+« : end compressed string (etaoinsrhldcumfp)
+» : end compressed string (gwybvkxjqz ?*#.,)
 	░ : convert to string (implicit map)
 ▒
 ▓
 │
 	┤ : pop from right of string/array
 	╡ : discard from right of string/array
-╢
-╖
-╕
-╣
-║
-╗
+╢ : start compressed string of length 2 (etaoinsrhldcumfp)
+╖ : start compressed string of length 3 (etaoinsrhldcumfp)
+╕ : start compressed string of length 4 (etaoinsrhldcumfp)
+╣ : start compressed string of length 2 (gwybvkxjqz ?*#.,)
+║ : start compressed string of length 3 (gwybvkxjqz ?*#.,)
+╗ : start compressed string of length 4 (gwybvkxjqz ?*#.,)
 ╝
 ╜
 ╛
