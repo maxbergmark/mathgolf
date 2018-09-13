@@ -119,7 +119,7 @@ t : unix timestamp as integer milliseconds
 		u : join with separator
 v : random integer in 
 	w : random integer in range, random item from list
-x
+	x : reverse int/array/string
 y
 	z : reverse sort(array)
 { : start block or arbitrary length
@@ -140,7 +140,7 @@ y
 è
 ï : index of current loop, or length of last loop
 î : index of current loop (1-based)
-ì
+ì : get loop value in foreach loop
 Ä : start block of length 1
 Å : start block of length 2
 É : start block of length 3
@@ -160,9 +160,9 @@ y
 ₧
 ƒ
 á
-í
-ó
-ú
+í : get total number of iterations of for loop
+	ó : pop(a), push(2**a)
+	ú : pop(a), push(10**a)
 	ñ : pop(a), push palindromize(a) string/list/number
 Ñ
 ª : push [1]
@@ -176,7 +176,7 @@ y
 « : end compressed string (etaoinsrhldcumfp)
 » : end compressed string (gwybvkxjqz ?*#.,)
 	░ : convert to string (implicit map)
-▒
+	▒ : split to list of chars/digits
 ▓
 │
 	┤ : pop from right of string/array
@@ -233,16 +233,15 @@ y
 τ : tau (2*pi)
 	Φ : increment array/string item
 	Θ : decrement array/string item
-Ω
-δ
+	δ : capitalize string
 	∞ : pop a, push 2*a
 φ : golden ratio (1.618...)
 ε
 ∩
 ≡
 ±
-≥
-≤
+		≥ : greater or equal
+		≤ : lesser or equal
 	⌠ : increment twice
 	⌡ : decrement twice
 		÷ : is divisible
@@ -254,7 +253,7 @@ y
 	ⁿ : pop a : push(a*a*a)
 	² : pop a : push(a*a)
 	■ : cartesian product with itself for lists, next collatz item for numbers
-  : non-breaking space
+  : discard everything but TOS
 
 
 
@@ -266,7 +265,7 @@ s: string
 															+-+-+-+-+
 Monads:														|i|f|l|s|
 															+-+-+-+-+
-	¶ : is_prime(n)											|x| |x| |
+	¶ : is_prime(n)/split string 							|x| |x|x|
 	! : gamma(n+1)											|x|x|x| |
 	( : decrement											|x|x|x| |
 	) : increment											|x|x|x| |
@@ -277,6 +276,7 @@ Monads:														|i|f|l|s|
 	r : range(0, n)											|x| |x| |
 	s : sort(array)											| | |x|x|
 	w : random integer in range, random item from list 		|x| |x| |
+	x : reverse int/array/string 							|x| |x|x|
 	z : reverse sort(array)									| | |x|x|
 	~ : evaluate string, dump array, negate integer			|x| |x|x|
 	â : convert to binary									|x| |x| |
@@ -289,6 +289,7 @@ Monads:														|i|f|l|s|
 	½ : pop a : push(a//2 if int else a/2)					|x|x|x| |
 	¼ : pop a : push(a//4 if int else a/4)					|x|x|x| |
 	░ : convert to string (implicit map) 					|x|x|x| |
+	▒ : split to list of chars/digits 						| | |x|x|
 	┤ : pop from right of string/array						| | |x|x|
 	╡ : discard from right of string/array					| | |x|x|
 	┐ : push TOS-1 without popping							|x|x| | |
@@ -302,6 +303,7 @@ Monads:														|i|f|l|s|
 	┌ : convert to inverted boolean 						|x| |x| |
 	Σ : sum(list), digit sum(int)							|x| |x| |
 	σ : remove leading zeroes 								| | |x|x|
+	δ : capitalize string 									| | |x|x|
 	∞ : pop a, push 2*a 									|x|x| | |
 	⌠ : increment twice										|x| |x| |
 	⌡ : decrement twice										|x| |x| |

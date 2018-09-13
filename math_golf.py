@@ -8,10 +8,10 @@ import random
 Argument = namedtuple("Argument", ["char", "code"])
 DEBUG = False
 
-code_page = "☺☻♥♦♣♠•◘○◙♂♀♪♫☼►◄↕‼¶§▬↨↑↓→←∟↔▲▼S!\"#$%&'()*+,-./0123456789:;" \
+code_page = "☺☻♥♦♣♠•◘○◙♂♀♪♫☼►◄↕‼¶§▬↨↑↓→←∟↔▲▼ !\"#$%&'()*+,-./0123456789:;" \
 + "<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~⌂Ç" \
 + "üéâäàåçêëèïîìÄÅÉæÆôöòûùÿÖÜ¢£¥₧ƒáíóúñÑªº¿⌐¬½¼¡«»░▒▓│┤╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞" \
-+ "╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪┘┌█▄▌▐▀αßΓπΣσµτΦΘΩδ∞φε∩≡±≥≤⌠⌡÷≈°∙·√ⁿ²■ "
++ "╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪┘┌█▄▌▐▀αßΓπΣσµτΦΘΩδ∞φε∩≡±≥≤⌠⌡÷≈°∙·√ⁿ²■ "
 
 class StdIn():
 
@@ -64,6 +64,12 @@ def is_less(a, b):
 
 def is_greater(a, b):
 	yield int(a > b)
+
+def is_leq(a, b):
+	yield int(a <= b)
+
+def is_geq(a, b):
+	yield int(a >= b)
 
 def is_not(a, b):
 	yield int(a != b)
@@ -190,11 +196,11 @@ def for_looping(n):
 	for i in range(n):
 		yield i
 
-def evaluate(code, stdin, stack = [], level = 0, loop_counter = 0):
+def evaluate(code, stdin, stack = [], level = 0, loop_counter = 0, loop_limit = 0, loop_value = None):
 	# stack = []
 	monads = {"¶": is_prime, "_": duplicate, "∙": triplicate, "·": quadruplicate}
 	binary_monads = {"â": to_base, "ä": from_base}
-	dinads = {"<": is_less, "=": is_equal, ">": is_greater, "¡": is_not, "+": add, "*": mult}
+	dinads = {"<": is_less, "=": is_equal, ">": is_greater, "¡": is_not, "+": add, "*": mult, "≥": is_geq, "≤": is_leq}
 	loop_handlers = {
 		"↑": while_true_no_pop,
 		"↓": while_false_no_pop,
@@ -211,7 +217,6 @@ def evaluate(code, stdin, stack = [], level = 0, loop_counter = 0):
 	string_terminators = set("\"«»")
 	compressed_letters_0 = "etaoinsrdluczbfp"
 	compressed_letters_1 = "gwymvkxjqh ?*#.,"
-	# loop_counter = 0
 
 	while code:
 		arg = code.pop()
@@ -220,7 +225,16 @@ def evaluate(code, stdin, stack = [], level = 0, loop_counter = 0):
 		elif 11 <= arg.code <= 18:
 			stack.append(10**(arg.code-10))
 		elif arg.char == "¶":
-			stack.append(is_prime(stack.pop()))
+			a = stack.pop()
+			if is_int(a):
+				stack.append(is_prime(a))
+			elif is_list(a):
+				stack.append([is_prime(n) for n in a])
+			elif is_str(a):
+				stack.append(a.split())
+			else:
+				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
 		elif arg.char == "§":
 			a = stack.pop()
 			b = stack.pop()
@@ -588,7 +602,7 @@ def evaluate(code, stdin, stack = [], level = 0, loop_counter = 0):
 			a = stack.pop()
 			if is_list(a):
 				stack.append(sorted(a))
-			if is_str(a):
+			elif is_str(a):
 				stack.append(''.join(sorted(a)))
 			else:
 				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
@@ -602,9 +616,9 @@ def evaluate(code, stdin, stack = [], level = 0, loop_counter = 0):
 			b = stack.pop()
 			a = stack.pop()
 			if is_list(a) and is_str(b):
-				stack.append(b.join(a))
+				stack.append(b.join([str(n) for n in a]))
 			elif is_str(a) and is_list(b):
-				stack.append(a.join(b))
+				stack.append(a.join([str(n) for n in b]))
 			elif(is_str(a) and is_str(b)):
 				stack.append(b.join(list(a)))
 			elif is_list(a) and is_list(b):
@@ -625,12 +639,23 @@ def evaluate(code, stdin, stack = [], level = 0, loop_counter = 0):
 			else:
 				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
+		elif arg.char == "x":
+			a = stack.pop()
+			if is_int(a):
+				stack.append(int(str(a)[::-1]))
+			elif is_list(a):
+				stack.append(a[::-1])
+			elif is_str(a):
+				stack.append(a[::-1])
+			else:
+				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
 
 		elif arg.char == "z":
 			a = stack.pop()
 			if is_list(a):
 				stack.append(sorted(a, reverse = True))
-			if is_str(a):
+			elif is_str(a):
 				stack.append(''.join(sorted(a, reverse = True)))
 			else:
 				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
@@ -703,6 +728,10 @@ def evaluate(code, stdin, stack = [], level = 0, loop_counter = 0):
 			stack.append(loop_counter)
 		elif arg.char == "î":
 			stack.append(loop_counter+1)
+		elif arg.char == "ì":
+			stack.append(loop_value)
+		elif arg.char == "í":
+			stack.append(loop_limit)
 
 
 		elif arg.char in block_creators:
@@ -742,9 +771,18 @@ def evaluate(code, stdin, stack = [], level = 0, loop_counter = 0):
 			if loop_type.char in loop_types:
 				if loop_type.char == "*":
 					limit = stack.pop()
-					for i in for_looping(limit):
-						loop_counter = i
-						stack = evaluate(c[:], stdin, stack, level+1, loop_counter)
+					if is_int(limit):
+						loop_limit = limit
+						for i in for_looping(limit):
+							loop_counter = i
+							stack = evaluate(c[:], stdin, stack, level+1, loop_counter, loop_limit)
+					elif is_list(limit):
+						loop_limit = len(limit)
+						for i, n in enumerate(limit):
+							loop_counter = i
+							loop_value = n
+							stack.append(loop_value)
+							stack = evaluate(c[:], stdin, stack, level+1, loop_counter, loop_limit, loop_value)
 				else:
 					for i in loop_handlers[loop_type.char](stack):
 						loop_counter = i
@@ -756,6 +794,25 @@ def evaluate(code, stdin, stack = [], level = 0, loop_counter = 0):
 				stack.append(a % 2)
 			elif is_list(a):
 				stack.append([n % 2 for n in a])
+			else:
+				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+		elif arg.char == "ó":
+			a = stack.pop()
+			if is_int(a):
+				stack.append(2**a)
+			elif is_list(a):
+				stack.append([2**n for n in a])
+			else:
+				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+		elif arg.char == "ú":
+			a = stack.pop()
+			if is_int(a):
+				stack.append(int(10**a))
+			elif is_num(a):
+				stack.append(10**a)
+			elif is_list(a):
+				stack.append([10**n for n in a])
 			else:
 				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
@@ -812,6 +869,16 @@ def evaluate(code, stdin, stack = [], level = 0, loop_counter = 0):
 				stack.append([str(n) for n in a])
 			else:
 				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+		elif arg.char == "▒":
+			a = stack.pop()
+			if is_int(a):
+				stack.append([int(n) for n in str(a)])
+			elif is_str(a):
+				stack.append(list(a))
+			else:
+				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
 
 		elif arg.char == "¡":
 			a = stack.pop()
@@ -1038,6 +1105,15 @@ def evaluate(code, stdin, stack = [], level = 0, loop_counter = 0):
 			else:
 				raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
 
+		elif arg.char == "δ":
+			a = stack.pop()
+			if is_str(a):
+				stack.append(a.capitalize())
+			elif is_list(a):
+				stack.append([n.capitalize() if is_str(n) else n for n in a])
+			else:
+				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
 		elif arg.char == "∞":
 			a = stack.pop()
 			if is_num(a):
@@ -1049,6 +1125,26 @@ def evaluate(code, stdin, stack = [], level = 0, loop_counter = 0):
 
 		elif arg.char == "φ":
 			stack.append((1+math.sqrt(5))/2)
+
+		elif arg.char == "≥":
+			a, b = stack.pop(), stack.pop()
+			if is_num(a) and is_num(b):
+				stack.append(int(all(is_geq(a, b))))
+			elif is_int(a) and is_list(b):
+				stack.append([b[i%len(b)] for i in range(a)])
+			else:
+				raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
+
+		elif arg.char == "≤":
+			a, b = stack.pop(), stack.pop()
+			if is_num(a) and is_num(b):
+				stack.append(int(all(is_leq(a, b))))
+			elif is_int(a) and is_list(b):
+				stack.append([b[i%len(b)] for i in range(a)])
+			else:
+				raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
+
+
 
 		elif arg.char == "⌠":
 			a = stack.pop()
@@ -1144,7 +1240,8 @@ def evaluate(code, stdin, stack = [], level = 0, loop_counter = 0):
 
 		elif arg.char == " ":
 			stack.append(" ")
-
+		elif arg.char == " ":
+			stack = [stack[-1]]
 
 		else:
 			raise ValueError("Not yet implemented: " + arg.char)
@@ -1157,6 +1254,10 @@ def evaluate(code, stdin, stack = [], level = 0, loop_counter = 0):
 def print_list(l):
 	return ''.join([str(s) if is_list(s) else str(s) for s in l])
 
+
+def parse_input(byte_array):
+	return ''.join([code_page[i] for i in list(byte_array)])
+
 if __name__ == '__main__':
 	## doctest.testmod() ## <- Uncomment to run tests.
 	if len(sys.argv) <= 1:
@@ -1167,7 +1268,9 @@ if __name__ == '__main__':
 		DEBUG = True
 		sys.argv.pop(1)
 
-	code = open(sys.argv[1], 'r').read()
+	code_bytes = open(sys.argv[1], 'rb').read()
+	code = parse_input(code_bytes)
+	print(code)
 	commands = [code_page.index(c)+1 for c in code]
 	code_list = [Argument(char, c) for char, c in zip(code, commands)][::-1]
 	stdin = StdIn(list('' if sys.stdin.isatty() else sys.stdin.read().split()))
