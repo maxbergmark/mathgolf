@@ -126,7 +126,7 @@ y
 |
 } : end block
 	~ : evaluate string, dump array, negate integer
-⌂
+⌂ : asterisk character (for challenges where a printable character is needed)
 Ç
 ü
 é

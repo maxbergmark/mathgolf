@@ -660,6 +660,8 @@ def evaluate(code, stdin, stack = [], level = 0, loop_counter = 0, loop_limit = 
 			else:
 				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
+		elif arg.char == "⌂":
+			stack.append("*")
 		elif arg.char == "~":
 			a = stack.pop()
 			if is_int(a):
@@ -1270,7 +1272,6 @@ if __name__ == '__main__':
 
 	code_bytes = open(sys.argv[1], 'rb').read()
 	code = parse_input(code_bytes)
-	print(code)
 	commands = [code_page.index(c)+1 for c in code]
 	code_list = [Argument(char, c) for char, c in zip(code, commands)][::-1]
 	stdin = StdIn(list('' if sys.stdin.isatty() else sys.stdin.read().split()))
