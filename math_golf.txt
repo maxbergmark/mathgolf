@@ -135,9 +135,9 @@ y
 	à : convert to binary string
 	å : convert from binary string
 	ç : implicit faulty filter
-ê
-ë
-è
+ê : read entire input as int array
+ë : read entire input as float array
+è : read entire input as string array
 ï : index of current loop, or length of last loop
 î : index of current loop (1-based)
 ì : get loop value in foreach loop
@@ -155,7 +155,7 @@ y
 Ö
 Ü
 ¢
-£
+	£ : length of array/string with pop
 	¥ : modulo 2
 ₧
 ƒ
@@ -167,7 +167,7 @@ y
 Ñ
 ª : push [1]
 º : push [0]
-¿
+¿ : if/else (uses one of the next two characters in the code)
 ⌐ : rotate entire stack
 ¬ : rotate entire stack in reverse
 	½ : pop a : push(a//2 if int else a/2)
@@ -192,8 +192,8 @@ y
 ╛
 	┐ : push TOS-1 without popping
 	└ : push TOS+1 without popping
-┴
-┬
+	┴ : check if equal to 0
+	┬ : check if equal to 1
 	├ : pop from left of string/array
 	─ : flatten array
 ┼
@@ -201,35 +201,35 @@ y
 ╟ : push 60
 ╚ : push 3600
 ╔ : push 86400
-╩
-╦
+	╩ : fetch single dictionary word (top 256)
+	╦ : fetch single dictionary word (all)
 ╠
 ═
 ╬
 ╧
-╨
+	╨ : closest power of two above
 	╤ : range(-n, n+1)
-╥
+	╥ : closest power of two below
 ╙
 ╘
 	╒ : range(1,n+1)
 ╓
-╫
-╪
+	╫ : left-rotate bits in int, list/str
+	╪ : right-rotate bits in int, list, str
 	┘ : convert to boolean
 	┌ : convert to inverted boolean
 █
 ▄
 		▌ : prepend to start of list
 		▐ : append to end of list
-▀
+	▀ : unique elements of string/list
 α : wrap last two elements in array
 ß : wrap last three elements in array
 Γ : wrap last four elements in array
 π : pi (3.14159...)
 	Σ : sum(list), digit sum(int)
 	σ : remove leading zeroes
-µ
+	µ : swap array/string items
 τ : tau (2*pi)
 	Φ : increment array/string item
 	Θ : decrement array/string item
@@ -299,10 +299,14 @@ Monads:														|i|f|l|s|
 	─ : flatten array/ get divisors							|x| |x| |
 	╤ : range(-n, n+1)										|x| | | |
 	╒ : range(1,n+1)										|x| | | |
+	╫ : left-rotate bits in int, list/str 					|x| |x|x|
+	╪ : right-rotate bits in int, list, str 				|x| |x|x|
 	┘ : convert to boolean 									|x| |x| |
 	┌ : convert to inverted boolean 						|x| |x| |
+	▀ : unique elements of string/list 						| | |x|x|
 	Σ : sum(list), digit sum(int)							|x| |x| |
 	σ : remove leading zeroes 								| | |x|x|
+	µ : swap array/string items								| | |x|x|
 	δ : capitalize string 									| | |x|x|
 	∞ : pop a, push 2*a 									|x|x| | |
 	⌠ : increment twice										|x| |x| |
@@ -311,7 +315,7 @@ Monads:														|i|f|l|s|
 	√ : pop a : push(sqrt(a)), split string to list			|x|x|x|x|
 	ⁿ : pop a : push(a*a*a)									|x|x|x| |
 	² : pop a : push(a*a)									|x|x|x| |
-	■ : cartesian product with itself, next collatz number	|x| |x| |
+	■ : cartesian self-product, next collatz 				|x| |x| |
 															+-+-+-+-+
 
 
