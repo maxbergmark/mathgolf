@@ -528,7 +528,7 @@ def evaluate(code, stdin, stack = Stack([]), level = 0, loop_counter = 0, loop_l
 
 		elif arg.char == "[":
 			ret = evaluate(code, stdin, Stack([]), level+1)
-			stack.append(ret)
+			stack.append(ret.list)
 		elif arg.char == "\\":
 			stack.append(stack.pop(arg.char, -2))
 		elif arg.char == "]":
@@ -1410,7 +1410,7 @@ def evaluate(code, stdin, stack = Stack([]), level = 0, loop_counter = 0, loop_l
 		elif arg.char == " ":
 			stack.append(" ")
 		elif arg.char == " ":
-			stack = Stack([stack.pop()])
+			stack = Stack([stack.pop(arg.char)])
 
 		else:
 			raise ValueError("Not yet implemented: %s" % arg.char)
