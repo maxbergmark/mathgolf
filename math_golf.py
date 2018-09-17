@@ -89,6 +89,22 @@ def is_prime(n):
 			return 0
 	return 1
 
+def gamma(n):
+	if is_int(n):
+		return int(math.gamma(n+1))
+	elif is_num(n):
+		return math.gamma(n+1)
+	else:
+		raise ValueError("unsupported type for gamma: %s" % type(n))
+
+def gamma_yield(n):
+	if is_int(n):
+		yield int(math.gamma(n+1))
+	elif is_num(n):
+		yield math.gamma(n+1)
+	else:
+		raise ValueError("unsupported type for gamma: %s" % type(n))
+
 def is_str(n):
 	return type(n) is str
 
@@ -244,13 +260,53 @@ def decompress(string, compressed):
 		decompressed += compressed[string_idx]
 	return decompressed
 
+def create_block(arg, code):
+	if arg.char == "Ä":
+		c = code[-1:]
+		code = code[:-1]
+	elif arg.char == "Å":
+		c = code[-2:]
+		code = code[:-2]
+	elif arg.char == "É":
+		c = code[-3:]
+		code = code[:-3]
+	elif arg.char == "æ":
+		c = code[-4:]
+		code = code[:-4]
+	elif arg.char == "Æ":
+		c = code[-5:]
+		code = code[:-5]
+	elif arg.char == "ô":
+		c = code[-6:]
+		code = code[:-6]
+	elif arg.char == "ö":
+		c = code[-7:]
+		code = code[:-7]
+	elif arg.char == "ò":
+		c = code[-8:]
+		code = code[:-8]
+	elif arg.char == "{":
+		c = []
+		temp = [] if not code else code.pop()
+		while temp.char != "}" and code:
+			c.append(temp)
+			temp = code.pop()
+		c = c[::-1]
+	return c, code
+
 def for_looping(n):
 	for i in range(n):
 		yield i
 
 def evaluate(code, stdin, stack = Stack([]), level = 0, loop_counter = 0, loop_limit = 0, loop_value = None):
 
-	monads = {"¶": is_prime, "_": duplicate, "∙": triplicate, "·": quadruplicate}
+	monads = {
+		"¶": is_prime,
+		"!": gamma_yield,
+		"_": duplicate,
+		"∙": triplicate,
+		"·": quadruplicate
+	}
 	binary_monads = {"â": to_base, "ä": from_base}
 	dinads = {"<": is_less, "=": is_equal, ">": is_greater, "¡": is_not, "+": add_yield, "*": mult_yield, "≥": is_geq, "≤": is_leq}
 	loop_handlers = {
@@ -310,14 +366,9 @@ def evaluate(code, stdin, stack = Stack([]), level = 0, loop_counter = 0, loop_l
 		elif arg.char == "!":
 			a = stack.pop(arg.char)
 			if is_num(a):
-				if is_int(a):
-					v = int(math.gamma(a+1))
-				else:
-					v = math.gamma(a+1)
-				stack.append(v)
+				stack.append(gamma(a))
 			elif is_list(a):
-				v = [int(math.gamma(n+1)) if is_int(n) else math.gamma(n+1) for n in a]
-				stack.append(v)
+				stack.append([gamma(n) for n in a])
 			else:
 				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
@@ -566,23 +617,26 @@ def evaluate(code, stdin, stack = Stack([]), level = 0, loop_counter = 0, loop_l
 				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
 		elif arg.char == "g":
-			op = code.pop().char
+			op = code.pop()
 			a = stack.pop(arg.char)
-			if op in monads and is_list(a):
-				stack.append([n for n in a if all(monads[op](n))])
-			elif op in binary_monads and is_list(a):
-				stack.append([n for n in a if all(binary_monads[op](n, 2))])
-			elif op in dinads:
+			if op.char in monads and is_list(a):
+				stack.append([n for n in a if all(monads[op.char](n))])
+			elif op.char in binary_monads and is_list(a):
+				stack.append([n for n in a if all(binary_monads[op.char](n, 2))])
+			elif op.char in dinads:
 				b = stack.pop(arg.char)
 				if is_list(a) and is_num(b):
-					stack.append([n for n in a if all(dinads[op](n, b))])
+					stack.append([n for n in a if all(dinads[op.char](n, b))])
 				elif is_num(a) and is_list(b):
-					stack.append([n for n in b if all(dinads[op](a, n))])
+					stack.append([n for n in b if all(dinads[op.char](a, n))])
 				elif is_list(a) and is_list(b):
 					if len(a) == len(b):
-						stack.append([na for na, nb in zip(a, b) if all(dinads[op](na, nb))])
+						stack.append([na for na, nb in zip(a, b) if all(dinads[op.char](na, nb))])
 					else:
 						raise ValueError("Both lists need to be of equal length for filtering")
+			elif op.char in block_creators and is_list(a):
+				c, code = create_block(op, code)
+				stack.append([n for n in a if evaluate(c[:], stdin, Stack([n]), level+1)[0]])
 			else:
 				raise ValueError("[%s]%s%s is not supported" % (type(a),arg.char, op))
 
@@ -810,38 +864,8 @@ def evaluate(code, stdin, stack = Stack([]), level = 0, loop_counter = 0, loop_l
 
 
 		elif arg.char in block_creators:
-			if arg.char == "Ä":
-				c = code[-1:]
-				code = code[:-1]
-			elif arg.char == "Å":
-				c = code[-2:]
-				code = code[:-2]
-			elif arg.char == "É":
-				c = code[-3:]
-				code = code[:-3]
-			elif arg.char == "æ":
-				c = code[-4:]
-				code = code[:-4]
-			elif arg.char == "Æ":
-				c = code[-5:]
-				code = code[:-5]
-			elif arg.char == "ô":
-				c = code[-6:]
-				code = code[:-6]
-			elif arg.char == "ö":
-				c = code[-7:]
-				code = code[:-7]
-			elif arg.char == "ò":
-				c = code[-8:]
-				code = code[:-8]
-			elif arg.char == "{":
-				c = []
-				temp = [] if not code else code.pop()
-				while temp.char != "}" and code:
-					c.append(temp)
-					temp = code.pop()
-				c = c[::-1]
-			loop_type = code.pop()
+			c, code = create_block(arg, code)
+			loop_type = code.pop() if code else Argument("*", 0)
 
 			if loop_type.char in loop_types:
 				if loop_type.char == "*":
