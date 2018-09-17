@@ -236,7 +236,7 @@ y
 	δ : capitalize string
 	∞ : pop a, push 2*a
 φ : golden ratio (1.618...)
-ε
+	ε : reduce list with operator
 ∩
 ≡
 ±
@@ -309,6 +309,7 @@ Monads:														|i|f|l|s|
 	µ : swap array/string items								| | |x|x|
 	δ : capitalize string 									| | |x|x|
 	∞ : pop a, push 2*a 									|x|x| | |
+	ε : reduce list with operator 							| | |x| |
 	⌠ : increment twice										|x| |x| |
 	⌡ : decrement twice										|x| |x| |
 	° : is perfect square 									|x| | | |

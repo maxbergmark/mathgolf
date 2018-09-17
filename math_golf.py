@@ -6,6 +6,7 @@ import itertools
 import random
 import resources.dictionary
 from traceback import print_exc
+from functools import reduce
 
 Argument = namedtuple("Argument", ["char", "code"])
 DEBUG = False
@@ -118,10 +119,17 @@ def is_geq(a, b):
 def is_not(a, b):
 	yield int(a != b)
 
-def add(a, b):
+def add_yield(a, b):
 	yield a+b
-def mult(a, b):
+
+def mult_yield(a, b):
 	yield a*b
+
+def add(a, b):
+	return a+b
+
+def mult(a, b):
+	return a*b
 
 def to_base(a, b):
 	res = []
@@ -244,7 +252,7 @@ def evaluate(code, stdin, stack = Stack([]), level = 0, loop_counter = 0, loop_l
 
 	monads = {"¶": is_prime, "_": duplicate, "∙": triplicate, "·": quadruplicate}
 	binary_monads = {"â": to_base, "ä": from_base}
-	dinads = {"<": is_less, "=": is_equal, ">": is_greater, "¡": is_not, "+": add, "*": mult, "≥": is_geq, "≤": is_leq}
+	dinads = {"<": is_less, "=": is_equal, ">": is_greater, "¡": is_not, "+": add_yield, "*": mult_yield, "≥": is_geq, "≤": is_leq}
 	loop_handlers = {
 		"↑": while_true_no_pop,
 		"↓": while_false_no_pop,
@@ -255,6 +263,8 @@ def evaluate(code, stdin, stack = Stack([]), level = 0, loop_counter = 0, loop_l
 		"▲" : do_while_true_pop,
 		"▼" : do_while_false_pop
 	}
+	reducers = {"*": mult, "#": pow, "+": add}
+
 	loop_types = set("↑↓→←∟↔▲▼*")
 	block_creators = set("ÄÅÉæÆ{ôöò")
 	string_creators = set("ûùÿ╢╖╕╣║╗")
@@ -1282,6 +1292,18 @@ def evaluate(code, stdin, stack = Stack([]), level = 0, loop_counter = 0, loop_l
 				stack.append([n.capitalize() if is_str(n) else n for n in a])
 			else:
 				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+		elif arg.char == "ε":
+			a = stack.pop(arg.char)
+			if is_list(a):
+				operator = code.pop().char
+				if operator in reducers:
+					stack.append(reduce(reducers[operator], a))
+				else:
+					raise ValueError("[%s]%s%s is not a valid reduction" % (a, arg.char, operator))
+			else:
+				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
 
 		elif arg.char == "∞":
 			a = stack.pop(arg.char)

@@ -44,17 +44,17 @@ On top of that, a lot of mapping and functions are implicitly mapped to each ele
 
 ### Hello, world! (golfed)
 
-    'H╕○ô║·▬╕7ÿ'!
+    'H╕○ô╣·╩Θ'!
 
-    This code is one byte shorter. It uses MathGolf's shorthands for compressed strings and fixed-length strings to encode "Hello, world!"
+    This code is three bytes shorter. It uses MathGolf's shorthands for compressed strings, fixed-length strings and the dictionary to encode "Hello, world!"
 
 #### Explanation
 
     'H             Push "H"
       ╕○ô          Decompress "○ô" to get "ello"
-         ║·▬       Decompress "·▬" to get ", w"
-            ╕7ÿ    Decompress "7ÿ" to get "orld"
-               '!  Push "!"
+         ╣·        Decompress "·" to get ", "
+           ╩Θ      Access top 256 words in dictionary to get "world"
+             '!    Push "!"
 
 
 ### Print ascii triangle of asterisk
