@@ -75,13 +75,20 @@ def fibonnaci(n):
 		a, b = a+b, a+2*b
 	return [a, b][n%2]
 
-def fibonnaci_yield(n):
-	yield fibonnaci(n)
+def fibonnaci_yield(a, arg):
+	yield fibonnaci(a, arg)
 
-def length_yield(n):
-	yield len(n)
+def length_yield(a, arg):
+	if is_list(a):
+		yield a
+		yield len(a)
+	elif is_str(a):
+		yield a
+		yield len(a)
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-def cast_to_integer_yield(a):
+def cast_to_integer_yield(a, arg):
 	if is_list(a):
 		yield [int(n) if is_num(n) or is_int_string(n) else n for n in a]
 	elif is_num(a):
@@ -91,7 +98,7 @@ def cast_to_integer_yield(a):
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-def get_range_yield(a):
+def get_range_yield(a, arg):
 	if is_int(a):
 		yield list(range(a))
 	elif is_list(a):
@@ -99,7 +106,7 @@ def get_range_yield(a):
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-def sort_list_or_string_yield(a):
+def sort_list_or_string_yield(a, arg):
 	if is_list(a):
 		yield sorted(a)
 	elif is_str(a):
@@ -107,11 +114,11 @@ def sort_list_or_string_yield(a):
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-def sort_list_or_string_reverse_yield(a):
-	for val in sort_list_or_string_yield(a):
+def sort_list_or_string_reverse_yield(a, arg):
+	for val in sort_list_or_string_yield(a, arg):
 		yield val[::-1]
 
-def get_random_value_yield(a):
+def get_random_value_yield(a, arg):
 	if is_int(a):
 		yield random.randint(0, a)
 	elif is_list(a):
@@ -121,7 +128,7 @@ def get_random_value_yield(a):
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-def reverse_value_yield(a):
+def reverse_value_yield(a, arg):
 	if is_int(a):
 		yield int(str(a)[::-1])
 	elif is_list(a):
@@ -131,7 +138,7 @@ def reverse_value_yield(a):
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-def modulo_2_yield(a):
+def modulo_2_yield(a, arg):
 	if is_num(a):
 		yield a % 2
 	elif is_list(a):
@@ -139,7 +146,7 @@ def modulo_2_yield(a):
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-def pow_2_yield(a):
+def pow_2_yield(a, arg):
 	if is_int(a):
 		yield 2**a
 	elif is_num(a):
@@ -149,7 +156,7 @@ def pow_2_yield(a):
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-def pow_10_yield(a):
+def pow_10_yield(a, arg):
 	if is_int(a):
 		yield int(10**a)
 	elif is_num(a):
@@ -159,7 +166,7 @@ def pow_10_yield(a):
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-def palindromize_yield(a):
+def palindromize_yield(a, arg):
 	if is_int(a):
 		a = str(a)
 		yield int(a+a[::-1][1:])
@@ -170,7 +177,7 @@ def palindromize_yield(a):
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-def halve_yield(a):
+def halve_yield(a, arg):
 	if is_num(a):
 		if is_int(a):
 			yield a//2
@@ -181,7 +188,7 @@ def halve_yield(a):
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-def quarter_yield(a):
+def quarter_yield(a, arg):
 	if is_num(a):
 		if is_int(a):
 			yield a//4
@@ -192,7 +199,7 @@ def quarter_yield(a):
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-def convert_to_string_yield(a):
+def convert_to_string_yield(a, arg):
 	if is_num(a):
 		yield str(a)
 	elif is_list(a):
@@ -200,7 +207,7 @@ def convert_to_string_yield(a):
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-def split_string_or_int_yield(a):
+def split_string_or_int_yield(a, arg):
 	if is_int(a):
 		yield [int(n) for n in str(a)]
 	elif is_str(a):
@@ -210,7 +217,7 @@ def split_string_or_int_yield(a):
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-def pop_from_right_yield(a):
+def pop_from_right_yield(a, arg):
 	if is_str(a):
 		yield a[:-1]
 		yield a[-1]
@@ -220,7 +227,7 @@ def pop_from_right_yield(a):
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-def discard_from_right_yield(a):
+def discard_from_right_yield(a, arg):
 	if is_str(a):
 		yield a[:-1]
 	elif is_list(a):
@@ -228,7 +235,7 @@ def discard_from_right_yield(a):
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-def pop_from_left_yield(a):
+def pop_from_left_yield(a, arg):
 	if is_str(a):
 		yield a[1:]
 		yield a[0]
@@ -238,7 +245,7 @@ def pop_from_left_yield(a):
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-def discard_from_left_yield(a):
+def discard_from_left_yield(a, arg):
 	if is_str(a):
 		yield a[1:]
 	elif is_list(a):
@@ -246,7 +253,7 @@ def discard_from_left_yield(a):
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-def copy_and_decrease_yield(a):
+def copy_and_decrease_yield(a, arg):
 	if is_num(a):
 		yield a
 		yield a-1
@@ -255,7 +262,7 @@ def copy_and_decrease_yield(a):
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-def copy_and_increase_yield(a):
+def copy_and_increase_yield(a, arg):
 	if is_num(a):
 		yield a
 		yield a+1
@@ -264,19 +271,19 @@ def copy_and_increase_yield(a):
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-def check_if_1_yield(a):
+def check_if_1_yield(a, arg):
 	if is_num(a):
 		yield int(a == 1)
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-def check_if_0_yield(a):
+def check_if_0_yield(a, arg):
 	if is_num(a):
 		yield int(a == 1)
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-def get_dictionary_words_yield(a):
+def get_dictionary_words_yield(a, arg):
 	if is_int(a):
 		yield words[a]
 	elif is_list(a):
@@ -284,7 +291,7 @@ def get_dictionary_words_yield(a):
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-def flatten_or_get_divisors(a):
+def flatten_or_get_divisors_yield(a, arg):
 	if is_int(a):
 		yield [n for n in range(1, a+1) if a%n == 0]
 	elif is_list(a):
@@ -292,13 +299,13 @@ def flatten_or_get_divisors(a):
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-def get_symmetric_range_yield(a):
+def get_symmetric_range_yield(a, arg):
 	if is_num(a):
 		yield list(range(-int(a), int(a)+1))
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-def round_up_to_pow_2_yield(a):
+def round_up_to_pow_2_yield(a, arg):
 	if is_num(a):
 		yield 2**int(math.log(a, 2)+1)
 	elif is_list(a):
@@ -306,7 +313,7 @@ def round_up_to_pow_2_yield(a):
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-def round_down_to_pow_2_yield(a):
+def round_down_to_pow_2_yield(a, arg):
 	if is_num(a):
 		yield 2**int(math.log(a, 2))
 	elif is_list(a):
@@ -314,13 +321,13 @@ def round_down_to_pow_2_yield(a):
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-def get_range_1_based_yield(a):
+def get_range_1_based_yield(a, arg):
 	if is_num(a):
 		yield list(range(1, int(a)+1))
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-def left_rotate_yield(a):
+def left_rotate_yield(a, arg):
 	if is_int(a):
 		yield int(bin(a)[3:]+'1', 2)
 	elif is_list(a):
@@ -330,7 +337,7 @@ def left_rotate_yield(a):
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-def right_rotate_yield(a):
+def right_rotate_yield(a, arg):
 	if is_int(a):
 		yield int(str(a&1)+bin(a)[2:-1], 2)
 	elif is_list(a):
@@ -340,7 +347,7 @@ def right_rotate_yield(a):
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-def to_boolean_yield(a):
+def to_boolean_yield(a, arg):
 	if is_int(a):
 		yield int(is_truthy(a))
 	elif is_list(a):
@@ -348,7 +355,7 @@ def to_boolean_yield(a):
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-def to_boolean_inverted_yield(a):
+def to_boolean_inverted_yield(a, arg):
 	if is_int(a):
 		yield int(is_falsey(a))
 	elif is_list(a):
@@ -356,7 +363,7 @@ def to_boolean_inverted_yield(a):
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-def get_unique_elements_yield(a):
+def get_unique_elements_yield(a, arg):
 	if is_str(a):
 		yield ''.join(list(set(a)))
 	elif is_list(a):
@@ -364,7 +371,7 @@ def get_unique_elements_yield(a):
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-def get_sum_yield(a):
+def get_sum_yield(a, arg):
 	if is_int(a):
 		yield sum(int(d) for d in str(a))
 	elif is_list(a):
@@ -377,7 +384,7 @@ def get_sum_yield(a):
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-def remove_leading_zeroes_yield(a):
+def remove_leading_zeroes_yield(a, arg):
 	if is_str(a):
 		yield a.lstrip("0")
 	elif is_list(a):
@@ -390,7 +397,7 @@ def remove_leading_zeroes_yield(a):
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-def capitalize_string_yield(a):
+def capitalize_string_yield(a, arg):
 	if is_str(a):
 		yield a.capitalize()
 	elif is_list(a):
@@ -398,7 +405,7 @@ def capitalize_string_yield(a):
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-def double_element_yield(a):
+def double_element_yield(a, arg):
 	if is_num(a):
 		yield a*2
 	elif is_list(a):
@@ -406,7 +413,7 @@ def double_element_yield(a):
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-def increase_twice_yield(a):
+def increase_twice_yield(a, arg):
 	if is_num(a):
 		yield a+2
 	elif is_list(a):
@@ -414,7 +421,7 @@ def increase_twice_yield(a):
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-def decrease_twice_yield(a):
+def decrease_twice_yield(a, arg):
 	if is_num(a):
 		yield a-2
 	elif is_list(a):
@@ -426,10 +433,10 @@ def is_square(n):
 	s = round(n**.5)
 	return int(n == s*s)
 
-def is_square_yield(n):
-	yield is_square(n)
+def is_square_yield(a, arg):
+	yield is_square(a)
 
-def get_sqrt_yield(a):
+def get_sqrt_yield(a, arg):
 	if is_num(a):
 		yield math.sqrt(a)
 	elif is_list(a):
@@ -439,7 +446,7 @@ def get_sqrt_yield(a):
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-def get_cube_yield(a):
+def get_cube_yield(a, arg):
 	if is_num(a):
 		yield a*a*a
 	elif is_list(a):
@@ -447,7 +454,7 @@ def get_cube_yield(a):
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-def get_square_yield(a):
+def get_square_yield(a, arg):
 	if is_num(a):
 		yield a*a
 	elif is_list(a):
@@ -455,7 +462,7 @@ def get_square_yield(a):
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-def get_self_product_or_collatz_yield(a):
+def get_self_product_or_collatz_yield(a, arg):
 	if is_list(a):
 		yield [list(n) for n in itertools.product(a, a)]
 	if is_int(a):
@@ -486,7 +493,7 @@ def gamma(n):
 	else:
 		raise ValueError("unsupported type for gamma: %s" % type(n))
 
-def gamma_yield(n):
+def gamma_yield(n, arg):
 	if is_int(n):
 		yield int(math.gamma(n+1))
 	elif is_num(n):
@@ -494,10 +501,10 @@ def gamma_yield(n):
 	else:
 		raise ValueError("unsupported type for gamma: %s" % type(n))
 
-def decrease_yield(n):
+def decrease_yield(n, arg):
 	yield n-1
 
-def increase_yield(n):
+def increase_yield(n, arg):
 	yield n+1
 
 def is_str(n):
@@ -562,10 +569,10 @@ def from_base(l, b):
 		res += a*b**i
 	return res
 
-def to_binary_yield(a):
+def to_binary_yield(a, arg):
 	yield to_base(a, 2)
 
-def from_binary_yield(a):
+def from_binary_yield(a, arg):
 	yield from_base(a, 2)
 
 def to_base_string(a, b):
@@ -574,7 +581,7 @@ def to_base_string(a, b):
 def from_base_string(a, b):
 	return from_base([int(n) for n in a], b)
 
-def to_binary_string_yield(a):
+def to_binary_string_yield(a, arg):
 	if is_int(a):
 		yield to_base_string(a, 2)
 	elif is_list(a):
@@ -582,7 +589,7 @@ def to_binary_string_yield(a):
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-def from_binary_string_yield(a):
+def from_binary_string_yield(a, arg):
 	if is_list(a):
 		yield [from_base_string(n, 2) for n in a]
 	elif is_str(a):
@@ -590,15 +597,15 @@ def from_binary_string_yield(a):
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-def duplicate(a):
+def duplicate(a, arg = None):
 	for i in range(2):
 		yield a
 
-def triplicate(a):
+def triplicate(a, arg = None):
 	for i in range(3):
 		yield a
 
-def quadruplicate(a):
+def quadruplicate(a, arg = None):
 	for i in range(4):
 		yield a
 
@@ -725,7 +732,14 @@ def for_looping(n):
 	for i in range(n):
 		yield i
 
-def evaluate(code, stdin, stack = Stack([]), level = 0, loop_counter = 0, loop_limit = 0, loop_value = None):
+def evaluate(
+	code,
+	stdin,
+	stack = Stack([]),
+	level = 0,
+	loop_counter = 0,
+	loop_limit = 0,
+	loop_value = None):
 
 	monads = {
 		"¶": is_prime,
@@ -760,7 +774,7 @@ def evaluate(code, stdin, stack = Stack([]), level = 0, loop_counter = 0, loop_l
 		"└": copy_and_increase_yield,
 		"┴": check_if_1_yield,
 		"┴": check_if_0_yield,
-		"─": flatten_or_get_divisors,
+		"─": flatten_or_get_divisors_yield,
 		"╦": get_dictionary_words_yield,
 		"╤": get_symmetric_range_yield,
 		"╨": round_up_to_pow_2_yield,
@@ -833,9 +847,10 @@ def evaluate(code, stdin, stack = Stack([]), level = 0, loop_counter = 0, loop_l
 				stack.append(a.split())
 			else:
 				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
 		elif arg.char in monads:
 			a = stack.pop(arg.char)
-			for val in monads[arg.char](a):
+			for val in monads[arg.char](a, arg):
 				stack.append(val)
 
 		elif arg.char == "§":
@@ -1111,7 +1126,7 @@ def evaluate(code, stdin, stack = Stack([]), level = 0, loop_counter = 0, loop_l
 			op = code.pop()
 			a = stack.pop(arg.char)
 			if op.char in monads and is_list(a):
-				stack.append([n for n in a if all(monads[op.char](n))])
+				stack.append([n for n in a if all(monads[op.char](n, op))])
 			elif op.char in dinads:
 				b = stack.pop(arg.char)
 				if is_list(a) and is_num(b):
@@ -1154,7 +1169,7 @@ def evaluate(code, stdin, stack = Stack([]), level = 0, loop_counter = 0, loop_l
 			op = code.pop()
 			a = stack.pop(arg.char)
 			if op.char in monads and is_list(a):
-				stack.append([v for n in a for v in monads[op.char](n)])
+				stack.append([v for n in a for v in monads[op.char](n, op)])
 			elif op.char in dinads:
 				b = stack.pop(arg.char)
 				if is_list(a) and is_num(b):
