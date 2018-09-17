@@ -75,9 +75,398 @@ def fibonnaci(n):
 		a, b = a+b, a+2*b
 	return [a, b][n%2]
 
+def fibonnaci_yield(n):
+	yield fibonnaci(n)
+
+def length_yield(n):
+	yield len(n)
+
+def cast_to_integer_yield(a):
+	if is_list(a):
+		yield [int(n) if is_num(n) or is_int_string(n) else n for n in a]
+	elif is_num(a):
+		yield int(a)
+	elif is_str(a):
+		yield int(a)
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+def get_range_yield(a):
+	if is_int(a):
+		yield list(range(a))
+	elif is_list(a):
+		yield [list(range(n)) for n in a]
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+def sort_list_or_string_yield(a):
+	if is_list(a):
+		yield sorted(a)
+	elif is_str(a):
+		yield ''.join(sorted(a))
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+def sort_list_or_string_reverse_yield(a):
+	for val in sort_list_or_string_yield(a):
+		yield val[::-1]
+
+def get_random_value_yield(a):
+	if is_int(a):
+		yield random.randint(0, a)
+	elif is_list(a):
+		yield random.choice(a)
+	elif is_str(a):
+		yield random.choice(a)
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+def reverse_value_yield(a):
+	if is_int(a):
+		yield int(str(a)[::-1])
+	elif is_list(a):
+		yield a[::-1]
+	elif is_str(a):
+		yield a[::-1]
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+def modulo_2_yield(a):
+	if is_num(a):
+		yield a % 2
+	elif is_list(a):
+		yield [n % 2 for n in a]
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+def pow_2_yield(a):
+	if is_int(a):
+		yield 2**a
+	elif is_num(a):
+		yield 2**a
+	elif is_list(a):
+		yield [2**n for n in a]
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+def pow_10_yield(a):
+	if is_int(a):
+		yield int(10**a)
+	elif is_num(a):
+		yield 10**a
+	elif is_list(a):
+		yield [10**n for n in a]
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+def palindromize_yield(a):
+	if is_int(a):
+		a = str(a)
+		yield int(a+a[::-1][1:])
+	elif is_list(a):
+		yield a+a[::-1][1:]
+	elif is_str(a):
+		yield a+a[::-1][1:]
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+def halve_yield(a):
+	if is_num(a):
+		if is_int(a):
+			yield a//2
+		else:
+			yield a/2
+	elif is_list(a):
+		yield [n//2 if is_int(n) else n/2 for n in a]
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+def quarter_yield(a):
+	if is_num(a):
+		if is_int(a):
+			yield a//4
+		else:
+			yield a/4
+	elif is_list(a):
+		yield [n//4 if is_int(n) else n/4 for n in a]
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+def convert_to_string_yield(a):
+	if is_num(a):
+		yield str(a)
+	elif is_list(a):
+		yield [str(n) for n in a]
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+def split_string_or_int_yield(a):
+	if is_int(a):
+		yield [int(n) for n in str(a)]
+	elif is_str(a):
+		yield list(a)
+	elif is_list(a):
+		yield [v for n in a for v in split_string_or_int_yield(n)]
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+def pop_from_right_yield(a):
+	if is_str(a):
+		yield a[:-1]
+		yield a[-1]
+	elif is_list(a):
+		yield a[:-1]
+		yield a[-1]
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+def discard_from_right_yield(a):
+	if is_str(a):
+		yield a[:-1]
+	elif is_list(a):
+		yield a[:-1]
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+def pop_from_left_yield(a):
+	if is_str(a):
+		yield a[1:]
+		yield a[0]
+	elif is_list(a):
+		yield a[1:]
+		yield a[0]
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+def discard_from_left_yield(a):
+	if is_str(a):
+		yield a[1:]
+	elif is_list(a):
+		yield a[1:]
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+def copy_and_decrease_yield(a):
+	if is_num(a):
+		yield a
+		yield a-1
+	elif is_list(a):
+		yield [v for n in a for v in copy_and_decrease_yield(n)]
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+def copy_and_increase_yield(a):
+	if is_num(a):
+		yield a
+		yield a+1
+	elif is_list(a):
+		yield [v for n in a for v in copy_and_increase_yield(n)]
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+def check_if_1_yield(a):
+	if is_num(a):
+		yield int(a == 1)
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+def check_if_0_yield(a):
+	if is_num(a):
+		yield int(a == 1)
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+def get_dictionary_words_yield(a):
+	if is_int(a):
+		yield words[a]
+	elif is_list(a):
+		yield [words[n] if is_int(n) else n for n in a]
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+def flatten_or_get_divisors(a):
+	if is_int(a):
+		yield [n for n in range(1, a+1) if a%n == 0]
+	elif is_list(a):
+		yield [n for l in a for n in l]
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+def get_symmetric_range_yield(a):
+	if is_num(a):
+		yield list(range(-int(a), int(a)+1))
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+def round_up_to_pow_2_yield(a):
+	if is_num(a):
+		yield 2**int(math.log(a, 2)+1)
+	elif is_list(a):
+		yield [v for n in a for v in round_up_to_pow_2_yield(n)]
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+def round_down_to_pow_2_yield(a):
+	if is_num(a):
+		yield 2**int(math.log(a, 2))
+	elif is_list(a):
+		yield [v for n in a for v in round_down_to_pow_2_yield(n)]
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+def get_range_1_based_yield(a):
+	if is_num(a):
+		yield list(range(1, int(a)+1))
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+def left_rotate_yield(a):
+	if is_int(a):
+		yield int(bin(a)[3:]+'1', 2)
+	elif is_list(a):
+		yield a[1:] + [a[0]]
+	elif is_str(a):
+		yield a[1:] + a[0]
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+def right_rotate_yield(a):
+	if is_int(a):
+		yield int(str(a&1)+bin(a)[2:-1], 2)
+	elif is_list(a):
+		yield [a[-1]] + a[:-1]
+	elif is_str(a):
+		yield a[-1] + a[:-1]
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+def to_boolean_yield(a):
+	if is_int(a):
+		yield int(is_truthy(a))
+	elif is_list(a):
+		yield [int(is_truthy(n)) for n in a]
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+def to_boolean_inverted_yield(a):
+	if is_int(a):
+		yield int(is_falsey(a))
+	elif is_list(a):
+		yield [int(is_falsey(n)) for n in a]
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+def get_unique_elements_yield(a):
+	if is_str(a):
+		yield ''.join(list(set(a)))
+	elif is_list(a):
+		yield list(set(a))
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+def get_sum_yield(a):
+	if is_int(a):
+		yield sum(int(d) for d in str(a))
+	elif is_list(a):
+		if len(a) > 0 and is_int(a[0]):
+			yield sum(a)
+		elif len(a) > 0 and is_str(a[0]):
+			yield ''.join(a)
+		else:
+			yield 0
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+def remove_leading_zeroes_yield(a):
+	if is_str(a):
+		yield a.lstrip("0")
+	elif is_list(a):
+		if len(a) > 0 and is_int(a[0]):
+			yield ["" if n == 0 else str(n) for n in a]
+		elif len(a) > 0 and is_str(a[0]):
+			yield [n.lstrip("0") for n in a]
+		else:
+			yield []
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+def capitalize_string_yield(a):
+	if is_str(a):
+		yield a.capitalize()
+	elif is_list(a):
+		yield [n.capitalize() if is_str(n) else n for n in a]
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+def double_element_yield(a):
+	if is_num(a):
+		yield a*2
+	elif is_list(a):
+		yield [n*2 for n in a]
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+def increase_twice_yield(a):
+	if is_num(a):
+		yield a+2
+	elif is_list(a):
+		yield [n+2 for n in a]
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+def decrease_twice_yield(a):
+	if is_num(a):
+		yield a-2
+	elif is_list(a):
+		yield [n-2 for n in a]
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
 def is_square(n):
 	s = round(n**.5)
 	return int(n == s*s)
+
+def is_square_yield(n):
+	yield is_square(n)
+
+def get_sqrt_yield(a):
+	if is_num(a):
+		yield math.sqrt(a)
+	elif is_list(a):
+		yield [math.sqrt(n) for n in a]
+	elif is_str(a):
+		yield list(a)
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+def get_cube_yield(a):
+	if is_num(a):
+		yield a*a*a
+	elif is_list(a):
+		yield [n*n*n for n in a]
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+def get_square_yield(a):
+	if is_num(a):
+		yield a*a
+	elif is_list(a):
+		yield [n*n for n in a]
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+def get_self_product_or_collatz_yield(a):
+	if is_list(a):
+		yield [list(n) for n in itertools.product(a, a)]
+	if is_int(a):
+		if a % 2 == 0:
+			yield a//2
+		else:
+			yield 3*a+1
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+
 
 def is_prime(n):
 	if n < 0:
@@ -105,6 +494,12 @@ def gamma_yield(n):
 	else:
 		raise ValueError("unsupported type for gamma: %s" % type(n))
 
+def decrease_yield(n):
+	yield n-1
+
+def increase_yield(n):
+	yield n+1
+
 def is_str(n):
 	return type(n) is str
 
@@ -113,6 +508,13 @@ def is_num(n):
 
 def is_int(n):
 	return type(n) is int or is_num(n) and float(n).is_integer()
+
+def is_int_string(s):
+    try:
+        int(s)
+        return True
+    except ValueError:
+        return False
 
 def is_list(n):
 	return type(n) is list
@@ -160,11 +562,33 @@ def from_base(l, b):
 		res += a*b**i
 	return res
 
+def to_binary_yield(a):
+	yield to_base(a, 2)
+
+def from_binary_yield(a):
+	yield from_base(a, 2)
+
 def to_base_string(a, b):
 	return ''.join([str(n) for n in to_base(a, b)]) or '0'
 
 def from_base_string(a, b):
 	return from_base([int(n) for n in a], b)
+
+def to_binary_string_yield(a):
+	if is_int(a):
+		yield to_base_string(a, 2)
+	elif is_list(a):
+		yield [to_base_string(n, 2) for n in a]
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+def from_binary_string_yield(a):
+	if is_list(a):
+		yield [from_base_string(n, 2) for n in a]
+	elif is_str(a):
+		yield from_base_string(a, 2)
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
 def duplicate(a):
 	for i in range(2):
@@ -303,11 +727,63 @@ def evaluate(code, stdin, stack = Stack([]), level = 0, loop_counter = 0, loop_l
 	monads = {
 		"¶": is_prime,
 		"!": gamma_yield,
+		"(": decrease_yield,
+		")": increase_yield,
+		"f": fibonnaci_yield,
+		"h": length_yield,
+		"i": cast_to_integer_yield,
+		"r": get_range_yield,
+		"s": sort_list_or_string_yield,
+		"w": get_random_value_yield,
+		"x": reverse_value_yield,
+		"z": sort_list_or_string_reverse_yield,
+		"à": to_binary_string_yield,
+		"å": from_binary_string_yield,
+		"â": to_binary_yield,
+		"ä": from_binary_yield,
+		"¥": modulo_2_yield,
+		"ó": pow_2_yield,
+		"ú": pow_10_yield,
+		"ñ": palindromize_yield,
+		"½": halve_yield,
+		"¼": quarter_yield,
+		"░": convert_to_string_yield,
+		"▒": split_string_or_int_yield,
+		"┤": pop_from_right_yield,
+		"╡": discard_from_right_yield,
+		"├": pop_from_left_yield,
+		"╞": discard_from_left_yield,
+		"┐": copy_and_decrease_yield,
+		"└": copy_and_increase_yield,
+		"┴": check_if_1_yield,
+		"┴": check_if_0_yield,
+		"─": flatten_or_get_divisors,
+		"╦": get_dictionary_words_yield,
+		"╤": get_symmetric_range_yield,
+		"╨": round_up_to_pow_2_yield,
+		"╒": get_range_1_based_yield,
+		"╥": round_down_to_pow_2_yield,
+		"╫": left_rotate_yield,
+		"╪": right_rotate_yield,
+		"┘": to_boolean_yield,
+		"┌": to_boolean_inverted_yield,
+		"▀": get_unique_elements_yield,
+		"Σ": get_sum_yield,
+		"σ": remove_leading_zeroes_yield,
+		"δ": capitalize_string_yield,
+		"∞": double_element_yield,
+		"⌠": increase_twice_yield,
+		"⌡": decrease_twice_yield,
+		"°": is_square_yield,
 		"_": duplicate,
 		"∙": triplicate,
-		"·": quadruplicate
+		"·": quadruplicate,
+		"√": get_sqrt_yield,
+		"ⁿ": get_cube_yield,
+		"²": get_square_yield,
+		"■": get_self_product_or_collatz_yield
 	}
-	binary_monads = {"â": to_base, "ä": from_base}
+	# binary_monads = {"â": to_base, "ä": from_base}
 	dinads = {"<": is_less, "=": is_equal, ">": is_greater, "¡": is_not, "+": add_yield, "*": mult_yield, "≥": is_geq, "≤": is_leq}
 	loop_handlers = {
 		"↑": while_true_no_pop,
@@ -621,8 +1097,8 @@ def evaluate(code, stdin, stack = Stack([]), level = 0, loop_counter = 0, loop_l
 			a = stack.pop(arg.char)
 			if op.char in monads and is_list(a):
 				stack.append([n for n in a if all(monads[op.char](n))])
-			elif op.char in binary_monads and is_list(a):
-				stack.append([n for n in a if all(binary_monads[op.char](n, 2))])
+			# elif op.char in binary_monads and is_list(a):
+				# stack.append([n for n in a if all(binary_monads[op.char](n, 2))])
 			elif op.char in dinads:
 				b = stack.pop(arg.char)
 				if is_list(a) and is_num(b):
@@ -636,9 +1112,9 @@ def evaluate(code, stdin, stack = Stack([]), level = 0, loop_counter = 0, loop_l
 						raise ValueError("Both lists need to be of equal length for filtering")
 			elif op.char in block_creators and is_list(a):
 				c, code = create_block(op, code)
-				stack.append([n for n in a if evaluate(c[:], stdin, Stack([n]), level+1)[0]])
+				stack.append([n for n in a if any(evaluate(c[:], stdin, Stack([n]), level+1))])
 			else:
-				raise ValueError("[%s]%s%s is not supported" % (type(a),arg.char, op))
+				raise ValueError("[%s]%s%s is not supported" % (type(a),arg.char, op.char))
 
 		elif arg.char == "h":
 			a = stack.pop(arg.char)
@@ -653,15 +1129,8 @@ def evaluate(code, stdin, stack = Stack([]), level = 0, loop_counter = 0, loop_l
 
 		elif arg.char == "i":
 			a = stack.pop(arg.char)
-			if is_list(a):
-				stack.append([int(n) if is_num(n) else n for n in a])
-			elif is_num(a):
-				stack.append(int(a))
-			elif is_str(a):
-				stack.append(int(a))
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
+			for val in monads[arg.char](a):
+				stack.append(val)
 		elif arg.char == "j":
 			v = float(stdin.pop())
 			stack.append(v)
@@ -673,25 +1142,28 @@ def evaluate(code, stdin, stack = Stack([]), level = 0, loop_counter = 0, loop_l
 			stack.append(v)
 
 		elif arg.char == "m":
-			op = code.pop().char
+			op = code.pop()
 			a = stack.pop(arg.char)
-			if op in monads and is_list(a):
-				stack.append([v for n in a for v in monads[op](n)])
-			elif op in binary_monads and is_list(a):
-				stack.append([n for n in a if binary_monads[op](n, 2)])
-			elif op in dinads:
+			if op.char in monads and is_list(a):
+				stack.append([v for n in a for v in monads[op.char](n)])
+			# elif op.char in binary_monads and is_list(a):
+				# stack.append([n for n in a if binary_monads[op.char](n, 2)])
+			elif op.char in dinads:
 				b = stack.pop(arg.char)
 				if is_list(a) and is_num(b):
-					stack.append([v for n in a for v in dinads[op](n, b)])
+					stack.append([v for n in a for v in dinads[op.char](n, b)])
 				elif is_num(a) and is_list(b):
-					stack.append([v for n in b for v in dinads[op](a, n)])
+					stack.append([v for n in b for v in dinads[op.char](a, n)])
 				elif is_list(a) and is_list(b):
 					if len(a) == len(b):
-						stack.append([v for na, nb in zip(a, b) for v in dinads[op](na, nb)])
+						stack.append([v for na, nb in zip(a, b) for v in dinads[op.char](na, nb)])
 					else:
 						raise ValueError("Both lists need to be of equal length for filtering")
+			elif op.char in block_creators and is_list(a):
+				c, code = create_block(op, code)
+				stack.append([v for n in a for v in evaluate(c[:], stdin, Stack([n]), level+1)])
 			else:
-				raise ValueError("[%s]%s%s is not supported" % (type(a),arg.char, op))
+				raise ValueError("[%s]%s%s is not supported" % (type(a),arg.char, op.char))
 
 
 		elif arg.char == "n":
@@ -709,21 +1181,14 @@ def evaluate(code, stdin, stack = Stack([]), level = 0, loop_counter = 0, loop_l
 			print(stack.pop(arg.char), end='')
 		elif arg.char == "r":
 			a = stack.pop(arg.char)
-			if is_int(a):
-				stack.append(list(range(a)))
-			elif is_list(a):
-				stack.append([list(range(n)) for n in a])
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+			for val in monads[arg.char](a):
+				stack.append(val)
 
 		elif arg.char == "s":
 			a = stack.pop(arg.char)
-			if is_list(a):
-				stack.append(sorted(a))
-			elif is_str(a):
-				stack.append(''.join(sorted(a)))
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+			for val in monads[arg.char](a):
+				stack.append(val)
+
 		elif arg.char == "t":
 			now = datetime.datetime.now()
 			stack.append(int(
@@ -748,35 +1213,18 @@ def evaluate(code, stdin, stack = Stack([]), level = 0, loop_counter = 0, loop_l
 
 		elif arg.char == "w":
 			a = stack.pop(arg.char)
-			if is_int(a):
-				stack.append(random.randint(0, a))
-			elif is_list(a):
-				stack.append(random.choice(a))
-			elif is_str(a):
-				stack.append(random.choice(a))
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+			for val in monads[arg.char](a):
+				stack.append(val)
 
 		elif arg.char == "x":
 			a = stack.pop(arg.char)
-			if is_int(a):
-				stack.append(int(str(a)[::-1]))
-			elif is_list(a):
-				stack.append(a[::-1])
-			elif is_str(a):
-				stack.append(a[::-1])
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
+			for val in monads[arg.char](a):
+				stack.append(val)
 
 		elif arg.char == "z":
 			a = stack.pop(arg.char)
-			if is_list(a):
-				stack.append(sorted(a, reverse = True))
-			elif is_str(a):
-				stack.append(''.join(sorted(a, reverse = True)))
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+			for val in monads[arg.char](a):
+				stack.append(val)
 
 		elif arg.char == "⌂":
 			stack.append("*")
@@ -814,21 +1262,11 @@ def evaluate(code, stdin, stack = Stack([]), level = 0, loop_counter = 0, loop_l
 
 		elif arg.char == "à":
 			a = stack.pop(arg.char)
-			if is_int(a):
-				stack.append(to_base_string(a, 2))
-			elif is_list(a):
-				stack.append([to_base_string(n, 2) for n in a])
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+			for val in monads[arg.char](a):
+				stack.append(val)
 
 		elif arg.char == "å":
 			a = stack.pop(arg.char)
-			if is_list(a):
-				stack.append([from_base_string(n, 2) for n in a])
-			elif is_str(a):
-				stack.append(from_base_string(a, 2))
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
 		elif arg.char == "ç":
 			a = stack.pop(arg.char)
@@ -898,43 +1336,23 @@ def evaluate(code, stdin, stack = Stack([]), level = 0, loop_counter = 0, loop_l
 
 		elif arg.char == "¥":
 			a = stack.pop(arg.char)
-			if is_num(a):
-				stack.append(a % 2)
-			elif is_list(a):
-				stack.append([n % 2 for n in a])
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+			for val in monads[arg.char](a):
+				stack.append(val)
 
 		elif arg.char == "ó":
 			a = stack.pop(arg.char)
-			if is_int(a):
-				stack.append(2**a)
-			elif is_list(a):
-				stack.append([2**n for n in a])
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+			for val in monads[arg.char](a):
+				stack.append(val)
+
 		elif arg.char == "ú":
 			a = stack.pop(arg.char)
-			if is_int(a):
-				stack.append(int(10**a))
-			elif is_num(a):
-				stack.append(10**a)
-			elif is_list(a):
-				stack.append([10**n for n in a])
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+			for val in monads[arg.char](a):
+				stack.append(val)
 
 		elif arg.char == "ñ":
 			a = stack.pop(arg.char)
-			if is_int(a):
-				a = str(a)
-				stack.append(int(a+a[::-1][1:]))
-			elif is_list(a):
-				stack.append(a+a[::-1][1:])
-			elif is_str(a):
-				stack.append(a+a[::-1][1:])
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+			for val in monads[arg.char](a):
+				stack.append(val)
 
 		elif arg.char == "ª":
 			stack.append([1])
@@ -955,45 +1373,23 @@ def evaluate(code, stdin, stack = Stack([]), level = 0, loop_counter = 0, loop_l
 
 		elif arg.char == "½":
 			a = stack.pop(arg.char)
-			if is_num(a):
-				if is_int(a):
-					stack.append(a//2)
-				else:
-					stack.append(a/2)
-			elif is_list(a):
-				stack.append([n//2 if is_int(n) else n/2 for n in a])
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+			for val in monads[arg.char](a):
+				stack.append(val)
 
 		elif arg.char == "¼":
 			a = stack.pop(arg.char)
-			if is_num(a):
-				if is_int(a):
-					stack.append(a//4)
-				else:
-					stack.append(a/4)
-			elif is_list(a):
-				stack.append([n//4 if is_int(n) else n/4 for n in a])
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+			for val in monads[arg.char](a):
+				stack.append(val)
 
 		elif arg.char == "░":
 			a = stack.pop(arg.char)
-			if is_num(a):
-				stack.append(str(a))
-			elif is_list(a):
-				stack.append([str(n) for n in a])
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+			for val in monads[arg.char](a):
+				stack.append(val)
 
 		elif arg.char == "▒":
 			a = stack.pop(arg.char)
-			if is_int(a):
-				stack.append([int(n) for n in str(a)])
-			elif is_str(a):
-				stack.append(list(a))
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+			for val in monads[arg.char](a):
+				stack.append(val)
 
 
 		elif arg.char == "¡":
@@ -1003,81 +1399,49 @@ def evaluate(code, stdin, stack = Stack([]), level = 0, loop_counter = 0, loop_l
 
 		elif arg.char == "┤":
 			a = stack.pop(arg.char)
-			if is_str(a):
-				stack.append(a[:-1])
-				stack.append(a[-1])
-			elif is_list(a):
-				stack.append(a[:-1])
-				stack.append(a[-1])
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+			for val in monads[arg.char](a):
+				stack.append(val)
+
 
 		elif arg.char == "╡":
 			a = stack.pop(arg.char)
-			if is_str(a):
-				stack.append(a[:-1])
-			elif is_list(a):
-				stack.append(a[:-1])
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+			for val in monads[arg.char](a):
+				stack.append(val)
 
 		elif arg.char == "┐":
 			a = stack.pop(arg.char)
-			if is_num(a):
-				stack.append(a)
-				stack.append(a-1)
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+			for val in monads[arg.char](a):
+				stack.append(val)
+
 		elif arg.char == "└":
 			a = stack.pop(arg.char)
-			if is_num(a):
-				stack.append(a)
-				stack.append(a+1)
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+			for val in monads[arg.char](a):
+				stack.append(val)
 
 		elif arg.char == "┴":
 			a = stack.pop(arg.char)
-			if is_num(a):
-				stack.append(int(a == 1))
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+			for val in monads[arg.char](a):
+				stack.append(val)
+
 		elif arg.char == "┬":
 			a = stack.pop(arg.char)
-			if is_num(a):
-				stack.append(int(a == 0))
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
+			for val in monads[arg.char](a):
+				stack.append(val)
 
 		elif arg.char == "├":
 			a = stack.pop(arg.char)
-			if is_str(a):
-				stack.append(a[1:])
-				stack.append(a[0])
-			elif is_list(a):
-				stack.append(a[1:])
-				stack.append(a[0])
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+			for val in monads[arg.char](a):
+				stack.append(val)
 
 		elif arg.char == "╞":
 			a = stack.pop(arg.char)
-			if is_str(a):
-				stack.append(a[1:])
-			elif is_list(a):
-				stack.append(a[1:])
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+			for val in monads[arg.char](a):
+				stack.append(val)
 
 		elif arg.char == "─":
 			a = stack.pop(arg.char)
-			if is_int(a):
-				stack.append([n for n in range(1, a+1) if a%n == 0])
-			elif is_list(a):
-				stack.append([n for l in a for n in l])
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+			for val in monads[arg.char](a):
+				stack.append(val)
 
 		elif arg.char == "╟":
 			stack.append(60)
@@ -1092,40 +1456,28 @@ def evaluate(code, stdin, stack = Stack([]), level = 0, loop_counter = 0, loop_l
 
 		elif arg.char == "╦":
 			a = stack.pop(arg.char)
-			if is_int(a):
-				stack.append(words[a])
-			elif is_list(a):
-				stack.append([words[n] if is_int(n) else n for n in a])
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+			for val in monads[arg.char](a):
+				stack.append(val)
 
 		elif arg.char == "╨":
 			a = stack.pop(arg.char)
-			if is_num(a):
-				stack.append(2**int(math.log(a, 2)+1))
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+			for val in monads[arg.char](a):
+				stack.append(val)
 
 		elif arg.char == "╥":
 			a = stack.pop(arg.char)
-			if is_num(a):
-				stack.append(2**int(math.log(a, 2)))
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+			for val in monads[arg.char](a):
+				stack.append(val)
 
 		elif arg.char == "╤":
 			a = stack.pop(arg.char)
-			if is_num(a):
-				stack.append(list(range(-int(a), int(a)+1)))
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+			for val in monads[arg.char](a):
+				stack.append(val)
 
 		elif arg.char == "╒":
 			a = stack.pop(arg.char)
-			if is_num(a):
-				stack.append(list(range(1, int(a)+1)))
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+			for val in monads[arg.char](a):
+				stack.append(val)
 
 		elif arg.char == "▌":
 			b = stack.pop(arg.char)
@@ -1179,79 +1531,38 @@ def evaluate(code, stdin, stack = Stack([]), level = 0, loop_counter = 0, loop_l
 
 		elif arg.char == "╫":
 			a = stack.pop(arg.char)
-			if is_int(a):
-				stack.append(int(bin(a)[3:]+'1', 2))
-			elif is_list(a):
-				stack.append(a[1:] + [a[0]])
-			elif is_str(a):
-				stack.append(a[1:] + a[0])
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+			for val in monads[arg.char](a):
+				stack.append(val)
+
 		elif arg.char == "╪":
 			a = stack.pop(arg.char)
-			if is_int(a):
-				stack.append(int(str(a&1)+bin(a)[2:-1], 2))
-			elif is_list(a):
-				stack.append([a[-1]] + a[:-1])
-			elif is_str(a):
-				stack.append(a[-1] + a[:-1])
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+			for val in monads[arg.char](a):
+				stack.append(val)
 
 		elif arg.char == "┘":
 			a = stack.pop(arg.char)
-			if is_int(a):
-				stack.append(int(is_truthy(a)))
-			elif is_list(a):
-				stack.append([int(is_truthy(n)) for n in a])
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+			for val in monads[arg.char](a):
+				stack.append(val)
 
 		elif arg.char == "┌":
 			a = stack.pop(arg.char)
-			if is_int(a):
-				stack.append(int(is_falsey(a)))
-			elif is_list(a):
-				stack.append([int(is_falsey(n)) for n in a])
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+			for val in monads[arg.char](a):
+				stack.append(val)
 
 		elif arg.char == "▀":
 			a = stack.pop(arg.char)
-			if is_str(a):
-				stack.append(''.join(list(set(a))))
-			elif is_list(a):
-				stack.append(list(set(a)))
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+			for val in monads[arg.char](a):
+				stack.append(val)
 
 		elif arg.char == "Σ":
 			a = stack.pop(arg.char)
-			if is_int(a):
-				stack.append(sum(int(d) for d in str(a)))
-			elif is_list(a):
-				if len(a) > 0 and is_int(a[0]):
-					stack.append(sum(a))
-				elif len(a) > 0 and is_str(a[0]):
-					stack.append(''.join(a))
-				else:
-					stack.append(0)
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+			for val in monads[arg.char](a):
+				stack.append(val)
 
 		elif arg.char == "σ":
 			a = stack.pop(arg.char)
-			if is_str(a):
-				stack.append(a.lstrip("0"))
-			elif is_list(a):
-				if len(a) > 0 and is_int(a[0]):
-					stack.append(["" if n == 0 else str(n) for n in a])
-				elif len(a) > 0 and is_str(a[0]):
-					stack.append([n.lstrip("0") for n in a])
-				else:
-					stack.append([])
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+			for val in monads[arg.char](a):
+				stack.append(val)
 
 		elif arg.char == "Φ":
 			b = stack.pop(arg.char)
@@ -1310,12 +1621,8 @@ def evaluate(code, stdin, stack = Stack([]), level = 0, loop_counter = 0, loop_l
 
 		elif arg.char == "δ":
 			a = stack.pop(arg.char)
-			if is_str(a):
-				stack.append(a.capitalize())
-			elif is_list(a):
-				stack.append([n.capitalize() if is_str(n) else n for n in a])
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+			for val in monads[arg.char](a):
+				stack.append(val)
 
 		elif arg.char == "ε":
 			a = stack.pop(arg.char)
@@ -1328,15 +1635,10 @@ def evaluate(code, stdin, stack = Stack([]), level = 0, loop_counter = 0, loop_l
 			else:
 				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-
 		elif arg.char == "∞":
 			a = stack.pop(arg.char)
-			if is_num(a):
-				stack.append(a*2)
-			elif is_list(a):
-				stack.append([n*2 for n in a])
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+			for val in monads[arg.char](a):
+				stack.append(val)
 
 		elif arg.char == "φ":
 			stack.append((1+math.sqrt(5))/2)
@@ -1359,25 +1661,15 @@ def evaluate(code, stdin, stack = Stack([]), level = 0, loop_counter = 0, loop_l
 			else:
 				raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
 
-
-
 		elif arg.char == "⌠":
 			a = stack.pop(arg.char)
-			if is_num(a):
-				stack.append(a+2)
-			elif is_list(a):
-				stack.append([n+2 for n in a])
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+			for val in monads[arg.char](a):
+				stack.append(val)
 
 		elif arg.char == "⌡":
 			a = stack.pop(arg.char)
-			if is_num(a):
-				stack.append(a-2)
-			elif is_list(a):
-				stack.append([n-2 for n in a])
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+			for val in monads[arg.char](a):
+				stack.append(val)
 
 		elif arg.char == "÷":
 			b = stack.pop(arg.char)
@@ -1391,70 +1683,53 @@ def evaluate(code, stdin, stack = Stack([]), level = 0, loop_counter = 0, loop_l
 			else:
 				raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
 
-
 		elif arg.char == "_":
 			a = stack.pop(arg.char)
-			for n in duplicate(a):
-				stack.append(n)
+			for val in monads[arg.char](a):
+				stack.append(val)
+
 		elif arg.char == "`":
 			stack.append(stack[-2])
 			stack.append(stack[-2])
+
 		elif arg.char == "°":
 			a = stack.pop(arg.char)
-			if is_int(a):
-				stack.append(is_square(a))
+			for val in monads[arg.char](a):
+				stack.append(val)
+
 		elif arg.char == "∙":
 			a = stack.pop(arg.char)
-			for n in triplicate(a):
-				stack.append(n)
+			for val in monads[arg.char](a):
+				stack.append(val)
+
 		elif arg.char == "·":
 			a = stack.pop(arg.char)
-			for n in quadruplicate(a):
-				stack.append(n)
+			for val in monads[arg.char](a):
+				stack.append(val)
 
 		elif arg.char == "√":
 			a = stack.pop(arg.char)
-			if is_num(a):
-				stack.append(math.sqrt(a))
-			elif is_list(a):
-				stack.append([math.sqrt(n) for n in a])
-			elif is_str(a):
-				stack.append(list(a))
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+			for val in monads[arg.char](a):
+				stack.append(val)
 
 		elif arg.char == "ⁿ":
 			a = stack.pop(arg.char)
-			if is_num(a):
-				stack.append(a*a*a)
-			elif is_list(a):
-				stack.append([n*n*n for n in a])
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+			for val in monads[arg.char](a):
+				stack.append(val)
 
 		elif arg.char == "²":
 			a = stack.pop(arg.char)
-			if is_num(a):
-				stack.append(a*a)
-			elif is_list(a):
-				stack.append([n*n for n in a])
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+			for val in monads[arg.char](a):
+				stack.append(val)
 
 		elif arg.char == "■":
 			a = stack.pop(arg.char)
-			if is_list(a):
-				stack.append([list(n) for n in itertools.product(a, a)])
-			if is_int(a):
-				if a % 2 == 0:
-					stack.append(a//2)
-				else:
-					stack.append(3*a+1)
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+			for val in monads[arg.char](a):
+				stack.append(val)
 
 		elif arg.char == " ":
 			stack.append(" ")
+
 		elif arg.char == " ":
 			stack = Stack([stack.pop(arg.char)])
 
