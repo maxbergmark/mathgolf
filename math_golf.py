@@ -715,6 +715,9 @@ def create_block(arg, code):
 		while temp.char != "}" and code:
 			c.append(temp)
 			temp = code.pop()
+		if not code and temp.char != "}":
+			c.append(temp)
+
 		c = c[::-1]
 	return c, code
 
@@ -783,8 +786,16 @@ def evaluate(code, stdin, stack = Stack([]), level = 0, loop_counter = 0, loop_l
 		"²": get_square_yield,
 		"■": get_self_product_or_collatz_yield
 	}
-	# binary_monads = {"â": to_base, "ä": from_base}
-	dinads = {"<": is_less, "=": is_equal, ">": is_greater, "¡": is_not, "+": add_yield, "*": mult_yield, "≥": is_geq, "≤": is_leq}
+	dinads = {
+		"<": is_less,
+		"=": is_equal,
+		">": is_greater,
+		"¡": is_not,
+		"+": add_yield,
+		"*": mult_yield,
+		"≥": is_geq,
+		"≤": is_leq
+	}
 	loop_handlers = {
 		"↑": while_true_no_pop,
 		"↓": while_false_no_pop,
@@ -822,6 +833,10 @@ def evaluate(code, stdin, stack = Stack([]), level = 0, loop_counter = 0, loop_l
 				stack.append(a.split())
 			else:
 				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+		elif arg.char in monads:
+			a = stack.pop(arg.char)
+			for val in monads[arg.char](a):
+				stack.append(val)
 
 		elif arg.char == "§":
 			a = stack.pop(arg.char)
@@ -1097,8 +1112,6 @@ def evaluate(code, stdin, stack = Stack([]), level = 0, loop_counter = 0, loop_l
 			a = stack.pop(arg.char)
 			if op.char in monads and is_list(a):
 				stack.append([n for n in a if all(monads[op.char](n))])
-			# elif op.char in binary_monads and is_list(a):
-				# stack.append([n for n in a if all(binary_monads[op.char](n, 2))])
 			elif op.char in dinads:
 				b = stack.pop(arg.char)
 				if is_list(a) and is_num(b):
@@ -1127,10 +1140,6 @@ def evaluate(code, stdin, stack = Stack([]), level = 0, loop_counter = 0, loop_l
 			else:
 				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-		elif arg.char == "i":
-			a = stack.pop(arg.char)
-			for val in monads[arg.char](a):
-				stack.append(val)
 		elif arg.char == "j":
 			v = float(stdin.pop())
 			stack.append(v)
@@ -1146,8 +1155,6 @@ def evaluate(code, stdin, stack = Stack([]), level = 0, loop_counter = 0, loop_l
 			a = stack.pop(arg.char)
 			if op.char in monads and is_list(a):
 				stack.append([v for n in a for v in monads[op.char](n)])
-			# elif op.char in binary_monads and is_list(a):
-				# stack.append([n for n in a if binary_monads[op.char](n, 2)])
 			elif op.char in dinads:
 				b = stack.pop(arg.char)
 				if is_list(a) and is_num(b):
@@ -1179,15 +1186,7 @@ def evaluate(code, stdin, stack = Stack([]), level = 0, loop_counter = 0, loop_l
 			print(stack.pop(arg.char))
 		elif arg.char == "q":
 			print(stack.pop(arg.char), end='')
-		elif arg.char == "r":
-			a = stack.pop(arg.char)
-			for val in monads[arg.char](a):
-				stack.append(val)
 
-		elif arg.char == "s":
-			a = stack.pop(arg.char)
-			for val in monads[arg.char](a):
-				stack.append(val)
 
 		elif arg.char == "t":
 			now = datetime.datetime.now()
@@ -1211,20 +1210,8 @@ def evaluate(code, stdin, stack = Stack([]), level = 0, loop_counter = 0, loop_l
 		elif arg.char == "v":
 			stack.append(random.randint(-2**31, 2**31-1))
 
-		elif arg.char == "w":
-			a = stack.pop(arg.char)
-			for val in monads[arg.char](a):
-				stack.append(val)
 
-		elif arg.char == "x":
-			a = stack.pop(arg.char)
-			for val in monads[arg.char](a):
-				stack.append(val)
 
-		elif arg.char == "z":
-			a = stack.pop(arg.char)
-			for val in monads[arg.char](a):
-				stack.append(val)
 
 		elif arg.char == "⌂":
 			stack.append("*")
@@ -1260,10 +1247,6 @@ def evaluate(code, stdin, stack = Stack([]), level = 0, loop_counter = 0, loop_l
 			else:
 				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-		elif arg.char == "à":
-			a = stack.pop(arg.char)
-			for val in monads[arg.char](a):
-				stack.append(val)
 
 		elif arg.char == "å":
 			a = stack.pop(arg.char)
@@ -1334,25 +1317,9 @@ def evaluate(code, stdin, stack = Stack([]), level = 0, loop_counter = 0, loop_l
 			else:
 				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-		elif arg.char == "¥":
-			a = stack.pop(arg.char)
-			for val in monads[arg.char](a):
-				stack.append(val)
 
-		elif arg.char == "ó":
-			a = stack.pop(arg.char)
-			for val in monads[arg.char](a):
-				stack.append(val)
 
-		elif arg.char == "ú":
-			a = stack.pop(arg.char)
-			for val in monads[arg.char](a):
-				stack.append(val)
 
-		elif arg.char == "ñ":
-			a = stack.pop(arg.char)
-			for val in monads[arg.char](a):
-				stack.append(val)
 
 		elif arg.char == "ª":
 			stack.append([1])
@@ -1371,25 +1338,9 @@ def evaluate(code, stdin, stack = Stack([]), level = 0, loop_counter = 0, loop_l
 		elif arg.char == "¬":
 			stack = Stack([stack.pop(arg.char)] + stack.list())
 
-		elif arg.char == "½":
-			a = stack.pop(arg.char)
-			for val in monads[arg.char](a):
-				stack.append(val)
 
-		elif arg.char == "¼":
-			a = stack.pop(arg.char)
-			for val in monads[arg.char](a):
-				stack.append(val)
 
-		elif arg.char == "░":
-			a = stack.pop(arg.char)
-			for val in monads[arg.char](a):
-				stack.append(val)
 
-		elif arg.char == "▒":
-			a = stack.pop(arg.char)
-			for val in monads[arg.char](a):
-				stack.append(val)
 
 
 		elif arg.char == "¡":
@@ -1397,51 +1348,15 @@ def evaluate(code, stdin, stack = Stack([]), level = 0, loop_counter = 0, loop_l
 			b = stack.pop(arg.char)
 			stack.append(int(all(is_not(a, b))))
 
-		elif arg.char == "┤":
-			a = stack.pop(arg.char)
-			for val in monads[arg.char](a):
-				stack.append(val)
 
 
-		elif arg.char == "╡":
-			a = stack.pop(arg.char)
-			for val in monads[arg.char](a):
-				stack.append(val)
 
-		elif arg.char == "┐":
-			a = stack.pop(arg.char)
-			for val in monads[arg.char](a):
-				stack.append(val)
 
-		elif arg.char == "└":
-			a = stack.pop(arg.char)
-			for val in monads[arg.char](a):
-				stack.append(val)
 
-		elif arg.char == "┴":
-			a = stack.pop(arg.char)
-			for val in monads[arg.char](a):
-				stack.append(val)
 
-		elif arg.char == "┬":
-			a = stack.pop(arg.char)
-			for val in monads[arg.char](a):
-				stack.append(val)
 
-		elif arg.char == "├":
-			a = stack.pop(arg.char)
-			for val in monads[arg.char](a):
-				stack.append(val)
 
-		elif arg.char == "╞":
-			a = stack.pop(arg.char)
-			for val in monads[arg.char](a):
-				stack.append(val)
 
-		elif arg.char == "─":
-			a = stack.pop(arg.char)
-			for val in monads[arg.char](a):
-				stack.append(val)
 
 		elif arg.char == "╟":
 			stack.append(60)
@@ -1454,30 +1369,10 @@ def evaluate(code, stdin, stack = Stack([]), level = 0, loop_counter = 0, loop_l
 			next_char = code.pop().code
 			stack.append(words[next_char])
 
-		elif arg.char == "╦":
-			a = stack.pop(arg.char)
-			for val in monads[arg.char](a):
-				stack.append(val)
 
-		elif arg.char == "╨":
-			a = stack.pop(arg.char)
-			for val in monads[arg.char](a):
-				stack.append(val)
 
-		elif arg.char == "╥":
-			a = stack.pop(arg.char)
-			for val in monads[arg.char](a):
-				stack.append(val)
 
-		elif arg.char == "╤":
-			a = stack.pop(arg.char)
-			for val in monads[arg.char](a):
-				stack.append(val)
 
-		elif arg.char == "╒":
-			a = stack.pop(arg.char)
-			for val in monads[arg.char](a):
-				stack.append(val)
 
 		elif arg.char == "▌":
 			b = stack.pop(arg.char)
@@ -1529,40 +1424,12 @@ def evaluate(code, stdin, stack = Stack([]), level = 0, loop_counter = 0, loop_l
 		elif arg.char == "τ":
 			stack.append(2*math.pi)
 
-		elif arg.char == "╫":
-			a = stack.pop(arg.char)
-			for val in monads[arg.char](a):
-				stack.append(val)
 
-		elif arg.char == "╪":
-			a = stack.pop(arg.char)
-			for val in monads[arg.char](a):
-				stack.append(val)
 
-		elif arg.char == "┘":
-			a = stack.pop(arg.char)
-			for val in monads[arg.char](a):
-				stack.append(val)
 
-		elif arg.char == "┌":
-			a = stack.pop(arg.char)
-			for val in monads[arg.char](a):
-				stack.append(val)
 
-		elif arg.char == "▀":
-			a = stack.pop(arg.char)
-			for val in monads[arg.char](a):
-				stack.append(val)
 
-		elif arg.char == "Σ":
-			a = stack.pop(arg.char)
-			for val in monads[arg.char](a):
-				stack.append(val)
 
-		elif arg.char == "σ":
-			a = stack.pop(arg.char)
-			for val in monads[arg.char](a):
-				stack.append(val)
 
 		elif arg.char == "Φ":
 			b = stack.pop(arg.char)
@@ -1619,10 +1486,6 @@ def evaluate(code, stdin, stack = Stack([]), level = 0, loop_counter = 0, loop_l
 			else:
 				raise ValueError("[%s][%s][%s]%s is not supported" % (type(a), type(b), type(c),arg.char))
 
-		elif arg.char == "δ":
-			a = stack.pop(arg.char)
-			for val in monads[arg.char](a):
-				stack.append(val)
 
 		elif arg.char == "ε":
 			a = stack.pop(arg.char)
@@ -1635,10 +1498,6 @@ def evaluate(code, stdin, stack = Stack([]), level = 0, loop_counter = 0, loop_l
 			else:
 				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-		elif arg.char == "∞":
-			a = stack.pop(arg.char)
-			for val in monads[arg.char](a):
-				stack.append(val)
 
 		elif arg.char == "φ":
 			stack.append((1+math.sqrt(5))/2)
@@ -1661,15 +1520,7 @@ def evaluate(code, stdin, stack = Stack([]), level = 0, loop_counter = 0, loop_l
 			else:
 				raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
 
-		elif arg.char == "⌠":
-			a = stack.pop(arg.char)
-			for val in monads[arg.char](a):
-				stack.append(val)
 
-		elif arg.char == "⌡":
-			a = stack.pop(arg.char)
-			for val in monads[arg.char](a):
-				stack.append(val)
 
 		elif arg.char == "÷":
 			b = stack.pop(arg.char)
@@ -1683,49 +1534,17 @@ def evaluate(code, stdin, stack = Stack([]), level = 0, loop_counter = 0, loop_l
 			else:
 				raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
 
-		elif arg.char == "_":
-			a = stack.pop(arg.char)
-			for val in monads[arg.char](a):
-				stack.append(val)
 
 		elif arg.char == "`":
 			stack.append(stack[-2])
 			stack.append(stack[-2])
 
-		elif arg.char == "°":
-			a = stack.pop(arg.char)
-			for val in monads[arg.char](a):
-				stack.append(val)
 
-		elif arg.char == "∙":
-			a = stack.pop(arg.char)
-			for val in monads[arg.char](a):
-				stack.append(val)
 
-		elif arg.char == "·":
-			a = stack.pop(arg.char)
-			for val in monads[arg.char](a):
-				stack.append(val)
 
-		elif arg.char == "√":
-			a = stack.pop(arg.char)
-			for val in monads[arg.char](a):
-				stack.append(val)
 
-		elif arg.char == "ⁿ":
-			a = stack.pop(arg.char)
-			for val in monads[arg.char](a):
-				stack.append(val)
 
-		elif arg.char == "²":
-			a = stack.pop(arg.char)
-			for val in monads[arg.char](a):
-				stack.append(val)
 
-		elif arg.char == "■":
-			a = stack.pop(arg.char)
-			for val in monads[arg.char](a):
-				stack.append(val)
 
 		elif arg.char == " ":
 			stack.append(" ")

@@ -85,7 +85,7 @@ Here we will take an integer as input, and print a triangle to standard output o
 
 ### FizzBuzz
 
-    ♀{î╕Σ╠δ╕┌╠δ`+Γî35α÷ä§p}*
+    ♀{î╕Σ╠δ╕┌╠δ`+Γî35α÷ä§p
 
 #### Explanation
 
@@ -105,4 +105,4 @@ Here we will take an integer as input, and print a triangle to standard output o
                        ä      Convert from binary to int
                         §     Get array item
                          p    print
-                          }*  End block, "*" means for loop (100 iterations)
+                              Block is implicitly ended, for/foreach is the default behavior
