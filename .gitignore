@@ -3,3 +3,5 @@ test_program.out
 test_input.txt
 *.pyc
 *.pyo
+__pycache__/
+resources/__pycache__/
