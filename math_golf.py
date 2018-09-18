@@ -1,736 +1,27 @@
 import math
 import sys
 from collections import namedtuple
-import datetime, time
+import time
 import itertools
 import random
 import resources.dictionary
-from traceback import print_exc
+from traceback import print_exc, format_exc
 from functools import reduce
+
+from code_page import *
+from helper_functions import *
+from stack_stdin import *
+from two_arguments import *
+from single_argument import *
+from zero_arguments import *
+from check_type import *
 
 Argument = namedtuple("Argument", ["char", "code"])
 DEBUG = False
 
-code_page = "☺☻♥♦♣♠•◘○◙♂♀♪♫☼►◄↕‼¶§▬↨↑↓→←∟↔▲▼ !\"#$%&'()*+,-./0123456789:;" \
-+ "<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~⌂Ç" \
-+ "üéâäàåçêëèïîìÄÅÉæÆôöòûùÿÖÜ¢£¥₧ƒáíóúñÑªº¿⌐¬½¼¡«»░▒▓│┤╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞" \
-+ "╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪┘┌█▄▌▐▀αßΓπΣσµτΦΘΩδ∞φε∩≡±≥≤⌠⌡÷≈°∙·√ⁿ²■ "
 
-class StdIn():
 
-	def __init__(self, lst):
-		self.index = 0
-		self.list = lst
 
-	def __iter__(self):
-		return self
-
-	def __next__(self):
-		if self.index == len(self.list):
-			raise StopIteration
-		self.index += 1
-		return self.list[self.index-1]
-
-	def pop(self):
-		if self.list:
-			ret = self.list[self.index]
-			self.index = (self.index+1) % len(self.list)
-			return ret
-		raise EOFError("No input has been provided")
-
-class Stack():
-	def __init__(self, lst):
-		self.list = lst
-		self.index = 0
-
-	def __str__(self):
-		return str(self.list)
-
-	def __getitem__(self, index):
-		return self.list[index]
-
-	def __setitem__(self, index, value):
-		self.list[index] = value
-
-	def __iter__(self):
-		return self
-
-	def __next__(self):
-		if self.index == len(self.list):
-			raise StopIteration
-		self.index += 1
-		return self.list[self.index-1]
-
-	def append(self, item):
-		self.list.append(item)
-
-	def pop(self, operator, index = -1):
-		if self.list:
-			return self.list.pop(index)
-		raise IndexError("%s could not pop from stack" % operator)
-
-def fibonnaci(n):
-	a, b = 0, 1
-	for i in range(n//2):
-		a, b = a+b, a+2*b
-	return [a, b][n%2]
-
-def fibonnaci_yield(a, arg):
-	yield fibonnaci(a, arg)
-
-def length_yield(a, arg):
-	if is_list(a):
-		yield a
-		yield len(a)
-	elif is_str(a):
-		yield a
-		yield len(a)
-	else:
-		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-def cast_to_integer_yield(a, arg):
-	if is_list(a):
-		yield [int(n) if is_num(n) or is_int_string(n) else n for n in a]
-	elif is_num(a):
-		yield int(a)
-	elif is_str(a):
-		yield int(a)
-	else:
-		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-def get_range_yield(a, arg):
-	if is_int(a):
-		yield list(range(a))
-	elif is_list(a):
-		yield [list(range(n)) for n in a]
-	else:
-		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-def sort_list_or_string_yield(a, arg):
-	if is_list(a):
-		yield sorted(a)
-	elif is_str(a):
-		yield ''.join(sorted(a))
-	else:
-		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-def sort_list_or_string_reverse_yield(a, arg):
-	for val in sort_list_or_string_yield(a, arg):
-		yield val[::-1]
-
-def get_random_value_yield(a, arg):
-	if is_int(a):
-		yield random.randint(0, a)
-	elif is_list(a):
-		yield random.choice(a)
-	elif is_str(a):
-		yield random.choice(a)
-	else:
-		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-def reverse_value_yield(a, arg):
-	if is_int(a):
-		yield int(str(a)[::-1])
-	elif is_list(a):
-		yield a[::-1]
-	elif is_str(a):
-		yield a[::-1]
-	else:
-		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-def modulo_2_yield(a, arg):
-	if is_num(a):
-		yield a % 2
-	elif is_list(a):
-		yield [n % 2 for n in a]
-	else:
-		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-def pow_2_yield(a, arg):
-	if is_int(a):
-		yield 2**a
-	elif is_num(a):
-		yield 2**a
-	elif is_list(a):
-		yield [2**n for n in a]
-	else:
-		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-def pow_10_yield(a, arg):
-	if is_int(a):
-		yield int(10**a)
-	elif is_num(a):
-		yield 10**a
-	elif is_list(a):
-		yield [10**n for n in a]
-	else:
-		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-def palindromize_yield(a, arg):
-	if is_int(a):
-		a = str(a)
-		yield int(a+a[::-1][1:])
-	elif is_list(a):
-		yield a+a[::-1][1:]
-	elif is_str(a):
-		yield a+a[::-1][1:]
-	else:
-		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-def halve_yield(a, arg):
-	if is_num(a):
-		if is_int(a):
-			yield a//2
-		else:
-			yield a/2
-	elif is_list(a):
-		yield [n//2 if is_int(n) else n/2 for n in a]
-	else:
-		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-def quarter_yield(a, arg):
-	if is_num(a):
-		if is_int(a):
-			yield a//4
-		else:
-			yield a/4
-	elif is_list(a):
-		yield [n//4 if is_int(n) else n/4 for n in a]
-	else:
-		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-def convert_to_string_yield(a, arg):
-	if is_num(a):
-		yield str(a)
-	elif is_list(a):
-		yield [str(n) for n in a]
-	else:
-		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-def split_string_or_int_yield(a, arg):
-	if is_int(a):
-		yield [int(n) for n in str(a)]
-	elif is_str(a):
-		yield list(a)
-	elif is_list(a):
-		yield [v for n in a for v in split_string_or_int_yield(n)]
-	else:
-		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-def pop_from_right_yield(a, arg):
-	if is_str(a):
-		yield a[:-1]
-		yield a[-1]
-	elif is_list(a):
-		yield a[:-1]
-		yield a[-1]
-	else:
-		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-def discard_from_right_yield(a, arg):
-	if is_str(a):
-		yield a[:-1]
-	elif is_list(a):
-		yield a[:-1]
-	else:
-		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-def pop_from_left_yield(a, arg):
-	if is_str(a):
-		yield a[1:]
-		yield a[0]
-	elif is_list(a):
-		yield a[1:]
-		yield a[0]
-	else:
-		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-def discard_from_left_yield(a, arg):
-	if is_str(a):
-		yield a[1:]
-	elif is_list(a):
-		yield a[1:]
-	else:
-		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-def copy_and_decrease_yield(a, arg):
-	if is_num(a):
-		yield a
-		yield a-1
-	elif is_list(a):
-		yield [v for n in a for v in copy_and_decrease_yield(n)]
-	else:
-		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-def copy_and_increase_yield(a, arg):
-	if is_num(a):
-		yield a
-		yield a+1
-	elif is_list(a):
-		yield [v for n in a for v in copy_and_increase_yield(n)]
-	else:
-		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-def check_if_1_yield(a, arg):
-	if is_num(a):
-		yield int(a == 1)
-	else:
-		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-def check_if_0_yield(a, arg):
-	if is_num(a):
-		yield int(a == 1)
-	else:
-		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-def get_dictionary_words_yield(a, arg):
-	if is_int(a):
-		yield words[a]
-	elif is_list(a):
-		yield [words[n] if is_int(n) else n for n in a]
-	else:
-		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-def flatten_or_get_divisors_yield(a, arg):
-	if is_int(a):
-		yield [n for n in range(1, a+1) if a%n == 0]
-	elif is_list(a):
-		yield [n for l in a for n in l]
-	else:
-		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-def get_symmetric_range_yield(a, arg):
-	if is_num(a):
-		yield list(range(-int(a), int(a)+1))
-	else:
-		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-def round_up_to_pow_2_yield(a, arg):
-	if is_num(a):
-		yield 2**int(math.log(a, 2)+1)
-	elif is_list(a):
-		yield [v for n in a for v in round_up_to_pow_2_yield(n)]
-	else:
-		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-def round_down_to_pow_2_yield(a, arg):
-	if is_num(a):
-		yield 2**int(math.log(a, 2))
-	elif is_list(a):
-		yield [v for n in a for v in round_down_to_pow_2_yield(n)]
-	else:
-		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-def get_range_1_based_yield(a, arg):
-	if is_num(a):
-		yield list(range(1, int(a)+1))
-	else:
-		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-def left_rotate_yield(a, arg):
-	if is_int(a):
-		yield int(bin(a)[3:]+'1', 2)
-	elif is_list(a):
-		yield a[1:] + [a[0]]
-	elif is_str(a):
-		yield a[1:] + a[0]
-	else:
-		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-def right_rotate_yield(a, arg):
-	if is_int(a):
-		yield int(str(a&1)+bin(a)[2:-1], 2)
-	elif is_list(a):
-		yield [a[-1]] + a[:-1]
-	elif is_str(a):
-		yield a[-1] + a[:-1]
-	else:
-		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-def to_boolean_yield(a, arg):
-	if is_int(a):
-		yield int(is_truthy(a))
-	elif is_list(a):
-		yield [int(is_truthy(n)) for n in a]
-	else:
-		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-def to_boolean_inverted_yield(a, arg):
-	if is_int(a):
-		yield int(is_falsey(a))
-	elif is_list(a):
-		yield [int(is_falsey(n)) for n in a]
-	else:
-		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-def get_unique_elements_yield(a, arg):
-	if is_str(a):
-		yield ''.join(list(set(a)))
-	elif is_list(a):
-		yield list(set(a))
-	else:
-		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-def get_sum_yield(a, arg):
-	if is_int(a):
-		yield sum(int(d) for d in str(a))
-	elif is_list(a):
-		if len(a) > 0 and is_int(a[0]):
-			yield sum(a)
-		elif len(a) > 0 and is_str(a[0]):
-			yield ''.join(a)
-		else:
-			yield 0
-	else:
-		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-def remove_leading_zeroes_yield(a, arg):
-	if is_str(a):
-		yield a.lstrip("0")
-	elif is_list(a):
-		if len(a) > 0 and is_int(a[0]):
-			yield ["" if n == 0 else str(n) for n in a]
-		elif len(a) > 0 and is_str(a[0]):
-			yield [n.lstrip("0") for n in a]
-		else:
-			yield []
-	else:
-		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-def capitalize_string_yield(a, arg):
-	if is_str(a):
-		yield a.capitalize()
-	elif is_list(a):
-		yield [n.capitalize() if is_str(n) else n for n in a]
-	else:
-		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-def double_element_yield(a, arg):
-	if is_num(a):
-		yield a*2
-	elif is_list(a):
-		yield [n*2 for n in a]
-	else:
-		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-def increase_twice_yield(a, arg):
-	if is_num(a):
-		yield a+2
-	elif is_list(a):
-		yield [n+2 for n in a]
-	else:
-		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-def decrease_twice_yield(a, arg):
-	if is_num(a):
-		yield a-2
-	elif is_list(a):
-		yield [n-2 for n in a]
-	else:
-		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-def is_square(n):
-	s = round(n**.5)
-	return int(n == s*s)
-
-def is_square_yield(a, arg):
-	yield is_square(a)
-
-def get_sqrt_yield(a, arg):
-	if is_num(a):
-		yield math.sqrt(a)
-	elif is_list(a):
-		yield [math.sqrt(n) for n in a]
-	elif is_str(a):
-		yield list(a)
-	else:
-		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-def get_cube_yield(a, arg):
-	if is_num(a):
-		yield a*a*a
-	elif is_list(a):
-		yield [n*n*n for n in a]
-	else:
-		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-def get_square_yield(a, arg):
-	if is_num(a):
-		yield a*a
-	elif is_list(a):
-		yield [n*n for n in a]
-	else:
-		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-def get_self_product_or_collatz_yield(a, arg):
-	if is_list(a):
-		yield [list(n) for n in itertools.product(a, a)]
-	if is_int(a):
-		if a % 2 == 0:
-			yield a//2
-		else:
-			yield 3*a+1
-	else:
-		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-
-
-def is_prime(n):
-	if n < 0:
-		return 0
-	if n < 10:
-		return [0,0,1,1,0,1,0,1,0,0,0][n]
-	for div in range(2, int(n**.5)+1):
-		if n % div == 0:
-			return 0
-	return 1
-
-def gamma(n):
-	if is_int(n):
-		return int(math.gamma(n+1))
-	elif is_num(n):
-		return math.gamma(n+1)
-	else:
-		raise ValueError("unsupported type for gamma: %s" % type(n))
-
-def gamma_yield(n, arg):
-	if is_int(n):
-		yield int(math.gamma(n+1))
-	elif is_num(n):
-		yield math.gamma(n+1)
-	else:
-		raise ValueError("unsupported type for gamma: %s" % type(n))
-
-def decrease_yield(n, arg):
-	yield n-1
-
-def increase_yield(n, arg):
-	yield n+1
-
-def is_str(n):
-	return type(n) is str
-
-def is_num(n):
-	return type(n) is int or type(n) is float
-
-def is_int(n):
-	return type(n) is int or is_num(n) and float(n).is_integer()
-
-def is_int_string(s):
-    try:
-        int(s)
-        return True
-    except ValueError:
-        return False
-
-def is_list(n):
-	return type(n) is list
-
-def is_equal(a, b):
-	yield int(a == b)
-
-def is_less(a, b):
-	yield int(a < b)
-
-def is_greater(a, b):
-	yield int(a > b)
-
-def is_leq(a, b):
-	yield int(a <= b)
-
-def is_geq(a, b):
-	yield int(a >= b)
-
-def is_not(a, b):
-	yield int(a != b)
-
-def add_yield(a, b):
-	yield a+b
-
-def mult_yield(a, b):
-	yield a*b
-
-def add(a, b):
-	return a+b
-
-def mult(a, b):
-	return a*b
-
-def to_base(a, b):
-	res = []
-	while a:
-		res.append(a % b)
-		a //= b
-	return res
-
-def from_base(l, b):
-	res = 0
-	for i, a in enumerate(l):
-		res += a*b**i
-	return res
-
-def to_binary_yield(a, arg):
-	yield to_base(a, 2)
-
-def from_binary_yield(a, arg):
-	yield from_base(a, 2)
-
-def to_base_string(a, b):
-	return ''.join([str(n) for n in to_base(a, b)]) or '0'
-
-def from_base_string(a, b):
-	return from_base([int(n) for n in a], b)
-
-def to_binary_string_yield(a, arg):
-	if is_int(a):
-		yield to_base_string(a, 2)
-	elif is_list(a):
-		yield [to_base_string(n, 2) for n in a]
-	else:
-		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-def from_binary_string_yield(a, arg):
-	if is_list(a):
-		yield [from_base_string(n, 2) for n in a]
-	elif is_str(a):
-		yield from_base_string(a, 2)
-	else:
-		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-def duplicate(a, arg = None):
-	for i in range(2):
-		yield a
-
-def triplicate(a, arg = None):
-	for i in range(3):
-		yield a
-
-def quadruplicate(a, arg = None):
-	for i in range(4):
-		yield a
-
-def is_truthy(a):
-	if is_num(a):
-		return a != 0
-	elif is_str(a):
-		return len(a) > 0
-	elif is_list(a):
-		return any(map(is_truthy, a))
-
-def is_falsey(a):
-	if is_num(a):
-		return a == 0
-	elif is_str(a):
-		return a == ""
-	elif is_list(a):
-		return not any(is_truthy(n) for n in a)
-
-def while_true_no_pop(stack):
-	i = 0
-	while stack and stack[-1]:
-		yield i
-		i += 1
-
-def while_false_no_pop(stack):
-	i = 0
-	while stack and not stack[-1]:
-		yield i
-		i += 1
-
-def while_true_pop(stack):
-	i = 0
-	while stack and stack.pop("→"):
-		yield i
-		i += 1
-
-def while_false_pop(stack):
-	i = 0
-	while stack and not stack.pop("←"):
-		yield i
-		i += 1
-
-def do_while_true_no_pop(stack):
-	i = 0
-	while True:
-		yield i
-		i += 1
-		if not (stack and stack[-1]):
-			break
-
-def do_while_false_no_pop(stack):
-	i = 0
-	while True:
-		yield i
-		i += 1
-		if not (stack and not stack[-1]):
-			break
-
-def do_while_true_pop(stack):
-	i = 0
-	while True:
-		yield i
-		i += 1
-		if not (stack and stack.pop("▲")):
-			break
-
-def do_while_false_pop(stack):
-	i = 0
-	while True:
-		yield i
-		i += 1
-		if not (stack and not stack.pop("▼")):
-			break
-
-def decompress(string, compressed):
-	decompressed = ""
-	for i in range(len(string)):
-		letter_idx = code_page.index(string[i])+1
-		string_idx = (letter_idx >> 4) & 0xf
-		decompressed += compressed[string_idx]
-		string_idx = (letter_idx >> 0) & 0xf
-		decompressed += compressed[string_idx]
-	return decompressed
-
-def create_block(arg, code):
-	if arg.char == "Ä":
-		c = code[-1:]
-		code = code[:-1]
-	elif arg.char == "Å":
-		c = code[-2:]
-		code = code[:-2]
-	elif arg.char == "É":
-		c = code[-3:]
-		code = code[:-3]
-	elif arg.char == "æ":
-		c = code[-4:]
-		code = code[:-4]
-	elif arg.char == "Æ":
-		c = code[-5:]
-		code = code[:-5]
-	elif arg.char == "ô":
-		c = code[-6:]
-		code = code[:-6]
-	elif arg.char == "ö":
-		c = code[-7:]
-		code = code[:-7]
-	elif arg.char == "ò":
-		c = code[-8:]
-		code = code[:-8]
-	elif arg.char == "{":
-		c = []
-		temp = [] if not code else code.pop()
-		while temp.char != "}" and code:
-			c.append(temp)
-			temp = code.pop()
-		if not code and temp.char != "}":
-			c.append(temp)
-
-		c = c[::-1]
-	return c, code
-
-def for_looping(n):
-	for i in range(n):
-		yield i
 
 def evaluate(
 	code,
@@ -741,14 +32,95 @@ def evaluate(
 	loop_limit = 0,
 	loop_value = None):
 
+	nilads = {
+		"☻" : push_16,
+		"♥" : push_32,
+		"♦" : push_64,
+		"♣" : push_128,
+		"♠" : push_256,
+		"•" : push_512,
+		"◘" : push_1024,
+		"○" : push_2048,
+		"◙" : push_4096,
+		"♂" : push_10,
+		"♀" : push_100,
+		"♪" : push_1000,
+		"♫" : push_10000,
+		"☼" : push_100000,
+		"►" : push_1000000,
+		"◄" : push_10000000,
+		"↕" : push_100000000,
+		"0" : push_0,
+		"1" : push_1,
+		"2" : push_2,
+		"3" : push_3,
+		"4" : push_4,
+		"5" : push_5,
+		"6" : push_6,
+		"7" : push_7,
+		"8" : push_8,
+		"9" : push_9,
+		"b" : push_neg1,
+		"c" : push_neg2,
+		"d" : push_neg3,
+		"e" : push_e,
+		"t" : push_unixtime,
+		"v" : push_random_int,
+		"⌂" : push_asterisk_yield,
+		"ª" : push_1_array,
+		"º" : push_0_array,
+
+		"╟" : push_60,
+		"╚" : push_3600,
+		"╔" : push_86400,
+		"π" : push_pi,
+		"τ" : push_tau,
+		" " : push_space,
+
+		"A" : push_11,
+		"B" : push_12,
+		"C" : push_13,
+		"D" : push_14,
+		"E" : push_15,
+		"F" : push_17,
+		"G" : push_18,
+		"H" : push_19,
+		"I" : push_20,
+		"J" : push_21,
+		"K" : push_22,
+		"L" : push_23,
+		"M" : push_24,
+		"N" : push_25,
+		"O" : push_26,
+		"P" : push_27,
+		"Q" : push_28,
+		"R" : push_29,
+		"S" : push_30,
+		"T" : push_31,
+		"U" : push_33,
+		"V" : push_34,
+		"W" : push_35,
+		"X" : push_36,
+		"Y" : push_37,
+		"Z" : push_38,
+
+		"φ": golden_ratio_yield
+	}
+
 	monads = {
-		"¶": is_prime,
+		"¶": is_prime_yield,
 		"!": gamma_yield,
 		"(": decrease_yield,
 		")": increase_yield,
+		";": discard_tos_yield,
+		"a": wrap_in_array_yield,
 		"f": fibonnaci_yield,
 		"h": length_yield,
 		"i": cast_to_integer_yield,
+		"n": print_lines_yield,
+		"o": print_without_popping_yield,
+		"p": print_with_newline_yield,
+		"q": print_without_newline_yield,
 		"r": get_range_yield,
 		"s": sort_list_or_string_yield,
 		"w": get_random_value_yield,
@@ -758,6 +130,8 @@ def evaluate(
 		"å": from_binary_string_yield,
 		"â": to_binary_yield,
 		"ä": from_binary_yield,
+		"ç": is_truthy_filter_yield,
+		"£": length_with_pop_yield,
 		"¥": modulo_2_yield,
 		"ó": pow_2_yield,
 		"ú": pow_10_yield,
@@ -773,7 +147,7 @@ def evaluate(
 		"┐": copy_and_decrease_yield,
 		"└": copy_and_increase_yield,
 		"┴": check_if_1_yield,
-		"┴": check_if_0_yield,
+		"┬": check_if_0_yield,
 		"─": flatten_or_get_divisors_yield,
 		"╦": get_dictionary_words_yield,
 		"╤": get_symmetric_range_yield,
@@ -801,14 +175,25 @@ def evaluate(
 		"■": get_self_product_or_collatz_yield
 	}
 	dinads = {
+		"§": get_list_or_string_item,
+		"+": add_yield,
+		"-": subtract_yield,
+		"*": mult_yield,
+		"/": divide_yield,
+		"#": power_yield,
+		"u": join_yield,
+		"▌": prepend_list_or_string_yield,
+		"▐": append_list_or_string_yield,
+		"Φ": increase_array_element_yield,
+		"Θ": decrease_array_element_yield,
 		"<": is_less,
 		"=": is_equal,
 		">": is_greater,
 		"¡": is_not,
-		"+": add_yield,
-		"*": mult_yield,
 		"≥": is_geq,
-		"≤": is_leq
+		"≤": is_leq,
+		"÷": is_divisible_yield,
+		"%": modulo_yield
 	}
 	loop_handlers = {
 		"↑": while_true_no_pop,
@@ -833,50 +218,21 @@ def evaluate(
 
 	while code:
 		arg = code.pop()
-		if 2 <= arg.code <= 10:
-			stack.append(2**(arg.code+2))
-		elif 11 <= arg.code <= 18:
-			stack.append(10**(arg.code-10))
-		elif arg.char == "¶":
-			a = stack.pop(arg.char)
-			if is_int(a):
-				stack.append(is_prime(a))
-			elif is_list(a):
-				stack.append([is_prime(n) for n in a])
-			elif is_str(a):
-				stack.append(a.split())
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+		if arg.char in nilads:
+			for val in nilads[arg.char](arg):
+				stack.append(val)
 
 		elif arg.char in monads:
 			a = stack.pop(arg.char)
 			for val in monads[arg.char](a, arg):
 				stack.append(val)
 
-		elif arg.char == "§":
-			a = stack.pop(arg.char)
+		elif arg.char in dinads:
 			b = stack.pop(arg.char)
-			if is_int(a) and is_list(b):
-				stack.append(b[a % len(b)])
-			elif is_list(a) and is_int(b):
-				stack.append(a[b % len(a)])
-			elif is_int(a) and is_str(b):
-				stack.append(b[a % len(b)])
-			elif is_str(a) and is_int(b):
-				stack.append(a[b % len(a)])
-			elif is_list(a) and is_list(b):
-				stack.append([a[n % len(a)] for n in b])
-			else:
-				raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
-
-		elif arg.char == "!":
 			a = stack.pop(arg.char)
-			if is_num(a):
-				stack.append(gamma(a))
-			elif is_list(a):
-				stack.append([gamma(n) for n in a])
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+			for val in dinads[arg.char](a, b, arg):
+				stack.append(val)
 
 		elif arg.char == "\"":
 			s = ""
@@ -887,14 +243,15 @@ def evaluate(
 				else:
 					s += c
 				c = code.pop().char
-			if c == "\"" or not code:
-				if not code:
-					s += c
+			if not code and c not in string_terminators:
+				s += c
+				stack.append(s)
+			elif c == "\"":
 				stack.append(s)
 			else:
 				if c == "«":
 					compressed = "etaoinsrhluczbfp"
-				elif c == "":
+				elif c == "»":
 					compressed = "gwymvkxjqd_?*#.,"
 
 				stack.append(decompress(s, compressed))
@@ -923,178 +280,24 @@ def evaluate(
 				s = s[:3]
 			stack.append(s)
 
-		elif arg.char == "#":
-			b = stack.pop(arg.char)
-			a = stack.pop(arg.char)
-			if is_num(a) and is_num(b):
-				stack.append(a**b)
-			elif is_num(a) and is_list(b):
-				stack.append([a**n for n in b])
-			elif is_list(a) and is_num(b):
-				stack.append([n**b for n in a])
-			else:
-				raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
-
-		elif arg.char == "%":
-			b = stack.pop(arg.char)
-			a = stack.pop(arg.char)
-			if is_num(a) and is_num(b):
-				stack.append(a%b)
-			elif is_num(a) and is_list(b):
-				stack.append([n for n in b[::n]])
-			elif is_list(a) and is_num(b):
-				stack.append([n%b for n in a])
-			elif is_num(a) and is_str(b):
-				stack.append(''.join([n for n in b[::n]]))
-			else:
-				raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
 
 		elif arg.char == "'":
 			stack.append(code.pop().char)
 
-		elif arg.char == "(":
-			a = stack.pop(arg.char)
-			if is_num(a):
-				stack.append(a-1)
-			elif is_list(a):
-				stack.append([n-1 for n in a])
-			elif is_str(a):
-				stack.append(''.join([chr(ord(n)-1) for n in a]))
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-		elif arg.char == ")":
-			a = stack.pop(arg.char)
-			if is_num(a):
-				stack.append(a+1)
-			elif is_list(a):
-				stack.append([n+1 for n in a])
-			elif is_str(a):
-				stack.append(''.join([chr(ord(n)+1) for n in a]))
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-		elif arg.char == "*":
-			b = stack.pop(arg.char)
-			a = stack.pop(arg.char)
-			if is_num(a) and is_num(b):
-				stack.append(a*b)
-			elif is_str(a) and is_num(b):
-				stack.append(a*int(b))
-			elif is_num(a) and is_str(b):
-				stack.append(int(a)*b)
-			elif is_num(a) and is_list(b):
-				stack.append(a*b)
-			elif is_list(a) and is_num(b):
-				stack.append([n*b for n in a])
-			elif is_list(a) and is_str(b):
-				stack.append([n*b for n in a])
-			elif is_list(a) and is_list(b):
-				stack.append([list(n) for n in itertools.product(a, b)])
-			else:
-				raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
-
-		elif arg.char == "+":
-			b = stack.pop(arg.char)
-			a = stack.pop(arg.char)
-			if is_num(a) and is_num(b):
-				stack.append(a+b)
-			elif is_num(a) and is_list(b):
-				stack.append([n+a for n in b])
-			elif is_list(a) and is_num(b):
-				stack.append([n+b for n in a])
-			elif is_list(a) and is_list(b):
-				stack.append(a+b)
-			elif is_str(a) and is_num(b):
-				stack.append(a+str(b))
-			elif is_num(a) and is_str(b):
-				stack.append(str(a)+b)
-			elif is_str(a) and is_list(b):
-				stack.append([a+str(n) for n in b])
-			elif is_list(a) and is_str(b):
-				stack.append([str(n)+b for n in a])
-			elif is_str(a) and is_str(b):
-				stack.append(a+b)
-			else:
-				raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
-
-		elif arg.char == "-":
-			b = stack.pop(arg.char)
-			a = stack.pop(arg.char)
-			if is_num(a) and is_num(b):
-				stack.append(a-b)
-			elif is_num(a) and is_list(b):
-				stack.append([a-n for n in b])
-			elif is_list(a) and is_num(b):
-				stack.append([n-b for n in a])
-			elif is_list(a) and is_list(b):
-				stack.append([n for n in a if n not in set(b)])
-			else:
-				raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
-
-		elif arg.char == "/":
-			b = stack.pop(arg.char)
-			a = stack.pop(arg.char)
-			if is_int(a) and is_int(b):
-				stack.append(a//b)
-			elif is_num(a) and is_num(b):
-				stack.append(a/b)
-			elif is_num(a) and is_list(b):
-				stack.append([a/n for n in b])
-			elif is_list(a) and is_num(b):
-				stack.append([n/b for n in a])
-			elif is_list(a) and is_list(b):
-				stack.append([n2 for n2 in b if n2 not in set([n for n in a if n not in set(b)])])
-			elif is_str(a) and is_int(b):
-				stack.append([a[i*b:(i+1)*b] for i in range(math.ceil(len(a)/b))])
-
-			else:
-				raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
-
-		elif "0" <= arg.char <= "9":
-			stack.append(int(arg.char))
-
-		elif arg.char == ";":
-			stack.pop(arg.char)
-
-		elif arg.char == "<":
-			a, b = stack.pop(arg.char), stack.pop(arg.char)
-			if is_num(a) and is_num(b):
-				stack.append(int(all(is_less(a, b))))
-			elif is_int(a) and is_list(b):
-				stack.append([b[i%len(b)] for i in range(a)])
-			else:
-				raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
-
-		elif arg.char == "=":
-			a, b = stack.pop(arg.char), stack.pop(arg.char)
-			stack.append(int(all(is_equal(a, b))))
-		elif arg.char == ">":
-			a, b = stack.pop(arg.char), stack.pop(arg.char)
-			stack.append(int(all(is_greater(a, b))))
 
 		elif arg.char == "?":
-			if len(stack) < 3:
+			if len(stack.list) < 3:
 				raise IndexError("%s requires at least 3 elements on the stack" % arg.char)
 			stack.append(stack.pop(arg.char, -3))
 		elif arg.char == "@":
-			if len(stack) < 3:
+			if len(stack.list) < 3:
 				raise IndexError("%s requires at least 3 elements on the stack" % arg.char)
 			stack.append(stack.pop(arg.char, -3))
 			stack.append(stack.pop(arg.char, -3))
 
-		elif "A" <= arg.char <= "E":
-			val = 11 + ord(arg.char) - ord("A")
-			stack.append(val)
-		elif "F" <= arg.char <= "T":
-			val = 17 + ord(arg.char) - ord("F")
-			stack.append(val)
-		elif "U" <= arg.char <= "Z":
-			val = 33 + ord(arg.char) - ord("U")
-			stack.append(val)
 
 		elif arg.char == "[":
-			ret = evaluate(code, stdin, Stack([]), level+1)
+			ret = evaluate(code, stdin, Stack([]), level+1, loop_counter, loop_limit, loop_value)
 			stack.append(ret.list)
 		elif arg.char == "\\":
 			stack.append(stack.pop(arg.char, -2))
@@ -1104,23 +307,7 @@ def evaluate(
 			else:
 				stack = Stack([stack.list])
 
-		elif arg.char == "a":
-			stack.append([stack.pop(arg.char)])
 
-		elif "b" <= arg.char <= "d":
-			stack.append(ord("a") - ord(arg.char))
-
-		elif arg.char == "e":
-			stack.append(math.e)
-
-		elif arg.char == "f":
-			a = stack.pop(arg.char)
-			if is_int(a):
-				stack.append(fibonnaci(a))
-			elif is_list(a):
-				stack.append([fibonnaci(n) for n in a])
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
 		elif arg.char == "g":
 			op = code.pop()
@@ -1130,12 +317,12 @@ def evaluate(
 			elif op.char in dinads:
 				b = stack.pop(arg.char)
 				if is_list(a) and is_num(b):
-					stack.append([n for n in a if all(dinads[op.char](n, b))])
+					stack.append([n for n in a if all(dinads[op.char](n, b, op))])
 				elif is_num(a) and is_list(b):
-					stack.append([n for n in b if all(dinads[op.char](a, n))])
+					stack.append([n for n in b if all(dinads[op.char](a, n, op))])
 				elif is_list(a) and is_list(b):
 					if len(a) == len(b):
-						stack.append([na for na, nb in zip(a, b) if all(dinads[op.char](na, nb))])
+						stack.append([na for na, nb in zip(a, b) if all(dinads[op.char](na, nb, op))])
 					else:
 						raise ValueError("Both lists need to be of equal length for filtering")
 			elif op.char in block_creators and is_list(a):
@@ -1144,26 +331,19 @@ def evaluate(
 			else:
 				raise ValueError("[%s]%s%s is not supported" % (type(a),arg.char, op.char))
 
-		elif arg.char == "h":
-			a = stack.pop(arg.char)
-			if is_list(a):
-				stack.append(a)
-				stack.append(len(a))
-			elif is_str(a):
-				stack.append(a)
-				stack.append(len(a))
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
 
 		elif arg.char == "j":
-			v = float(stdin.pop())
-			stack.append(v)
+			a = float(stdin.pop())
+			stack.append(a)
 		elif arg.char == "k":
-			v = int(stdin.pop())
-			stack.append(v)
+			a = int(stdin.pop())
+			stack.append(a)
 		elif arg.char == "l":
-			v = stdin.pop()
-			stack.append(v)
+			a = stdin.pop()
+			stack.append(a)
+
+
 
 		elif arg.char == "m":
 			op = code.pop()
@@ -1173,12 +353,12 @@ def evaluate(
 			elif op.char in dinads:
 				b = stack.pop(arg.char)
 				if is_list(a) and is_num(b):
-					stack.append([v for n in a for v in dinads[op.char](n, b)])
+					stack.append([v for n in a for v in dinads[op.char](n, b, op)])
 				elif is_num(a) and is_list(b):
-					stack.append([v for n in b for v in dinads[op.char](a, n)])
+					stack.append([v for n in b for v in dinads[op.char](a, n, op)])
 				elif is_list(a) and is_list(b):
 					if len(a) == len(b):
-						stack.append([v for na, nb in zip(a, b) for v in dinads[op.char](na, nb)])
+						stack.append([v for na, nb in zip(a, b) for v in dinads[op.char](na, nb, op)])
 					else:
 						raise ValueError("Both lists need to be of equal length for filtering")
 			elif op.char in block_creators and is_list(a):
@@ -1187,49 +367,12 @@ def evaluate(
 			else:
 				raise ValueError("[%s]%s%s is not supported" % (type(a),arg.char, op.char))
 
-
-		elif arg.char == "n":
-			a = stack.pop(arg.char)
-			if is_list(a):
-				print('\n'.join([str(n) for n in a]))
-			else:
-				print()
-				stack.append(a)
-		elif arg.char == "o":
-			print(stack[-1])
-		elif arg.char == "p":
-			print(stack.pop(arg.char))
-		elif arg.char == "q":
-			print(stack.pop(arg.char), end='')
-
-
-		elif arg.char == "t":
-			now = datetime.datetime.now()
-			stack.append(int(
-				time.mktime(now.timetuple())*1e3 + now.microsecond//1e3
-			))
-
 		elif arg.char == "u":
 			b = stack.pop(arg.char)
 			a = stack.pop(arg.char)
-			if is_list(a) and is_str(b):
-				stack.append(b.join([str(n) for n in a]))
-			elif is_str(a) and is_list(b):
-				stack.append(a.join([str(n) for n in b]))
-			elif(is_str(a) and is_str(b)):
-				stack.append(b.join(list(a)))
-			elif is_list(a) and is_list(b):
-				stack.append([n.join(a) for n in b])
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-		elif arg.char == "v":
-			stack.append(random.randint(-2**31, 2**31-1))
 
 
 
-
-		elif arg.char == "⌂":
-			stack.append("*")
 		elif arg.char == "~":
 			a = stack.pop(arg.char)
 			if is_int(a):
@@ -1242,45 +385,6 @@ def evaluate(
 				stack = evaluate(str_code_list, stdin, stack, level+1)
 			else:
 				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-		elif arg.char == "â":
-			a = stack.pop(arg.char)
-			if is_int(a):
-				stack.append(to_base(a, 2))
-			elif is_list(a):
-				stack.append([to_base(n, 2) for n in a])
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-		elif arg.char == "ä":
-			a = stack.pop(arg.char)
-			if is_list(a):
-				if len(a) > 0 and is_list(a[0]):
-					stack.append([from_base(n, 2) for n in a])
-				else:
-					stack.append(from_base(a, 2))
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-
-		elif arg.char == "å":
-			a = stack.pop(arg.char)
-
-		elif arg.char == "ç":
-			a = stack.pop(arg.char)
-			if is_list(a):
-				if not is_falsey(a):
-					stack.append([n for n in a if not is_falsey(n)])
-			elif is_str(a):
-				if not is_falsey(a):
-					stack.append(a)
-			elif is_num(a):
-				if not is_falsey(a):
-					stack.append(a)
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-
 
 		elif arg.char == "ê":
 			stack.append([int(i) for i in stdin])
@@ -1297,7 +401,6 @@ def evaluate(
 			stack.append(loop_value)
 		elif arg.char == "í":
 			stack.append(loop_limit)
-
 
 		elif arg.char in block_creators:
 			c, code = create_block(arg, code)
@@ -1323,99 +426,59 @@ def evaluate(
 						loop_counter = i
 						stack = evaluate(c[:], stdin, stack, level+1, loop_counter)
 
-		elif arg.char == "£":
-			a = stack.pop(arg.char)
-			if is_str(a):
-				stack.append(len(a))
-			elif is_list(a):
-				stack.append(len(a))
-			else:
-				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-
-
-
-
-		elif arg.char == "ª":
-			stack.append([1])
-		elif arg.char == "º":
-			stack.append([0])
 
 		elif arg.char == "¿":
 			a = stack.pop(arg.char)
 			if is_truthy(a):
-				code.pop(1)
+				code.pop(-2)
 			else:
 				code.pop()
 
 		elif arg.char == "⌐":
 			stack.append(stack.pop(arg.char, 0))
+
 		elif arg.char == "¬":
-			stack = Stack([stack.pop(arg.char)] + stack.list())
-
-
-
-
-
-
-		elif arg.char == "¡":
-			a = stack.pop(arg.char)
-			b = stack.pop(arg.char)
-			stack.append(int(all(is_not(a, b))))
-
-
-
-
-
-
-
-
-
-
-
-		elif arg.char == "╟":
-			stack.append(60)
-		elif arg.char == "╚":
-			stack.append(3600)
-		elif arg.char == "╔":
-			stack.append(86400)
+			stack = Stack([stack.pop(arg.char)] + stack.list)
 
 		elif arg.char == "╩":
 			next_char = code.pop().code
 			stack.append(words[next_char])
 
-
-
-
-
-
-		elif arg.char == "▌":
-			b = stack.pop(arg.char)
+		elif arg.char == "╙":
 			a = stack.pop(arg.char)
-			if is_num(a) and is_list(b):
-				stack.append([a] + b)
-			elif is_list(a) and is_num(b):
-				stack.append([b] + a)
-			elif is_str(a) and is_list(b):
-				stack.append([a] + b)
-			elif is_list(a) and is_str(b):
-				stack.append([b] + a)
-			else:
-				raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
+			if is_num(a):
+				b = stack.pop(arg.char)
+				if is_num(b):
+					stack.append(max(a, b))
+				else:
+					raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
+			elif is_str(a):
+				b = stack.pop(arg.char)
+				if is_str(b):
+					stack.append(max(a, b))
+				else:
+					raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
+			if is_list(a):
+				stack.append(max(a))
 
-		elif arg.char == "▐":
-			b = stack.pop(arg.char)
+		elif arg.char == "╓":
 			a = stack.pop(arg.char)
-			if is_num(a) and is_list(b):
-				stack.append(b + [a])
-			elif is_list(a) and is_num(b):
-				stack.append(a + [b])
-			elif is_str(a) and is_list(b):
-				stack.append(b + [a])
-			elif is_list(a) and is_str(b):
-				stack.append(a + [b])
-			else:
-				raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
+			if is_num(a):
+				b = stack.pop(arg.char)
+				if is_num(b):
+					stack.append(min(a, b))
+				else:
+					raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
+			elif is_str(a):
+				b = stack.pop(arg.char)
+				if is_str(b):
+					stack.append(min(a, b))
+				else:
+					raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
+			if is_list(a):
+				stack.append(min(a))
+
+
 
 		elif arg.char == "α":
 			b = stack.pop(arg.char)
@@ -1427,6 +490,7 @@ def evaluate(
 			b = stack.pop(arg.char)
 			a = stack.pop(arg.char)
 			stack.append([a, b, c])
+
 		elif arg.char == "Γ":
 			d = stack.pop(arg.char)
 			c = stack.pop(arg.char)
@@ -1434,41 +498,8 @@ def evaluate(
 			a = stack.pop(arg.char)
 			stack.append([a, b, c, d])
 
-		elif arg.char == "π":
-			stack.append(math.pi)
-		elif arg.char == "τ":
-			stack.append(2*math.pi)
 
 
-
-
-
-
-
-
-		elif arg.char == "Φ":
-			b = stack.pop(arg.char)
-			a = stack.pop(arg.char)
-			if is_int(a) and is_list(b):
-				b[a % len(b)] += 1
-				stack.append(b)
-			elif is_list(a) and is_int(b):
-				a[b % len(a)] += 1
-				stack.append(a)
-			else:
-				raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
-
-		elif arg.char == "Θ":
-			b = stack.pop(arg.char)
-			a = stack.pop(arg.char)
-			if is_int(a) and is_list(b):
-				b[a % len(b)] -= 1
-				stack.append(b)
-			elif is_list(a) and is_int(b):
-				a[b % len(a)] -= 1
-				stack.append(a)
-			else:
-				raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
 
 		elif arg.char == "µ":
 			c = stack.pop(arg.char)
@@ -1501,7 +532,6 @@ def evaluate(
 			else:
 				raise ValueError("[%s][%s][%s]%s is not supported" % (type(a), type(b), type(c),arg.char))
 
-
 		elif arg.char == "ε":
 			a = stack.pop(arg.char)
 			if is_list(a):
@@ -1513,56 +543,9 @@ def evaluate(
 			else:
 				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-
-		elif arg.char == "φ":
-			stack.append((1+math.sqrt(5))/2)
-
-		elif arg.char == "≥":
-			a, b = stack.pop(arg.char), stack.pop(arg.char)
-			if is_num(a) and is_num(b):
-				stack.append(int(all(is_geq(a, b))))
-			elif is_int(a) and is_list(b):
-				stack.append([b[i%len(b)] for i in range(a)])
-			else:
-				raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
-
-		elif arg.char == "≤":
-			a, b = stack.pop(arg.char), stack.pop(arg.char)
-			if is_num(a) and is_num(b):
-				stack.append(int(all(is_leq(a, b))))
-			elif is_int(a) and is_list(b):
-				stack.append([b[i%len(b)] for i in range(a)])
-			else:
-				raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
-
-
-
-		elif arg.char == "÷":
-			b = stack.pop(arg.char)
-			a = stack.pop(arg.char)
-			if is_int(a) and is_int(b):
-				stack.append(int(a%b == 0))
-			elif is_int(a) and is_list(b):
-				stack.append([int(a%n == 0) for n in b])
-			elif is_list(a) and is_int(b):
-				stack.append([int(n%b == 0) for n in a])
-			else:
-				raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
-
-
 		elif arg.char == "`":
 			stack.append(stack[-2])
 			stack.append(stack[-2])
-
-
-
-
-
-
-
-
-		elif arg.char == " ":
-			stack.append(" ")
 
 		elif arg.char == " ":
 			stack = Stack([stack.pop(arg.char)])
@@ -1590,6 +573,11 @@ if __name__ == '__main__':
 
 	if sys.argv[1] == '-d':
 		DEBUG = True
+		sys.argv.pop(1)
+
+	if sys.argv[1] == '--unittest':
+		set_unittest()
+		random.seed(1)
 		sys.argv.pop(1)
 
 	code_bytes = open(sys.argv[1], 'rb').read()

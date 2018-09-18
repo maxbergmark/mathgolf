@@ -117,7 +117,7 @@ q : print without newline
 	s : sort(array)
 t : unix timestamp as integer milliseconds
 		u : join with separator
-v : random integer in 
+v : random integer in [-2**31, 2**31-1]
 	w : random integer in range, random item from list
 	x : reverse int/array/string
 y
@@ -210,10 +210,10 @@ y
 	╨ : closest power of two above
 	╤ : range(-n, n+1)
 	╥ : closest power of two below
-╙
+╙ : maximum of two elements, max of list, maximum by filter
 ╘
 	╒ : range(1,n+1)
-╓
+╓ : minimum of two elements, min of list, minimum by filter
 	╫ : left-rotate bits in int, list/str
 	╪ : right-rotate bits in int, list, str
 	┘ : convert to boolean
@@ -233,6 +233,7 @@ y
 τ : tau (2*pi)
 	Φ : increment array/string item
 	Θ : decrement array/string item
+Ω
 	δ : capitalize string
 	∞ : pop a, push 2*a
 φ : golden ratio (1.618...)
