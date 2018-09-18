@@ -1,3 +1,5 @@
 test_program.mg
 test_program.out
 test_input.txt
+*.pyc
+*.pyo
