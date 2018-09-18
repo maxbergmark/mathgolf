@@ -32,6 +32,8 @@ def evaluate(
 	loop_limit = 0,
 	loop_value = None):
 
+	stack.stdin = stdin
+
 	nilads = {
 		"☻" : push_16,
 		"♥" : push_32,
@@ -69,14 +71,12 @@ def evaluate(
 		"⌂" : push_asterisk_yield,
 		"ª" : push_1_array,
 		"º" : push_0_array,
-
 		"╟" : push_60,
 		"╚" : push_3600,
 		"╔" : push_86400,
 		"π" : push_pi,
 		"τ" : push_tau,
 		" " : push_space,
-
 		"A" : push_11,
 		"B" : push_12,
 		"C" : push_13,
@@ -103,7 +103,6 @@ def evaluate(
 		"X" : push_36,
 		"Y" : push_37,
 		"Z" : push_38,
-
 		"φ": golden_ratio_yield
 	}
 
@@ -205,7 +204,13 @@ def evaluate(
 		"▲" : do_while_true_pop,
 		"▼" : do_while_false_pop
 	}
-	reducers = {"*": mult, "#": pow, "+": add}
+	reducers = {
+		"*": mult_yield,
+		"#": power_yield,
+		"+": add_yield,
+		"-": subtract_yield,
+		"/": divide_yield
+	}
 
 	loop_types = set("↑↓→←∟↔▲▼*")
 	block_creators = set("ÄÅÉæÆ{ôöò")
@@ -535,9 +540,13 @@ def evaluate(
 		elif arg.char == "ε":
 			a = stack.pop(arg.char)
 			if is_list(a):
-				operator = code.pop().char
-				if operator in reducers:
-					stack.append(reduce(reducers[operator], a))
+				op = code.pop()
+				if op.char in reducers:
+					value = a[0] if a else 0
+					for n in a[1:]:
+						for step in reducers[op.char](value, n, op):
+							value = step
+					stack.append(value)
 				else:
 					raise ValueError("[%s]%s%s is not a valid reduction" % (a, arg.char, operator))
 			else:
@@ -584,7 +593,7 @@ if __name__ == '__main__':
 	code = parse_input(code_bytes)
 	commands = [code_page.index(c)+1 for c in code]
 	code_list = [Argument(char, c) for char, c in zip(code, commands)][::-1]
-	stdin = StdIn(list('' if sys.stdin.isatty() else sys.stdin.read().split()))
+	stdin = StdIn(list("" if sys.stdin.isatty() else sys.stdin.read().split()))
 	try:
 		result = evaluate(code_list, stdin)
 		print(print_list(result))

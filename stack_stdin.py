@@ -1,4 +1,6 @@
-
+from check_type import *
+import ast
+import sys
 
 class StdIn():
 
@@ -14,13 +16,22 @@ class StdIn():
 			self.index = 0
 			raise StopIteration
 		self.index += 1
-		return self.list[self.index-1]
+		return self.convert(self.list[self.index-1])
+
+	def convert(self, item):
+		# print(item, file=sys.stderr)
+		if is_int_string(item):
+			return int(item)
+		elif is_float_string(item):
+			return float(item)
+		else:
+			return ast.literal_eval(item)
 
 	def pop(self):
 		if self.list:
 			ret = self.list[self.index]
 			self.index = (self.index+1) % len(self.list)
-			return ret
+			return self.convert(ret)
 		raise EOFError("No input has been provided")
 
 class Stack():
@@ -53,4 +64,6 @@ class Stack():
 	def pop(self, operator, index = -1):
 		if self.list:
 			return self.list.pop(index)
+		else:
+			return self.stdin.pop()
 		raise IndexError("%s could not pop from stack" % operator)

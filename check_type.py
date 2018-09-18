@@ -14,6 +14,13 @@ def is_int_string(s):
     except ValueError:
         return False
 
+def is_float_string(s):
+    try:
+        float(s)
+        return True
+    except ValueError:
+        return False
+
 def is_list(n):
 	return type(n) is list
 

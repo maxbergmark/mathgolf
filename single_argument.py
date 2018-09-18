@@ -460,7 +460,7 @@ def gamma(n):
 	elif is_num(n):
 		return math.gamma(n+1)
 	else:
-		raise ValueError("unsupported type for gamma: %s" % type(n))
+		raise ValueError("Unsupported type for gamma: %s" % type(n))
 
 def gamma_yield(n, arg):
 	if is_int(n):
@@ -468,13 +468,23 @@ def gamma_yield(n, arg):
 	elif is_num(n):
 		yield math.gamma(n+1)
 	else:
-		raise ValueError("unsupported type for gamma: %s" % type(n))
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-def decrease_yield(n, arg):
-	yield n-1
+def decrease_yield(a, arg):
+	if is_num(a):
+		yield a-1
+	elif is_list(a):
+		yield [n-1 for n in a]
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-def increase_yield(n, arg):
-	yield n+1
+def increase_yield(a, arg):
+	if is_num(a):
+		yield a+1
+	elif is_list(a):
+		yield [n+1 for n in a]
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
 def discard_tos_yield(a, arg):
 	if False:

@@ -5,7 +5,7 @@ def run_program(code, input_string = ""):
 	with open("unittest.mg", "w") as f:
 		f.write(code)
 	compile_command = "python3 pre_processor.py unittest.mg"
-	run_command = "echo '%s' | python3 math_golf.py --unittest unittest.out" % input_string
+	run_command = "echo \"%s\" | python3 math_golf.py --unittest unittest.out" % input_string
 	total_call = ";".join([compile_command, run_command])
 	return check_output(total_call, shell = True).decode('utf-8')[:-1]
 
@@ -86,13 +86,13 @@ inputs = [
 	[""],
 	[""],
 	[""],
-	["5.4 hej"],
+	["5.4 \'hej\'"],
 	[""],
 	["1 3 2 4 3 5 4 6"],
 	[""],
 	[""],
 	[""],
-	["abcdefghijkl"],
+	["\'abcdefghijkl\'"],
 	["1", "2", "3", "4", "5"],
 	["1 2 3 4 5"],
 	[""],
@@ -170,6 +170,12 @@ outputs = [
 	["['1'] ['0']", "['2'] ['0', '1']", "['3'] ['0', '1', '2']", "['4'] ['0', '1', '2', '3']"]
 ]
 
+# start = 22
+# end = 23
+# programs = programs[start:end]
+# inputs = inputs[start:end]
+# outputs = outputs[start:end]
+
 failure = False
 errors = []
 
@@ -182,6 +188,7 @@ if len(programs) != len(inputs) or len(programs) != len(outputs):
 	quit()
 
 counter = 0
+test_count = 0
 for program, inps, outps in zip(programs, inputs, outputs):
 	if len(inps) != len(outps):
 		print("\n\tThere should be as many inputs as there are outputs", end="\n\t")
@@ -194,10 +201,11 @@ for program, inps, outps in zip(programs, inputs, outputs):
 		if not program_output == outp:
 			failure = True
 			print("F", end="", flush=True)
-			errors.append("Failed asserting that \"%s\" == \"%s\"" % (program_output, outp))
+			errors.append("%d: (%s) (%s) Failed asserting that \"%s\" == \"%s\"" % (test_count, program, inp, program_output, outp))
 		else:
 			print(".", end="", flush=True)
 		counter += 1
+	test_count += 1
 
 if not failure:
 	print("\n\tAll unit tests passed!", end="\n\t")
