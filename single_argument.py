@@ -291,6 +291,8 @@ def round_down_to_pow_2_yield(a, arg):
 def get_range_1_based_yield(a, arg):
 	if is_num(a):
 		yield list(range(1, int(a)+1))
+	elif is_list(a):
+		yield [list(range(1, n+1)) for n in a]
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
