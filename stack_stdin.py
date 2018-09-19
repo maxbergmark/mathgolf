@@ -1,12 +1,15 @@
 from check_type import *
 import ast
 import sys
+import re
 
 class StdIn():
 
-	def __init__(self, lst):
+	def __init__(self, inp_str):
 		self.index = 0
-		self.list = lst
+
+		formatted_string = "[" + re.sub(r"\s+(?=([^\']*\'[^\']*\')*[^\']*$)", ", ", inp_str) + "]"
+		self.list = ast.literal_eval(formatted_string)
 
 	def __iter__(self):
 		return self
@@ -16,10 +19,9 @@ class StdIn():
 			self.index = 0
 			raise StopIteration
 		self.index += 1
-		return self.convert(self.list[self.index-1])
+		return self.list[self.index-1]
 
 	def convert(self, item):
-		# print(item, file=sys.stderr)
 		if is_int_string(item):
 			return int(item)
 		elif is_float_string(item):
@@ -31,7 +33,7 @@ class StdIn():
 		if self.list:
 			ret = self.list[self.index]
 			self.index = (self.index+1) % len(self.list)
-			return self.convert(ret)
+			return ret
 		raise EOFError("No input has been provided")
 
 class Stack():
