@@ -1,4 +1,5 @@
 from check_type import *
+import math
 
 def get_list_or_string_item(a, b, arg):
 	if is_int(a) and is_list(b):
