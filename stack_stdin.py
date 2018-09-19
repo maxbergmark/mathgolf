@@ -7,8 +7,10 @@ class StdIn():
 
 	def __init__(self, inp_str):
 		self.index = 0
-
-		formatted_string = "[" + re.sub(r"\s+(?=([^\']*\'[^\']*\')*[^\']*$)", ", ", inp_str) + "]"
+		if len(inp_str) > 0:
+			formatted_string = "[" + re.sub(r"\s+(?=([^\']*\'[^\']*\')*[^\']*$)", ", ", inp_str) + "]"
+		else:
+			formatted_string = "[]"
 		self.list = ast.literal_eval(formatted_string)
 
 	def __iter__(self):

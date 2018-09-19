@@ -573,7 +573,7 @@ if __name__ == '__main__':
 	code = parse_input(code_bytes)
 	commands = [code_page.index(c)+1 for c in code]
 	code_list = [Argument(char, c) for char, c in zip(code, commands)][::-1]
-	stdin = StdIn("" if sys.stdin.isatty() else sys.stdin.read())
+	stdin = StdIn("" if sys.stdin.isatty() else sys.stdin.read().rstrip("\n"))
 	try:
 		result = evaluate(code_list, stdin)
 		print(print_list(result))
