@@ -96,8 +96,6 @@ def push_tau(arg):
 	yield 2*math.pi
 def push_space(arg):
 	yield " "
-
-
 def push_11(arg):
 	yield 11
 def push_12(arg):
@@ -150,6 +148,5 @@ def push_37(arg):
 	yield 37
 def push_38(arg):
 	yield 38
-
 def golden_ratio_yield(arg):
 	yield (1+math.sqrt(5))/2

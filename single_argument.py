@@ -2,10 +2,9 @@ from check_type import *
 import math
 import random
 import resources.dictionary
-
+import itertools
 
 words = resources.dictionary.words
-
 
 def fibonnaci(n):
 	a, b = 0, 1
@@ -44,6 +43,8 @@ def cast_to_integer_yield(a, arg):
 def get_range_yield(a, arg):
 	if is_int(a):
 		yield list(range(a))
+	elif is_num(a):
+		yield list(range(int(a)))
 	elif is_list(a):
 		yield [list(range(n)) for n in a]
 	else:
@@ -117,6 +118,17 @@ def palindromize_yield(a, arg):
 		yield a+a[::-1][1:]
 	elif is_str(a):
 		yield a+a[::-1][1:]
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+def check_palindrome_yield(a, arg):
+	if is_int(a):
+		a = str(a)
+		yield int(a == a[::-1])
+	elif is_list(a):
+		yield int(a == a[::-1])
+	elif is_str(a):
+		yield int(a == a[::-1])
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
@@ -401,7 +413,7 @@ def get_sqrt_yield(a, arg):
 	elif is_list(a):
 		yield [math.sqrt(n) for n in a]
 	elif is_str(a):
-		yield list(a)
+		yield a.split("\n")
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
@@ -424,15 +436,13 @@ def get_square_yield(a, arg):
 def get_self_product_or_collatz_yield(a, arg):
 	if is_list(a):
 		yield [list(n) for n in itertools.product(a, a)]
-	if is_int(a):
+	elif is_int(a):
 		if a % 2 == 0:
 			yield a//2
 		else:
 			yield 3*a+1
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
-
 
 def is_prime(n):
 	if n < 0:
@@ -534,7 +544,6 @@ def length_with_pop_yield(a, arg):
 		yield len(a)
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
-
 
 def to_base(a, b):
 	res = []

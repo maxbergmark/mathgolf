@@ -19,10 +19,6 @@ from check_type import *
 Argument = namedtuple("Argument", ["char", "code"])
 DEBUG = False
 
-
-
-
-
 def evaluate(
 	code,
 	stdin,
@@ -34,7 +30,7 @@ def evaluate(
 
 	stack.stdin = stdin
 
-	nilads = {
+	zero_args = {
 		"☻" : push_16,
 		"♥" : push_32,
 		"♦" : push_64,
@@ -106,7 +102,7 @@ def evaluate(
 		"φ": golden_ratio_yield
 	}
 
-	monads = {
+	one_arg = {
 		"¶": is_prime_yield,
 		"!": gamma_yield,
 		"(": decrease_yield,
@@ -135,6 +131,7 @@ def evaluate(
 		"ó": pow_2_yield,
 		"ú": pow_10_yield,
 		"ñ": palindromize_yield,
+		"Ñ": check_palindrome_yield,
 		"½": halve_yield,
 		"¼": quarter_yield,
 		"░": convert_to_string_yield,
@@ -173,7 +170,7 @@ def evaluate(
 		"²": get_square_yield,
 		"■": get_self_product_or_collatz_yield
 	}
-	dinads = {
+	two_args = {
 		"§": get_list_or_string_item,
 		"+": add_yield,
 		"-": subtract_yield,
@@ -224,19 +221,19 @@ def evaluate(
 	while code:
 		arg = code.pop()
 
-		if arg.char in nilads:
-			for val in nilads[arg.char](arg):
+		if arg.char in zero_args:
+			for val in zero_args[arg.char](arg):
 				stack.append(val)
 
-		elif arg.char in monads:
+		elif arg.char in one_arg:
 			a = stack.pop(arg.char)
-			for val in monads[arg.char](a, arg):
+			for val in one_arg[arg.char](a, arg):
 				stack.append(val)
 
-		elif arg.char in dinads:
+		elif arg.char in two_args:
 			b = stack.pop(arg.char)
 			a = stack.pop(arg.char)
-			for val in dinads[arg.char](a, b, arg):
+			for val in two_args[arg.char](a, b, arg):
 				stack.append(val)
 
 		elif arg.char == "\"":
@@ -285,10 +282,8 @@ def evaluate(
 				s = s[:3]
 			stack.append(s)
 
-
 		elif arg.char == "'":
 			stack.append(code.pop().char)
-
 
 		elif arg.char == "?":
 			if len(stack.list) < 3:
@@ -299,7 +294,6 @@ def evaluate(
 				raise IndexError("%s requires at least 3 elements on the stack" % arg.char)
 			stack.append(stack.pop(arg.char, -3))
 			stack.append(stack.pop(arg.char, -3))
-
 
 		elif arg.char == "[":
 			ret = evaluate(code, stdin, Stack([]), level+1, loop_counter, loop_limit, loop_value)
@@ -312,22 +306,20 @@ def evaluate(
 			else:
 				stack = Stack([stack.list])
 
-
-
 		elif arg.char == "g":
 			op = code.pop()
 			a = stack.pop(arg.char)
-			if op.char in monads and is_list(a):
-				stack.append([n for n in a if all(monads[op.char](n, op))])
-			elif op.char in dinads:
+			if op.char in one_arg and is_list(a):
+				stack.append([n for n in a if all(one_arg[op.char](n, op))])
+			elif op.char in two_args:
 				b = stack.pop(arg.char)
 				if is_list(a) and is_num(b):
-					stack.append([n for n in a if all(dinads[op.char](n, b, op))])
+					stack.append([n for n in a if all(two_args[op.char](n, b, op))])
 				elif is_num(a) and is_list(b):
-					stack.append([n for n in b if all(dinads[op.char](a, n, op))])
+					stack.append([n for n in b if all(two_args[op.char](a, n, op))])
 				elif is_list(a) and is_list(b):
 					if len(a) == len(b):
-						stack.append([na for na, nb in zip(a, b) if all(dinads[op.char](na, nb, op))])
+						stack.append([na for na, nb in zip(a, b) if all(two_args[op.char](na, nb, op))])
 					else:
 						raise ValueError("Both lists need to be of equal length for filtering")
 			elif op.char in block_creators and is_list(a):
@@ -335,8 +327,6 @@ def evaluate(
 				stack.append([n for n in a if any(evaluate(c[:], stdin, Stack([n]), level+1))])
 			else:
 				raise ValueError("[%s]%s%s is not supported" % (type(a),arg.char, op.char))
-
-
 
 		elif arg.char == "j":
 			a = float(stdin.pop())
@@ -348,22 +338,20 @@ def evaluate(
 			a = stdin.pop()
 			stack.append(a)
 
-
-
 		elif arg.char == "m":
 			op = code.pop()
 			a = stack.pop(arg.char)
-			if op.char in monads and is_list(a):
-				stack.append([v for n in a for v in monads[op.char](n, op)])
-			elif op.char in dinads:
+			if op.char in one_arg and is_list(a):
+				stack.append([v for n in a for v in one_arg[op.char](n, op)])
+			elif op.char in two_args:
 				b = stack.pop(arg.char)
 				if is_list(a) and is_num(b):
-					stack.append([v for n in a for v in dinads[op.char](n, b, op)])
+					stack.append([v for n in a for v in two_args[op.char](n, b, op)])
 				elif is_num(a) and is_list(b):
-					stack.append([v for n in b for v in dinads[op.char](a, n, op)])
+					stack.append([v for n in b for v in two_args[op.char](a, n, op)])
 				elif is_list(a) and is_list(b):
 					if len(a) == len(b):
-						stack.append([v for na, nb in zip(a, b) for v in dinads[op.char](na, nb, op)])
+						stack.append([v for na, nb in zip(a, b) for v in two_args[op.char](na, nb, op)])
 					else:
 						raise ValueError("Both lists need to be of equal length for filtering")
 			elif op.char in block_creators and is_list(a):
@@ -375,8 +363,6 @@ def evaluate(
 		elif arg.char == "u":
 			b = stack.pop(arg.char)
 			a = stack.pop(arg.char)
-
-
 
 		elif arg.char == "~":
 			a = stack.pop(arg.char)
@@ -410,7 +396,9 @@ def evaluate(
 		elif arg.char in block_creators:
 			c, code = create_block(arg, code)
 			loop_type = code.pop() if code else Argument("*", 0)
-
+			if loop_type.char not in loop_types:
+				code.append(loop_type)
+				loop_type = Argument("*", 0)
 			if loop_type.char in loop_types:
 				if loop_type.char == "*":
 					limit = stack.pop(arg.char)
@@ -430,7 +418,6 @@ def evaluate(
 					for i in loop_handlers[loop_type.char](stack):
 						loop_counter = i
 						stack = evaluate(c[:], stdin, stack, level+1, loop_counter)
-
 
 		elif arg.char == "¿":
 			a = stack.pop(arg.char)
@@ -483,8 +470,6 @@ def evaluate(
 			if is_list(a):
 				stack.append(min(a))
 
-
-
 		elif arg.char == "α":
 			b = stack.pop(arg.char)
 			a = stack.pop(arg.char)
@@ -502,9 +487,6 @@ def evaluate(
 			b = stack.pop(arg.char)
 			a = stack.pop(arg.char)
 			stack.append([a, b, c, d])
-
-
-
 
 		elif arg.char == "µ":
 			c = stack.pop(arg.char)
@@ -570,12 +552,10 @@ def evaluate(
 def print_list(l):
 	return ''.join([str(s) if is_list(s) else str(s) for s in l])
 
-
 def parse_input(byte_array):
 	return ''.join([code_page[i] for i in list(byte_array)])
 
 if __name__ == '__main__':
-	## doctest.testmod() ## <- Uncomment to run tests.
 	if len(sys.argv) <= 1:
 		print('usage: python %s [-d] <code file>' % sys.argv[0])
 		sys.exit(1)

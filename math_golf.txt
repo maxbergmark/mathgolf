@@ -164,7 +164,7 @@ y
 	ó : pop(a), push(2**a)
 	ú : pop(a), push(10**a)
 	ñ : pop(a), push palindromize(a) string/list/number
-Ñ
+	Ñ : check if palindrome
 ª : push [1]
 º : push [0]
 ¿ : if/else (uses one of the next two characters in the code)
@@ -289,6 +289,7 @@ Monads:														|i|f|l|s|
 	ó : pop(a), push(2**a) 									|x|x| |x| x
 	ú : pop(a), push(10**a) 								|x|x| |x| x
 	ñ : pop(a), push palindromize(a)						|x| |x|x| x
+	Ñ : check if palindrome 								|x| |x|x| x
 	½ : pop a : push(a//2 if int else a/2)					|x|x|x| | x
 	¼ : pop a : push(a//4 if int else a/4)					|x|x|x| | x
 	░ : convert to string (implicit map) 					|x|x|x| | x
