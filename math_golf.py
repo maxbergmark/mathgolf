@@ -540,7 +540,8 @@ def evaluate(
 
 		elif arg.char == " ":
 			stack = Stack([stack.pop(arg.char)])
-
+		elif arg.char == "╘":
+			stack = Stack([])
 		else:
 			raise ValueError("Not yet implemented: %s" % arg.char)
 		if DEBUG:

@@ -211,7 +211,7 @@ y
 	╤ : range(-n, n+1)
 	╥ : closest power of two below
 ╙ : maximum of two elements, max of list, maximum by filter
-╘
+╘ : discard everything in stack
 	╒ : range(1,n+1)
 ╓ : minimum of two elements, min of list, minimum by filter
 	╫ : left-rotate bits in int, list/str
