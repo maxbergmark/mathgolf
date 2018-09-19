@@ -143,8 +143,8 @@ def power_yield(a, b, arg):
 def modulo_yield(a, b, arg):
 	if is_num(a) and is_num(b):
 		yield a%b
-	elif is_num(a) and is_list(b):
-		yield [n for n in b[::n]]
+	elif is_int(a) and is_list(b):
+		yield [n for n in b[::a]]
 	elif is_list(a) and is_num(b):
 		yield [n%b for n in a]
 	elif is_num(a) and is_str(b):
