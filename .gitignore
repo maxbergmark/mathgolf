@@ -1,6 +1,8 @@
 test_program.mg
 test_program.out
 test_input.txt
+unittest.mg
+*.out
 *.pyc
 *.pyo
 __pycache__/

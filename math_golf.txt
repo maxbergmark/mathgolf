@@ -120,7 +120,7 @@ t : unix timestamp as integer milliseconds
 v : random integer in [-2**31, 2**31-1]
 	w : random integer in range, random item from list
 	x : reverse int/array/string
-y
+	y : join array without separator to string or number
 	z : reverse sort(array)
 { : start block or arbitrary length
 |
@@ -233,7 +233,7 @@ y
 τ : tau (2*pi)
 	Φ : increment array/string item
 	Θ : decrement array/string item
-Ω
+		Ω : center string/int
 	δ : capitalize string
 	∞ : pop a, push 2*a
 φ : golden ratio (1.618...)
@@ -330,7 +330,7 @@ Monads:														|i|f|l|s|
 															|i|i|i|i|f|f|f|f|l|l|l|l|s|s|s|s|
 Dinads:														|i|f|l|s|i|f|l|s|i|f|l|s|i|f|l|s|
 															+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-		§ : get from array									| | |x|x| | | | |x| | | |x| | | |
+		§ : get from array, concatenate						|x| |x|x| | | | |x| | | |x| | | |
 		# : pop a, b : push(a**b)							|x| |x| | | | | |x| | | | | | | |
 		% : modulo											|x| |x|x| | | | |x| | | | | | | |
 		* : pop a, b : push(a*b)							|x| |x|x| | | | |x| |x|x|x| | | |

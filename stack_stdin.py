@@ -67,7 +67,10 @@ class Stack():
 
 	def pop(self, operator, index = -1):
 		if self.list:
-			return self.list.pop(index)
+			if index < len(self.list) and -index <= len(self.list):
+				return self.list.pop(index)
+			else:
+				return self.stdin.pop()
 		else:
 			return self.stdin.pop()
 		raise IndexError("%s could not pop from stack" % operator)

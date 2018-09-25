@@ -120,6 +120,7 @@ def evaluate(
 		"s": sort_list_or_string_yield,
 		"w": get_random_value_yield,
 		"x": reverse_value_yield,
+		"y": join_list_without_separator_yield,
 		"z": sort_list_or_string_reverse_yield,
 		"à": to_binary_string_yield,
 		"å": from_binary_string_yield,
@@ -171,7 +172,7 @@ def evaluate(
 		"■": get_self_product_or_collatz_yield
 	}
 	two_args = {
-		"§": get_list_or_string_item,
+		"§": get_list_or_string_item_or_concatenate_yield,
 		"+": add_yield,
 		"-": subtract_yield,
 		"*": mult_yield,
@@ -182,6 +183,7 @@ def evaluate(
 		"▐": append_list_or_string_yield,
 		"Φ": increase_array_element_yield,
 		"Θ": decrease_array_element_yield,
+		"Ω": center_string_or_int_yield,
 		"<": is_less,
 		"=": is_equal,
 		">": is_greater,

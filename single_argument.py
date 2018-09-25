@@ -338,9 +338,17 @@ def to_boolean_inverted_yield(a, arg):
 
 def get_unique_elements_yield(a, arg):
 	if is_str(a):
-		yield ''.join(list(set(a)))
+		b = []
+		for n in a:
+			if n not in b:
+				b.append(n)
+		yield ''.join(b)
 	elif is_list(a):
-		yield list(set(a))
+		b = []
+		for n in a:
+			if n not in b:
+				b.append(n)
+		yield b
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
@@ -351,7 +359,7 @@ def get_sum_yield(a, arg):
 		if len(a) > 0 and is_int(a[0]):
 			yield sum(a)
 		elif len(a) > 0 and is_str(a[0]):
-			yield ''.join(a)
+			yield ''.join([str(n) for n in a])
 		else:
 			yield 0
 	else:
@@ -599,3 +607,15 @@ def triplicate(a, arg = None):
 def quadruplicate(a, arg = None):
 	for i in range(4):
 		yield a
+
+def join_list_without_separator_yield(a, arg):
+	if is_list(a):
+		if a and is_int(a[0]):
+			yield int(''.join([str(n) for n in a]))
+		elif a and is_str(a[0]):
+			yield ''.join([str(n) for n in a])
+		else:
+			raise ValueError("[%s]%s is not supported" % (type(a[0]),arg.char))
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+

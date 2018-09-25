@@ -1,8 +1,10 @@
 from check_type import *
 import math
 
-def get_list_or_string_item(a, b, arg):
-	if is_int(a) and is_list(b):
+def get_list_or_string_item_or_concatenate_yield(a, b, arg):
+	if is_int(a) and is_int(b):
+		yield int(str(a)+str(b))
+	elif is_int(a) and is_list(b):
 		yield b[a % len(b)]
 	elif is_list(a) and is_int(b):
 		yield a[b % len(a)]
@@ -21,6 +23,10 @@ def is_equal(a, b, arg):
 		yield int(a == b)
 	elif type(a) == type(b):
 		yield int(a == b)
+	elif is_list(a):
+		yield a.index(b) if b in a else -1
+	elif is_list(b):
+		yield b.index(a) if a in b else -1
 	else:
 		raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
 
@@ -223,3 +229,20 @@ def add(a, b):
 
 def mult(a, b, arg):
 	return a*b
+
+def center_string_or_int_yield(a, b, arg):
+	if is_int(a) and is_int(b):
+		yield str(a).center(b)
+	elif is_int(a) and is_str(b):
+		yield b.center(a)
+	elif is_str(a) and is_int(b):
+		yield a.center(b)
+	elif is_int(a) and is_list(b):
+		yield [str(n).center(a) for n in b]
+	elif is_list(a) and is_int(b):
+		yield [str(n).center(b) for n in a]
+	else:
+		raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
+
+
+
