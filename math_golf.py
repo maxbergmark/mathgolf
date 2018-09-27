@@ -425,10 +425,47 @@ def evaluate(
 
 		elif arg.char == "¿":
 			a = stack.pop(arg.char)
-			if is_truthy(a):
-				code.pop(-2)
+
+			truth_arg = code.pop()
+			if truth_arg.char in block_creators:
+				truth_block, code = create_block(truth_arg, code)
 			else:
-				code.pop()
+				truth_block = [truth_arg]
+
+			false_arg = code.pop()
+			if false_arg.char in block_creators:
+				false_block, code = create_block(false_arg, code)
+			else:
+				false_block = [false_arg]
+
+			if is_truthy(a):
+				code += truth_block
+			else:
+				code += false_block
+
+		elif arg.char == "╜":
+			a = stack.pop(arg.char)
+
+			false_arg = code.pop()
+			if false_arg.char in block_creators:
+				false_block, code = create_block(false_arg, code)
+			else:
+				false_block = [false_arg]
+
+			if is_falsey(a):
+				code += false_block
+
+		elif arg.char == "╛":
+			a = stack.pop(arg.char)
+			truth_arg = code.pop()
+			if truth_arg.char in block_creators:
+				truth_block, code = create_block(truth_arg, code)
+			else:
+				truth_block = [truth_arg]
+
+			if is_truthy(a):
+				code += truth_block
+
 
 		elif arg.char == "⌐":
 			stack.append(stack.pop(arg.char, 0))

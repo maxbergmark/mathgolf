@@ -188,8 +188,8 @@ v : random integer in [-2**31, 2**31-1]
 ║ : start compressed string of length 3 (gwybvkxjqz ?*#.,)
 ╗ : start compressed string of length 4 (gwybvkxjqz ?*#.,)
 ╝
-╜
-╛
+	╜ : else without if
+	╛ : if without else
 	┐ : push TOS-1 without popping
 	└ : push TOS+1 without popping
 	┴ : check if equal to 0
