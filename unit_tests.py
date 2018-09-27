@@ -69,7 +69,9 @@ programs = [
 	"§§]",
 	"=¿{=¿{\"t t\"}{\"t f\"}}{=¿{\"f t\"}{\"f f\"}}",
 	"╜{'fq}╛{'tq}",
-	"╜q╛q"
+	"╜q╛q",
+	"9rá{3%",
+	"9rá{¶"
 
 ]
 
@@ -133,7 +135,9 @@ inputs = [
 	["3", "3 4", "3 4 5", "3 4 5 6"],
 	["5", "5 4", "5 5", "5 4 3", "5 5 4", "5 5 5", "5 5 5 5", "5 4 5 5", "5 4 5 4", "5 4 4 5", "5 4 4 4", "5 4 3 2"],
 	["0", "1", "[0]", "[0,1]", "5 0", "0 5"],
-	["0", "1", "2", "0 2", "2 0", "0 0", "2 2", "2 3", "3 2"]
+	["0", "1", "2", "0 2", "2 0", "0 0", "2 2", "2 3", "3 2"],
+	[""],
+	[""]
 ]
 outputs = [
 	["1\n2\nFizz\n4\nBuzz\nFizz\n7\n8\nFizz\nBuzz\n11\nFizz\n13\n14\nFizzBuzz\n16\n17\nFizz\n19\nBuzz\nFizz\n22\n23\nFizz\nBuzz\n26\nFizz\n28\n29\nFizzBuzz\n31\n32\nFizz\n34\nBuzz\nFizz\n37\n38\nFizz\nBuzz\n41\nFizz\n43\n44\nFizzBuzz\n46\n47\nFizz\n49\nBuzz\nFizz\n52\n53\nFizz\nBuzz\n56\nFizz\n58\n59\nFizzBuzz\n61\n62\nFizz\n64\nBuzz\nFizz\n67\n68\nFizz\nBuzz\n71\nFizz\n73\n74\nFizzBuzz\n76\n77\nFizz\n79\nBuzz\nFizz\n82\n83\nFizz\nBuzz\n86\nFizz\n88\n89\nFizzBuzz\n91\n92\nFizz\n94\nBuzz\nFizz\n97\n98\nFizz\nBuzz\n"],
@@ -195,7 +199,9 @@ outputs = [
 	["[333]", "[343]", "[543]", "[543]"],
 	["t t", "f f", "t t", "f f", "t f", "t t", "t t", "f t", "f f", "f f", "f t", "f f"],
 	["f", "t", "f", "t", "", "ft"],
-	["0", "1", "2", "2", "", "0", "2", "2", "3"]
+	["0", "1", "2", "2", "", "0", "2", "2", "3"],
+	["[0, 3, 6, 1, 4, 7, 2, 5, 8]"],
+	["[0, 1, 4, 6, 8, 2, 3, 5, 7]"]
 ]
 
 # start = 5
