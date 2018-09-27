@@ -364,9 +364,20 @@ def evaluate(
 			else:
 				raise ValueError("[%s]%s%s is not supported" % (type(a),arg.char, op.char))
 
-		elif arg.char == "u":
-			b = stack.pop(arg.char)
+		elif arg.char == "á":
 			a = stack.pop(arg.char)
+			map_arg = code.pop()
+			if map_arg.char in block_creators:
+				map_block, code = create_block(map_arg, code)
+			else:
+				map_block = [map_arg]
+			mapped = [evaluate(map_block[:], stdin, Stack([n]), level+1) for n in a]
+			b = [n[1] for n in sorted(enumerate(a), key=lambda v:mapped[v[0]][0])]
+			if is_str(a):
+				stack.append(''.join(b))
+			else:
+				stack.append(b)
+
 
 		elif arg.char == "~":
 			a = stack.pop(arg.char)

@@ -159,7 +159,7 @@ v : random integer in [-2**31, 2**31-1]
 	¥ : modulo 2
 ₧
 ƒ
-á
+	á : sort by comparator
 í : get total number of iterations of for loop
 	ó : pop(a), push(2**a)
 	ú : pop(a), push(10**a)
