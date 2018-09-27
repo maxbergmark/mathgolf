@@ -127,6 +127,7 @@ def evaluate(
 		"â": to_binary_yield,
 		"ä": from_binary_yield,
 		"ç": is_truthy_filter_yield,
+		"¢": convert_hexadecimal_yield,
 		"£": length_with_pop_yield,
 		"¥": modulo_2_yield,
 		"ó": pow_2_yield,
@@ -191,7 +192,8 @@ def evaluate(
 		"≥": is_geq,
 		"≤": is_leq,
 		"÷": is_divisible_yield,
-		"%": modulo_yield
+		"%": modulo_yield,
+		"═": pad_to_equal_length,
 	}
 	loop_handlers = {
 		"↑": while_true_no_pop,

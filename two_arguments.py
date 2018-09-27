@@ -1,5 +1,6 @@
 from check_type import *
 import math
+import itertools
 
 def get_list_or_string_item_or_concatenate_yield(a, b, arg):
 	if is_int(a) and is_int(b):
@@ -244,5 +245,26 @@ def center_string_or_int_yield(a, b, arg):
 	else:
 		raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
 
+def pad_to_equal_length(a, b, arg):
+	if is_list(a) and (is_int(b) or is_str(b)):
+		max_len = 0
+		for n in a:
+			max_len = max(max_len, len(str(n)))
+		res = []
+		for n in a:
+			pad = max_len - len(str(n))
+			res.append(pad*str(b)+str(n))
+		yield res
+	elif is_list(b) and (is_int(a) or is_str(a)):
+		max_len = 0
+		for n in b:
+			max_len = max(max_len, len(str(n)))
+		res = []
+		for n in b:
+			pad = max_len - len(str(n))
+			res.append(pad*str(a)+str(n))
+		yield res
+	else:
+		raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
 
 

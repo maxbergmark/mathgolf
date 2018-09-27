@@ -154,7 +154,7 @@ v : random integer in [-2**31, 2**31-1]
 ÿ : start string of length 4
 Ö
 Ü
-¢
+	¢ : convert to/from hexadecimal
 	£ : length of array/string with pop
 	¥ : modulo 2
 ₧
@@ -204,7 +204,7 @@ v : random integer in [-2**31, 2**31-1]
 	╩ : fetch single dictionary word (top 256)
 	╦ : fetch single dictionary word (all)
 ╠
-═
+	═ : pad list elements to equal length
 ╬
 ╧
 	╨ : closest power of two above
@@ -285,6 +285,7 @@ Monads:														|i|f|l|s|
 	à : convert to binary string							|x| |x| | x
 	å : convert from binary string							|x| |x| | x
 	ç : implicit faulty filter								|x|x|x|x|
+	¢ : convert to/from hexadecimal 						|x| |x|x| x
 	¥ : modulo 2											|x|x|x| | x
 	ó : pop(a), push(2**a) 									|x|x| |x| x
 	ú : pop(a), push(10**a) 								|x|x| |x| x

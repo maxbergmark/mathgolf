@@ -619,3 +619,13 @@ def join_list_without_separator_yield(a, arg):
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
+def convert_hexadecimal_yield(a, arg):
+	if is_int(a):
+		yield "%X" % a
+	elif is_str(a):
+		yield int(a, 16)
+	elif is_list(a):
+		yield [b for n in a for b in convert_hexadecimal_yield(n, arg)]
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+

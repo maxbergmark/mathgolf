@@ -94,7 +94,12 @@ def create_block(arg, code):
 	elif arg.char == "{":
 		c = []
 		temp = [] if not code else code.pop()
-		while temp.char != "}" and code:
+		bracket_counter = 0
+		while (bracket_counter > 0 or temp.char != "}") and code:
+			if temp.char == "{":
+				bracket_counter += 1
+			if temp.char == "}":
+				bracket_counter -= 1
 			c.append(temp)
 			temp = code.pop()
 		if not code and temp.char != "}":
