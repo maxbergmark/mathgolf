@@ -630,7 +630,7 @@ if __name__ == '__main__':
 	for line in input_lines:
 		try:
 			stdin = StdIn(line)
-			result = evaluate(code_list[:], stdin)
+			result = evaluate(code_list[:], stdin, Stack([]))
 			print(print_list(result))
 		except Exception as e:
 			exc_type, exc_obj, exc_tb = sys.exc_info()
