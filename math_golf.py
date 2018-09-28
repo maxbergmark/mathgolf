@@ -613,25 +613,27 @@ if __name__ == '__main__':
 		print('usage: python %s [-d] <code file>' % sys.argv[0])
 		sys.exit(1)
 
-	if sys.argv[1] == '-d':
+	if '-d' in sys.argv:
 		DEBUG = True
-		sys.argv.pop(1)
+		sys.argv.remove('-d')
 
-	if sys.argv[1] == '--unittest':
+	if '--unittest' in sys.argv:
 		set_unittest()
 		random.seed(1)
-		sys.argv.pop(1)
+		sys.argv.remove('--unittest')
 
 	code_bytes = open(sys.argv[1], 'rb').read()
 	code = parse_input(code_bytes)
 	commands = [code_page.index(c)+1 for c in code]
 	code_list = [Argument(char, c) for char, c in zip(code, commands)][::-1]
-	stdin = StdIn("" if sys.stdin.isatty() else sys.stdin.read().rstrip("\n"))
-	try:
-		result = evaluate(code_list, stdin)
-		print(print_list(result))
-	except Exception as e:
-		exc_type, exc_obj, exc_tb = sys.exc_info()
-		print()
-		print_exc()
-		print("%s (line %d): %s" % (type(e).__name__, exc_tb.tb_lineno, e))
+	input_lines = "" if sys.stdin.isatty() else sys.stdin.read().rstrip("\n").split("\n")
+	for line in input_lines:
+		try:
+			stdin = StdIn(line)
+			result = evaluate(code_list[:], stdin)
+			print(print_list(result))
+		except Exception as e:
+			exc_type, exc_obj, exc_tb = sys.exc_info()
+			print()
+			print_exc()
+			print("%s (line %d): %s" % (type(e).__name__, exc_tb.tb_lineno, e))
