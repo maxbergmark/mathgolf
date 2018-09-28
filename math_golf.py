@@ -308,7 +308,7 @@ def evaluate(
 			if level > 0:
 				return stack
 			else:
-				stack = Stack([stack.list])
+				stack.list = [stack.list]
 
 		elif arg.char == "g":
 			op = code.pop()
@@ -482,7 +482,7 @@ def evaluate(
 			stack.append(stack.pop(arg.char, 0))
 
 		elif arg.char == "¬":
-			stack = Stack([stack.pop(arg.char)] + stack.list)
+			stack.list = [stack.pop(arg.char)] + stack.list
 
 		elif arg.char == "╩":
 			next_char = code.pop().code
@@ -591,9 +591,9 @@ def evaluate(
 			stack.append(stack[-2])
 
 		elif arg.char == " ":
-			stack = Stack([stack.pop(arg.char)])
+			stack.list = [stack.pop(arg.char)]
 		elif arg.char == "╘":
-			stack = Stack([])
+			stack.list = []
 		else:
 			raise ValueError("Not yet implemented: %s" % arg.char)
 		if DEBUG:

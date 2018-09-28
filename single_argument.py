@@ -610,7 +610,9 @@ def quadruplicate(a, arg = None):
 
 def join_list_without_separator_yield(a, arg):
 	if is_list(a):
-		if a and is_int(a[0]):
+		if a == []:
+			yield 0
+		elif a and is_int(a[0]):
 			yield int(''.join([str(n) for n in a]))
 		elif a and is_str(a[0]):
 			yield ''.join([str(n) for n in a])

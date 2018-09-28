@@ -1,26 +1,27 @@
 from code_page import *
+from check_type import *
 
 def while_true_no_pop(stack):
 	i = 0
-	while stack and stack[-1]:
+	while stack and is_truthy(stack[-1]):
 		yield i
 		i += 1
 
 def while_false_no_pop(stack):
 	i = 0
-	while stack and not stack[-1]:
+	while stack and not is_truthy(stack[-1]):
 		yield i
 		i += 1
 
 def while_true_pop(stack):
 	i = 0
-	while stack and stack.pop("→"):
+	while stack and is_truthy(stack.pop("→")):
 		yield i
 		i += 1
 
 def while_false_pop(stack):
 	i = 0
-	while stack and not stack.pop("←"):
+	while stack and not is_truthy(stack.pop("←")):
 		yield i
 		i += 1
 
@@ -29,7 +30,7 @@ def do_while_true_no_pop(stack):
 	while True:
 		yield i
 		i += 1
-		if not (stack and stack[-1]):
+		if not (stack and is_truthy(stack[-1])):
 			break
 
 def do_while_false_no_pop(stack):
@@ -37,7 +38,7 @@ def do_while_false_no_pop(stack):
 	while True:
 		yield i
 		i += 1
-		if not (stack and not stack[-1]):
+		if not (stack and not is_truthy(stack[-1])):
 			break
 
 def do_while_true_pop(stack):
@@ -45,7 +46,7 @@ def do_while_true_pop(stack):
 	while True:
 		yield i
 		i += 1
-		if not (stack and stack.pop("▲")):
+		if not (stack and is_truthy(stack.pop("▲"))):
 			break
 
 def do_while_false_pop(stack):
@@ -53,7 +54,7 @@ def do_while_false_pop(stack):
 	while True:
 		yield i
 		i += 1
-		if not (stack and not stack.pop("▼")):
+		if not (stack and not is_truthy(stack.pop("▼"))):
 			break
 
 def decompress(string, compressed):
