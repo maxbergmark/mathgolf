@@ -24,6 +24,12 @@ or
 
     python3 math_golf.py program.out < input.txt
 
+## Input
+
+All input is evaluated using `ast.literal_eval`. Thus, strings should be quoted with `'`, lists should be input as `[1,2,3]`, and floats/ints are input as is.
+
+To run a test suite, or test your script for multiple inputs, provide each input on a separate line.
+
 ## Data types
 
 The data types in this language are `float`, `int`, `list` and `string`. They are all internally represented by Python's data types, which makes the line between `float` and `int` somewhat fuzzy. I have tried to make sure that operators don't change the data type unexpectedly.
@@ -61,7 +67,7 @@ On top of that, a lot of mapping and functions are implicitly mapped to each ele
 
 Here we will take an integer as input, and print a triangle to standard output of the desired size.
 
-    k╒⌂*n
+    ╒⌂*n
 
 #### Input
 
@@ -77,11 +83,11 @@ Here we will take an integer as input, and print a triangle to standard output o
 
 #### Explanation
 
-    k      Read integer from standard input
-     ╒     Create list(range(1, a+1))
-      ⌂    Push an asterisk
-       *   Multiply string and list with implicit mapping
-        n  Implicit '\n'.join(a) and output
+          Read integer from standard input (implicit)
+    ╒     Create list(range(1, a+1))
+     ⌂    Push an asterisk
+      *   Multiply string and list with implicit mapping
+       n  Implicit '\n'.join(a) and output
 
 ### FizzBuzz
 
@@ -95,7 +101,7 @@ Here we will take an integer as input, and print a triangle to standard output o
        ╕Σ╠δ                   Decompress "Σ╠" and capitalize to get "Fizz"
            ╕┌╠δ               Decompress "┌╠" and capitalize to get "Buzz"
                `              Duplicate top 2 elements of stack
-                +             Add (creating "fizzbuzz")
+                +             Add (creating "FizzBuzz")
                  Γ            Wrap top 4 elements of stack in array
                   î           Push loop counter (1-indexed)
                    3          Push 3

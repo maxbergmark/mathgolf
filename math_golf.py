@@ -22,7 +22,7 @@ DEBUG = False
 def evaluate(
 	code,
 	stdin,
-	stack = Stack([]),
+	stack,
 	level = 0,
 	loop_counter = 0,
 	loop_limit = 0,
@@ -64,6 +64,7 @@ def evaluate(
 		"e" : push_e,
 		"t" : push_unixtime,
 		"v" : push_random_int,
+		"ƒ" : push_random_float,
 		"⌂" : push_asterisk_yield,
 		"ª" : push_1_array,
 		"º" : push_0_array,
@@ -170,8 +171,10 @@ def evaluate(
 		"√": get_sqrt_yield,
 		"ⁿ": get_cube_yield,
 		"²": get_square_yield,
-		"■": get_self_product_or_collatz_yield
+		"■": get_self_product_or_collatz_yield,
+		"±": get_absolute_value_yield
 	}
+
 	two_args = {
 		"§": get_list_or_string_item_or_concatenate_yield,
 		"+": add_yield,
@@ -194,6 +197,7 @@ def evaluate(
 		"÷": is_divisible_yield,
 		"%": modulo_yield,
 		"═": pad_to_equal_length,
+		"╧": contains_yield
 	}
 	loop_handlers = {
 		"↑": while_true_no_pop,
@@ -313,22 +317,37 @@ def evaluate(
 		elif arg.char == "g":
 			op = code.pop()
 			a = stack.pop(arg.char)
-			if op.char in one_arg and is_list(a):
-				stack.append([n for n in a if all(one_arg[op.char](n, op))])
+			if op.char in one_arg:
+				if is_list(a):
+					stack.append([n for n in a if all(one_arg[op.char](n, op))])
+				elif is_str(a):
+					stack.append(''.join([n for n in a if all(one_arg[op.char](n, op))]))
 			elif op.char in two_args:
 				b = stack.pop(arg.char)
 				if is_list(a) and is_num(b):
 					stack.append([n for n in a if all(two_args[op.char](n, b, op))])
 				elif is_num(a) and is_list(b):
 					stack.append([n for n in b if all(two_args[op.char](a, n, op))])
+				elif is_str(a) and is_num(b):
+					stack.append(''.join([n for n in a if all(two_args[op.char](n, b, op))]))
+				elif is_num(a) and is_str(b):
+					stack.append(''.join([n for n in b if all(two_args[op.char](a, n, op))]))
 				elif is_list(a) and is_list(b):
 					if len(a) == len(b):
 						stack.append([na for na, nb in zip(a, b) if all(two_args[op.char](na, nb, op))])
 					else:
 						raise ValueError("Both lists need to be of equal length for filtering")
+				elif is_str(a) and is_str(b):
+					if len(a) == len(b):
+						stack.append(''.join([na for na, nb in zip(a, b) if all(two_args[op.char](na, nb, op))]))
+					else:
+						raise ValueError("Both strings need to be of equal length for filtering")
 			elif op.char in block_creators and is_list(a):
 				c, code = create_block(op, code)
-				stack.append([n for n in a if any(evaluate(c[:], stdin, Stack([n]), level+1))])
+				stack.append([n for i, n in enumerate(a) if any(evaluate(c[:], stdin, Stack([n]), level+1, i, len(a), n))])
+			elif op.char in block_creators and is_str(a):
+				c, code = create_block(op, code)
+				stack.append(''.join([n for i, n in enumerate(a) if any(evaluate(c[:], stdin, Stack([n]), level+1, i, len(a), n))]))
 			else:
 				raise ValueError("[%s]%s%s is not supported" % (type(a),arg.char, op.char))
 
@@ -345,22 +364,37 @@ def evaluate(
 		elif arg.char == "m":
 			op = code.pop()
 			a = stack.pop(arg.char)
-			if op.char in one_arg and is_list(a):
-				stack.append([v for n in a for v in one_arg[op.char](n, op)])
+			if op.char in one_arg:
+				if is_list(a):
+					stack.append([v for n in a for v in one_arg[op.char](n, op)])
+				elif is_str(a):
+					stack.append(''.join([v for n in a for v in one_arg[op.char](n, op)]))
 			elif op.char in two_args:
 				b = stack.pop(arg.char)
 				if is_list(a) and is_num(b):
 					stack.append([v for n in a for v in two_args[op.char](n, b, op)])
 				elif is_num(a) and is_list(b):
 					stack.append([v for n in b for v in two_args[op.char](a, n, op)])
+				elif is_str(a) and is_num(b):
+					stack.append(''.join([v for n in a for v in two_args[op.char](n, b, op)]))
+				elif is_num(a) and is_str(b):
+					stack.append(''.join([v for n in b for v in two_args[op.char](a, n, op)]))
 				elif is_list(a) and is_list(b):
 					if len(a) == len(b):
 						stack.append([v for na, nb in zip(a, b) for v in two_args[op.char](na, nb, op)])
 					else:
 						raise ValueError("Both lists need to be of equal length for filtering")
+				elif is_str(a) and is_str(b):
+					if len(a) == len(b):
+						stack.append(''.join([v for na, nb in zip(a, b) for v in two_args[op.char](na, nb, op)]))
+					else:
+						raise ValueError("Both strings need to be of equal length for filtering")
 			elif op.char in block_creators and is_list(a):
 				c, code = create_block(op, code)
-				stack.append([v for n in a for v in evaluate(c[:], stdin, Stack([n]), level+1)])
+				stack.append([v for i, n in enumerate(a) for v in evaluate(c[:], stdin, Stack([n]), level+1, i, len(a), n)])
+			elif op.char in block_creators and is_str(a):
+				c, code = create_block(op, code)
+				stack.append(''.join([str(v) for i, n in enumerate(a) for v in evaluate(c[:], stdin, Stack([n]), level+1, i, len(a), n)]))
 			else:
 				raise ValueError("[%s]%s%s is not supported" % (type(a),arg.char, op.char))
 
@@ -429,6 +463,15 @@ def evaluate(
 							loop_value = n
 							stack.append(loop_value)
 							stack = evaluate(c[:], stdin, stack, level+1, loop_counter, loop_limit, loop_value)
+					elif is_str(limit):
+						loop_limit = len(limit)
+						for i, n in enumerate(limit):
+							loop_counter = i
+							loop_value = n
+							stack.append(loop_value)
+							stack = evaluate(c[:], stdin, stack, level+1, loop_counter, loop_limit, loop_value)
+					else:
+						raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 				else:
 					for i in loop_handlers[loop_type.char](stack):
 						loop_counter = i
@@ -586,16 +629,22 @@ def evaluate(
 			else:
 				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
+		elif arg.char == "┼":
+			stack.append(stack[-2])
+
 		elif arg.char == "`":
 			stack.append(stack[-2])
 			stack.append(stack[-2])
 
 		elif arg.char == " ":
 			stack.list = [stack.pop(arg.char)]
+
 		elif arg.char == "╘":
 			stack.list = []
+
 		else:
 			raise ValueError("Not yet implemented: %s" % arg.char)
+
 		if DEBUG:
 			print(arg.char, stack)
 			time.sleep(0.1)
@@ -627,13 +676,16 @@ if __name__ == '__main__':
 	commands = [code_page.index(c)+1 for c in code]
 	code_list = [Argument(char, c) for char, c in zip(code, commands)][::-1]
 	input_lines = "" if sys.stdin.isatty() else sys.stdin.read().rstrip("\n").split("\n")
+	results = []
 	for line in input_lines:
 		try:
 			stdin = StdIn(line)
 			result = evaluate(code_list[:], stdin, Stack([]))
-			print(print_list(result))
+			results.append(print_list(result))
 		except Exception as e:
 			exc_type, exc_obj, exc_tb = sys.exc_info()
 			print()
 			print_exc()
 			print("%s (line %d): %s" % (type(e).__name__, exc_tb.tb_lineno, e))
+
+	print('\n'.join(results), end='')

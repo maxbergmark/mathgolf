@@ -42,8 +42,12 @@ def is_less(a, b, arg):
 		raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
 
 def is_greater(a, b, arg):
-	if type(a) == type(b):
+	if is_num(a) and is_num(b):
 		yield int(a > b)
+	elif is_int(a) and is_list(b):
+		yield [b[i] for i in range((a+1)%len(b), len(b))]
+	elif is_list(a) and is_int(b):
+		yield [a[i] for i in range((b+1)%len(a), len(a))]
 	else:
 		raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
 
@@ -51,7 +55,9 @@ def is_leq(a, b, arg):
 	if is_num(a) and is_num(b):
 		yield int(a <= b)
 	elif is_int(a) and is_list(b):
-		yield [b[i%len(b)] for i in range(a)]
+		yield [b[i%len(b)] for i in range(a+1)]
+	elif is_list(a) and is_int(b):
+		yield [a[i%len(a)] for i in range(b+1)]
 	else:
 		raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
 
@@ -59,7 +65,9 @@ def is_geq(a, b, arg):
 	if is_num(a) and is_num(b):
 		yield int(a >= b)
 	elif is_int(a) and is_list(b):
-		yield [b[i%len(b)] for i in range(a)]
+		yield [b[i] for i in range(a%len(b), len(b))]
+	elif is_list(a) and is_int(b):
+		yield [a[i] for i in range(b%len(a), len(a))]
 	else:
 		raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
 
@@ -267,4 +275,16 @@ def pad_to_equal_length(a, b, arg):
 	else:
 		raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
 
-
+def contains_yield(a, b, arg):
+	if is_list(a):
+		yield 1 if b in a else 0
+	elif is_list(b):
+		yield 1 if a in b else 0
+	elif is_str(a):
+		yield 1 if str(b) in a else 0
+	elif is_str(b):
+		yield 1 if str(a) in b else 0
+	elif is_int(a) and is_int(b):
+		yield 1 if str(b) in str(a) else 0
+	else:
+		raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))

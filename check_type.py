@@ -5,7 +5,7 @@ def is_num(n):
 	return type(n) is int or type(n) is float
 
 def is_int(n):
-	return type(n) is int or is_num(n) and float(n).is_integer()
+	return type(n) is int
 
 def is_int_string(s):
     try:

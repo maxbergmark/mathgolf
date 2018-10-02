@@ -358,6 +358,8 @@ def get_sum_yield(a, arg):
 	elif is_list(a):
 		if len(a) > 0 and is_int(a[0]):
 			yield sum(a)
+		elif len(a) > 0 and is_num(a[0]):
+			yield sum(a)
 		elif len(a) > 0 and is_str(a[0]):
 			yield ''.join([str(n) for n in a])
 		else:
@@ -631,3 +633,10 @@ def convert_hexadecimal_yield(a, arg):
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
+def get_absolute_value_yield(a, arg):
+	if is_int(a):
+		yield abs(a)
+	elif is_list(a):
+		yield [b for n in a for b in get_absolute_value_yield(n, arg)]
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))

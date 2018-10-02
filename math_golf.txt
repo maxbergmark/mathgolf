@@ -158,8 +158,9 @@ v : random integer in [-2**31, 2**31-1]
 	£ : length of array/string with pop
 	¥ : modulo 2
 ₧
-ƒ
+ƒ : random float in range [0,1]
 	á : sort by comparator
+}
 í : get total number of iterations of for loop
 	ó : pop(a), push(2**a)
 	ú : pop(a), push(10**a)
@@ -196,7 +197,7 @@ v : random integer in [-2**31, 2**31-1]
 	┬ : check if equal to 1
 	├ : pop from left of string/array
 	─ : flatten array
-┼
+┼ : duplicate second item from top and push to top
 	╞ : discard from left of string/array
 ╟ : push 60
 ╚ : push 3600
@@ -206,7 +207,7 @@ v : random integer in [-2**31, 2**31-1]
 ╠
 	═ : pad list elements to equal length
 ╬
-╧
+		╧ : pop a, b, a.contains(b)
 	╨ : closest power of two above
 	╤ : range(-n, n+1)
 	╥ : closest power of two below
@@ -240,7 +241,7 @@ v : random integer in [-2**31, 2**31-1]
 	ε : reduce list with operator
 ∩
 ≡
-±
+	± : absolute value
 		≥ : greater or equal
 		≤ : lesser or equal
 	⌠ : increment twice

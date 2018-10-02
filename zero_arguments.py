@@ -78,6 +78,8 @@ def push_unixtime(arg):
 		yield int(time.mktime(now.timetuple())*1e3 + now.microsecond//1e3)
 def push_random_int(arg):
 	yield random.randint(-2**31, 2**31-1)
+def push_random_float(arg):
+	yield random.random()
 def push_asterisk_yield(arg):
 	yield "*"
 def push_1_array(arg):
