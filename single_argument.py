@@ -634,7 +634,7 @@ def convert_hexadecimal_yield(a, arg):
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
 def get_absolute_value_yield(a, arg):
-	if is_int(a):
+	if is_num(a):
 		yield abs(a)
 	elif is_list(a):
 		yield [b for n in a for b in get_absolute_value_yield(n, arg)]
