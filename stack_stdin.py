@@ -31,11 +31,19 @@ class StdIn():
 		else:
 			return ast.literal_eval(item)
 
-	def pop(self):
+	def pop(self, expected_type = None):
 		if self.list:
 			ret = self.list[self.index]
 			self.index = (self.index+1) % len(self.list)
 			return ret
+		elif expected_type == int:
+			return 0
+		elif expected_type == float:
+			return 0
+		elif expected_type == list:
+			return []
+		elif expected_type == str:
+			return ""
 		raise EOFError("No input has been provided")
 
 class Stack():
@@ -65,12 +73,12 @@ class Stack():
 	def append(self, item):
 		self.list.append(item)
 
-	def pop(self, operator, index = -1):
+	def pop(self, operator, index = -1, expected_type = int):
 		if self.list:
 			if index < len(self.list) and -index <= len(self.list):
 				return self.list.pop(index)
 			else:
-				return self.stdin.pop()
+				return self.stdin.pop(expected_type)
 		else:
-			return self.stdin.pop()
+			return self.stdin.pop(expected_type)
 		raise IndexError("%s could not pop from stack" % operator)

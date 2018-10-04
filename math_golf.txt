@@ -168,33 +168,33 @@ v : random integer in [-2**31, 2**31-1]
 	Ñ : check if palindrome
 ª : push [1]
 º : push [0]
-¿ : if/else (uses one of the next two characters in the code)
+¿ : if/else (uses one of the next two characters/blocks in the code)
 ⌐ : rotate entire stack
 ¬ : rotate entire stack in reverse
 	½ : pop a : push(a//2 if int else a/2)
 	¼ : pop a : push(a//4 if int else a/4)
 		¡ : push a, b, push a != b
-« : end compressed string (etaoinsrhldcumfp)
-» : end compressed string (gwybvkxjqz ?*#.,)
+« : end compressed string (etaoinsrdluczbfp)
+» : end compressed string (gwymvkxjqh ?*#.,)
 	░ : convert to string (implicit map)
 	▒ : split to list of chars/digits
 ▓
 │
 	┤ : pop from right of string/array
 	╡ : discard from right of string/array
-╢ : start compressed string of length 2 (etaoinsrhldcumfp)
-╖ : start compressed string of length 3 (etaoinsrhldcumfp)
-╕ : start compressed string of length 4 (etaoinsrhldcumfp)
-╣ : start compressed string of length 2 (gwybvkxjqz ?*#.,)
-║ : start compressed string of length 3 (gwybvkxjqz ?*#.,)
-╗ : start compressed string of length 4 (gwybvkxjqz ?*#.,)
+╢ : start compressed string of length 2 (etaoinsrdluczbfp)
+╖ : start compressed string of length 3 (etaoinsrdluczbfp)
+╕ : start compressed string of length 4 (etaoinsrdluczbfp)
+╣ : start compressed string of length 2 (gwymvkxjqh ?*#.,)
+║ : start compressed string of length 3 (gwymvkxjqh ?*#.,)
+╗ : start compressed string of length 4 (gwymvkxjqh ?*#.,)
 ╝
 	╜ : else without if
 	╛ : if without else
 	┐ : push TOS-1 without popping
 	└ : push TOS+1 without popping
-	┴ : check if equal to 0
-	┬ : check if equal to 1
+	┴ : check if equal to 1
+	┬ : check if equal to 0
 	├ : pop from left of string/array
 	─ : flatten array
 ┼ : duplicate second item from top and push to top
@@ -204,7 +204,7 @@ v : random integer in [-2**31, 2**31-1]
 ╔ : push 86400
 	╩ : fetch single dictionary word (top 256)
 	╦ : fetch single dictionary word (all)
-╠
+		╠ : pop a, b, push b/a
 	═ : pad list elements to equal length
 ╬
 		╧ : pop a, b, a.contains(b)

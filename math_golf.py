@@ -181,6 +181,7 @@ def evaluate(
 		"-": subtract_yield,
 		"*": mult_yield,
 		"/": divide_yield,
+		"╠": reverse_divide_yield,
 		"#": power_yield,
 		"u": join_yield,
 		"▌": prepend_list_or_string_yield,
@@ -240,7 +241,7 @@ def evaluate(
 
 		elif arg.char in two_args:
 			b = stack.pop(arg.char)
-			a = stack.pop(arg.char)
+			a = stack.pop(arg.char, -1, type(b))
 			for val in two_args[arg.char](a, b, arg):
 				stack.append(val)
 
@@ -455,6 +456,7 @@ def evaluate(
 						loop_limit = limit
 						for i in for_looping(limit):
 							loop_counter = i
+							# stack.append(loop_counter)
 							stack = evaluate(c[:], stdin, stack, level+1, loop_counter, loop_limit)
 					elif is_list(limit):
 						loop_limit = len(limit)
