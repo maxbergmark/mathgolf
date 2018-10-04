@@ -22,12 +22,21 @@ def get_list_or_string_item_or_concatenate_yield(a, b, arg):
 def is_equal(a, b, arg):
 	if is_num(a) and is_num(b):
 		yield int(a == b)
-	elif type(a) == type(b):
+	elif type(a) == type(b) and type(a) != str:
 		yield int(a == b)
 	elif is_list(a):
 		yield a.index(b) if b in a else -1
 	elif is_list(b):
 		yield b.index(a) if a in b else -1
+	elif is_str(a) and is_str(b):
+		if (len(a) == 1 or len(b) == 1) and len(a) != len(b):
+			if len(a) < len(b):
+				yield b.find(a)
+			else:
+				yield a.find(b)
+		else:
+			yield int(a == b)
+
 	else:
 		raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
 
@@ -38,6 +47,10 @@ def is_less(a, b, arg):
 		yield [b[i%len(b)] for i in range(a)]
 	elif is_list(a) and is_int(b):
 		yield [a[i%len(a)] for i in range(b)]
+	elif is_int(a) and is_str(b):
+		yield ''.join([b[i%len(b)] for i in range(a)])
+	elif is_str(a) and is_int(b):
+		yield ''.join([a[i%len(a)] for i in range(b)])
 	else:
 		raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
 
@@ -48,6 +61,10 @@ def is_greater(a, b, arg):
 		yield [b[i] for i in range((a+1)%len(b), len(b))]
 	elif is_list(a) and is_int(b):
 		yield [a[i] for i in range((b+1)%len(a), len(a))]
+	elif is_int(a) and is_str(b):
+		yield ''.join([b[i] for i in range((a+1)%len(b), len(b))])
+	elif is_str(a) and is_int(b):
+		yield ''.join([a[i] for i in range((b+1)%len(a), len(a))])
 	else:
 		raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
 
@@ -58,6 +75,10 @@ def is_leq(a, b, arg):
 		yield [b[i%len(b)] for i in range(a+1)]
 	elif is_list(a) and is_int(b):
 		yield [a[i%len(a)] for i in range(b+1)]
+	elif is_int(a) and is_str(b):
+		yield ''.join([b[i%len(b)] for i in range(a+1)])
+	elif is_str(a) and is_int(b):
+		yield ''.join([a[i%len(a)] for i in range(b+1)])
 	else:
 		raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
 
@@ -68,6 +89,10 @@ def is_geq(a, b, arg):
 		yield [b[i] for i in range(a%len(b), len(b))]
 	elif is_list(a) and is_int(b):
 		yield [a[i] for i in range(b%len(a), len(a))]
+	elif is_int(a) and is_str(b):
+		yield ''.join([b[i] for i in range(a%len(b), len(b))])
+	elif is_str(a) and is_int(b):
+		yield ''.join([a[i] for i in range(b%len(a), len(a))])
 	else:
 		raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
 
