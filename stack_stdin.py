@@ -12,6 +12,9 @@ class StdIn():
 		else:
 			formatted_string = "[]"
 		self.list = ast.literal_eval(formatted_string)
+		self.loop_counter = 0
+		self.loop_level = 0
+		self.loop_popped = False
 
 	def __iter__(self):
 		return self
@@ -31,8 +34,16 @@ class StdIn():
 		else:
 			return ast.literal_eval(item)
 
+	def set_loop_counter(self, counter, level):
+		self.loop_counter = counter
+		self.loop_level = level
+		self.loop_popped = False
+
 	def pop(self, expected_type = None):
-		if self.list:
+		if self.loop_level > 0 and not self.loop_popped and expected_type == int:
+			self.loop_popped = True
+			return self.loop_counter
+		elif self.list:
 			ret = self.list[self.index]
 			self.index = (self.index+1) % len(self.list)
 			return ret

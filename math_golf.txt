@@ -127,7 +127,7 @@ v : random integer in [-2**31, 2**31-1]
 } : end block
 	~ : evaluate string, dump array, negate integer
 ⌂ : asterisk character (for challenges where a printable character is needed)
-Ç
+		Ç : inverted filter
 ü
 é
 	â : convert to binary
@@ -178,7 +178,7 @@ v : random integer in [-2**31, 2**31-1]
 » : end compressed string (gwymvkxjqh ?*#.,)
 	░ : convert to string (implicit map)
 	▒ : split to list of chars/digits
-▓
+	▓ : get average of list
 │
 	┤ : pop from right of string/array
 	╡ : discard from right of string/array
@@ -288,8 +288,8 @@ Monads:														|i|f|l|s|
 	ç : implicit faulty filter								|x|x|x|x|
 	¢ : convert to/from hexadecimal 						|x| |x|x| x
 	¥ : modulo 2											|x|x|x| | x
-	ó : pop(a), push(2**a) 									|x|x| |x| x
-	ú : pop(a), push(10**a) 								|x|x| |x| x
+	ó : pop(a), push(2**a) 									|x|x|x|x| x
+	ú : pop(a), push(10**a) 								|x|x|x|x| x
 	ñ : pop(a), push palindromize(a)						|x| |x|x| x
 	Ñ : check if palindrome 								|x| |x|x| x
 	½ : pop a : push(a//2 if int else a/2)					|x|x|x| | x
@@ -298,29 +298,29 @@ Monads:														|i|f|l|s|
 	▒ : split to list of chars/digits 						| | |x|x| x
 	┤ : pop from right of string/array						| | |x|x| x
 	╡ : discard from right of string/array					| | |x|x| x
-	┐ : push TOS-1 without popping							|x|x| | | x
-	└ : push TOS+1 without popping							|x|x| | | x
+	┐ : push TOS-1 without popping							|x|x|x|x| x
+	└ : push TOS+1 without popping							|x|x|x|x| x
 	├ : pop from left of string/array						| | |x|x| x
 	╞ : discard from left of string/array					| | |x|x| x
 	─ : flatten array/ get divisors							|x| |x| | x
-	╦ : fetch single dictionary word (all) 					| | | | | x
-	╨ : closest power of two above 							|x|x| |x| x
-	╤ : range(-n, n+1)										|x| | | | x
-	╥ : closest power of two below 							|x|x| |x| x
-	╒ : range(1,n+1)										|x| | | | x
+	╦ : fetch single dictionary word (all) 					|x| |x| | x
+	╨ : closest power of two above 							|x|x|x| | x
+	╤ : range(-n, n+1)										|x| |x| | x
+	╥ : closest power of two below 							|x|x|x| | x
+	╒ : range(1,n+1)										|x| |x| | x
 	╫ : left-rotate bits in int, list/str 					|x| |x|x| x
 	╪ : right-rotate bits in int, list, str 				|x| |x|x| x
-	┘ : convert to boolean 									|x| |x| | x
-	┌ : convert to inverted boolean 						|x| |x| | x
+	┘ : convert to boolean 									|x|x|x|x| x
+	┌ : convert to inverted boolean 						|x|x|x|x| x
 	▀ : unique elements of string/list 						| | |x|x| x
 	Σ : sum(list), digit sum(int)							|x| |x| | x
 	σ : remove leading zeroes 								| | |x|x| x
 	δ : capitalize string 									| | |x|x| x
-	∞ : pop a, push 2*a 									|x|x| | | x
+	∞ : pop a, push 2*a 									|x|x|x| | x
 	ε : reduce list with operator 							| | |x| |
-	⌠ : increment twice										|x| |x| | x
-	⌡ : decrement twice										|x| |x| | x
-	° : is perfect square 									|x| | | | x
+	⌠ : increment twice										|x|x|x|x| x
+	⌡ : decrement twice										|x|x|x|x| x
+	° : is perfect square 									|x| |x| | x
 	√ : pop a : push(sqrt(a)), split string to list			|x|x|x|x| x
 	ⁿ : pop a : push(a*a*a)									|x|x|x| | x
 	² : pop a : push(a*a)									|x|x|x| | x

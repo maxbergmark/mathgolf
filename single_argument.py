@@ -678,3 +678,9 @@ def get_absolute_value_yield(a, arg):
 		yield [b for n in a for b in get_absolute_value_yield(n, arg)]
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+def get_average_of_list_yield(a, arg):
+	if is_list(a):
+		yield sum(a)/float(len(a))
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))

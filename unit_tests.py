@@ -85,7 +85,12 @@ programs = [
 	"_)_(_⌠_⌡",
 	"└┐",
 	"ÿ∞'ÿ▌∞'ÿ▌",
-	"ÿ_'ÿ¬_'ÿ¬"
+	"ÿ_'ÿ¬_'ÿ¬",
+	"WÉƒ²)]4╠▓",
+	"5{)q}3{)q}[246]{)q}",
+	"{)q",
+	"♀╒ÇÅ2╧",
+	"y]"
 ]
 
 inputs = [
@@ -164,7 +169,12 @@ inputs = [
 	["'abc'", "'defg'", "'a'", "123", "['a','abc',123]"],
 	["'abc'", "'defg'", "'a'", "123", "['a','abc',123]"],
 	[""],
-	[""]
+	[""],
+	[""],
+	[""],
+	["5", "[2,4,6]"],
+	[""],
+	["[1,2,3]", "[0,5,4]", "[1,'2',3,'4']", "['a','b','c']", "['ab','cd','ef']", "['ab',12,'cd',34]"]
 ]
 outputs = [
 	["1\n2\nFizz\n4\nBuzz\nFizz\n7\n8\nFizz\nBuzz\n11\nFizz\n13\n14\nFizzBuzz\n16\n17\nFizz\n19\nBuzz\nFizz\n22\n23\nFizz\nBuzz\n26\nFizz\n28\n29\nFizzBuzz\n31\n32\nFizz\n34\nBuzz\nFizz\n37\n38\nFizz\nBuzz\n41\nFizz\n43\n44\nFizzBuzz\n46\n47\nFizz\n49\nBuzz\nFizz\n52\n53\nFizz\nBuzz\n56\nFizz\n58\n59\nFizzBuzz\n61\n62\nFizz\n64\nBuzz\nFizz\n67\n68\nFizz\nBuzz\n71\nFizz\n73\n74\nFizzBuzz\n76\n77\nFizz\n79\nBuzz\nFizz\n82\n83\nFizz\nBuzz\n86\nFizz\n88\n89\nFizzBuzz\n91\n92\nFizz\n94\nBuzz\nFizz\n97\n98\nFizz\nBuzz\n"],
@@ -222,7 +232,7 @@ outputs = [
 	["1 ", "1 12 ", "1 12 23 ", "1 12 23 34 "],
 	["Helloellolloloo worldorldrldldd ", "Dartharthrththh vaderaderdererr "],
 	["1", "1", "0", "0"],
-	["123123123", "1234123412341234", "1231234512312345123", "1231234"],
+	["112", "112123", "1121231234", "1"],
 	["[333]", "[343]", "[543]", "[543]"],
 	["t t", "f f", "t t", "f f", "t f", "t t", "t t", "f t", "f f", "f f", "f t", "f f"],
 	["f", "t", "f", "t", "", "ft"],
@@ -242,7 +252,12 @@ outputs = [
 	["abcbcdabccdeabc", "defgefghdefgfghidefg", "abaca", "123124123125123", "['a', 'abc', 123]['b', 'bcd', 124]['a', 'abc', 123]['c', 'cde', 125]['a', 'abc', 123]"],
 	["abcbcdabc", "defgefghdefg", "aba", "123124123", "['a', '`', 'b', 'a', 'abc', '`ab', 'bcd', 'abc', 123, 122, 124, 123]"],
 	["ÿ∞'ÿ▌∞'ÿ▌"],
-	["ÿ_'ÿ¬_'ÿ¬"]
+	["ÿ_'ÿ¬_'ÿ¬"],
+	["3.2958603789455028"],
+	["12345123357"],
+	["12345", "357"],
+	["[1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 18, 19, 30, 31, 33, 34, 35, 36, 37, 38, 39, 40, 41, 43, 44, 45, 46, 47, 48, 49, 50, 51, 53, 54, 55, 56, 57, 58, 59, 60, 61, 63, 64, 65, 66, 67, 68, 69, 70, 71, 73, 74, 75, 76, 77, 78, 79, 80, 81, 83, 84, 85, 86, 87, 88, 89, 90, 91, 93, 94, 95, 96, 97, 98, 99, 100]"],
+	["[123]", "[54]", "[1234]", "['abc']", "['abcdef']", "['ab12cd34']"]
 ]
 
 start = len(programs)*0

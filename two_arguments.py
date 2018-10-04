@@ -135,9 +135,9 @@ def divide_yield(a, b, arg):
 	elif is_num(a) and is_num(b):
 		yield a/b
 	elif is_num(a) and is_list(b):
-		yield [a//n if is_int(a) else a/n for n in b]
+		yield [a//n if is_int(a) and is_int(n) else a/n for n in b]
 	elif is_list(a) and is_num(b):
-		yield [n//b if is_int(b) else n/b for n in a]
+		yield [n//b if is_int(b) and is_int(n) else n/b for n in a]
 	elif is_list(a) and is_list(b):
 		yield [n2 for n2 in b if n2 not in set([n for n in a if n not in set(b)])]
 	elif is_str(a) and is_int(b):
@@ -146,7 +146,8 @@ def divide_yield(a, b, arg):
 		raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
 
 def reverse_divide_yield(a, b, arg):
-	yield divide_yield(b, a, arg)
+	for res in divide_yield(b, a, arg):
+		yield res
 
 def power_yield(a, b, arg):
 	if is_num(a) and is_num(b):
