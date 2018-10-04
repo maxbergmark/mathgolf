@@ -212,8 +212,16 @@ def copy_and_decrease_yield(a, arg):
 	if is_num(a):
 		yield a
 		yield a-1
+	elif is_str(a):
+		if len(a) == 1:
+			yield a
+			yield chr(ord(a)-1)
+		else:
+			yield a
+			for res in decrease_yield(a, arg):
+				yield res
 	elif is_list(a):
-		yield [v for n in a for v in copy_and_decrease_yield(n)]
+		yield [v for n in a for v in copy_and_decrease_yield(n, arg)]
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
@@ -221,8 +229,16 @@ def copy_and_increase_yield(a, arg):
 	if is_num(a):
 		yield a
 		yield a+1
+	elif is_str(a):
+		if len(a) == 1:
+			yield a
+			yield chr(ord(a)+1)
+		else:
+			yield a
+			for res in increase_yield(a, arg):
+				yield res
 	elif is_list(a):
-		yield [v for n in a for v in copy_and_increase_yield(n)]
+		yield [v for n in a for v in copy_and_increase_yield(n, arg)]
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
@@ -391,24 +407,36 @@ def capitalize_string_yield(a, arg):
 def double_element_yield(a, arg):
 	if is_num(a):
 		yield a*2
+	elif is_str(a):
+		yield a*2
 	elif is_list(a):
-		yield [n*2 for n in a]
+		yield [b for n in a for b in double_element_yield(n, arg)]
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
 def increase_twice_yield(a, arg):
 	if is_num(a):
 		yield a+2
+	elif is_str(a):
+		if len(a) == 1:
+			yield chr(ord(a)+2)
+		else:
+			yield ''.join([b for n in a for b in increase_twice_yield(n, arg)])
 	elif is_list(a):
-		yield [n+2 for n in a]
+		yield [b for n in a for b in increase_twice_yield(n, arg)]
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
 def decrease_twice_yield(a, arg):
 	if is_num(a):
 		yield a-2
+	elif is_str(a):
+		if len(a) == 1:
+			yield chr(ord(a)-2)
+		else:
+			yield ''.join([b for n in a for b in decrease_twice_yield(n, arg)])
 	elif is_list(a):
-		yield [n-2 for n in a]
+		yield [b for n in a for b in decrease_twice_yield(n, arg)]
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
@@ -495,16 +523,26 @@ def gamma_yield(n, arg):
 def decrease_yield(a, arg):
 	if is_num(a):
 		yield a-1
+	elif is_str(a):
+		if len(a) == 1:
+			yield chr(ord(a)-1)
+		else:
+			yield ''.join([b for n in a for b in decrease_yield(n, arg)])
 	elif is_list(a):
-		yield [n-1 for n in a]
+		yield [b for n in a for b in decrease_yield(n, arg)]
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
 def increase_yield(a, arg):
 	if is_num(a):
 		yield a+1
+	elif is_str(a):
+		if len(a) == 1:
+			yield chr(ord(a)+1)
+		else:
+			yield ''.join([b for n in a for b in increase_yield(n, arg)])
 	elif is_list(a):
-		yield [n+1 for n in a]
+		yield [b for n in a for b in increase_yield(n, arg)]
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 

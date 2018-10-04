@@ -191,6 +191,14 @@ def prepend_list_or_string_yield(a, b, arg):
 		yield [a] + b
 	elif is_list(a) and is_str(b):
 		yield [b] + a
+	elif is_str(a) and is_num(b):
+		yield str(b) + a
+	elif is_num(a) and is_str(b):
+		yield str(a) + b
+	elif is_str(a) and is_str(b):
+		yield b + a
+	elif is_int(a) and is_int(b):
+		yield int(str(b)+str(a))
 	else:
 		raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
 
@@ -203,6 +211,14 @@ def append_list_or_string_yield(a, b, arg):
 		yield b + [a]
 	elif is_list(a) and is_str(b):
 		yield a + [b]
+	elif is_str(a) and is_num(b):
+		yield a + str(b)
+	elif is_num(a) and is_str(b):
+		yield b + str(a)
+	elif is_str(a) and is_str(b):
+		yield a + b
+	elif is_int(a) and is_int(b):
+		yield int(str(a)+str(b))
 	else:
 		raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
 

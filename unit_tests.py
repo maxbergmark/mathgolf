@@ -81,7 +81,9 @@ programs = [
 	"m{ïìî}",
 	"g{;ï¥",
 	"g=",
-	"±"
+	"±",
+	"_)_(_⌠_⌡",
+	"└┐"
 ]
 
 inputs = [
@@ -156,7 +158,9 @@ inputs = [
 	["'123'", "'abc'", "'defghi'"],
 	["'abcdefghijklmnop'"],
 	["'abcdefghijkl' '_b_d_f_h_j_l'"],
-	["5", "-5", "1.23", "-1.23", "[1,2,-3]", "[-1,-2,-3]"]
+	["5", "-5", "1.23", "-1.23", "[1,2,-3]", "[-1,-2,-3]"],
+	["'abc'", "'defg'", "'a'", "123", "['a','abc',123]"],
+	["'abc'", "'defg'", "'a'", "123", "['a','abc',123]"]
 ]
 outputs = [
 	["1\n2\nFizz\n4\nBuzz\nFizz\n7\n8\nFizz\nBuzz\n11\nFizz\n13\n14\nFizzBuzz\n16\n17\nFizz\n19\nBuzz\nFizz\n22\n23\nFizz\nBuzz\n26\nFizz\n28\n29\nFizzBuzz\n31\n32\nFizz\n34\nBuzz\nFizz\n37\n38\nFizz\nBuzz\n41\nFizz\n43\n44\nFizzBuzz\n46\n47\nFizz\n49\nBuzz\nFizz\n52\n53\nFizz\nBuzz\n56\nFizz\n58\n59\nFizzBuzz\n61\n62\nFizz\n64\nBuzz\nFizz\n67\n68\nFizz\nBuzz\n71\nFizz\n73\n74\nFizzBuzz\n76\n77\nFizz\n79\nBuzz\nFizz\n82\n83\nFizz\nBuzz\n86\nFizz\n88\n89\nFizzBuzz\n91\n92\nFizz\n94\nBuzz\nFizz\n97\n98\nFizz\nBuzz\n"],
@@ -230,14 +234,16 @@ outputs = [
 	["101121223233", "a0a1b1b2c2c3", "d0d1e1e2f2f3g3g4h4h5i5i6"],
 	["bdfhjlnp"],
 	["bdfhjl"],
-	["5", "5", "1.23", "1.23", "[1, 2, 3]", "[1, 2, 3]"]
+	["5", "5", "1.23", "1.23", "[1, 2, 3]", "[1, 2, 3]"],
+	["abcbcdabccdeabc", "defgefghdefgfghidefg", "abaca", "123124123125123", "['a', 'abc', 123]['b', 'bcd', 124]['a', 'abc', 123]['c', 'cde', 125]['a', 'abc', 123]"],
+	["abcbcdabc", "defgefghdefg", "aba", "123124123", "['a', '`', 'b', 'a', 'abc', '`ab', 'bcd', 'abc', 123, 122, 124, 123]"]
 ]
 
-# start = 5
-# end = 6
-# programs = programs[start:end]
-# inputs = inputs[start:end]
-# outputs = outputs[start:end]
+start = len(programs)*0
+end = len(programs)
+programs = programs[start:end]
+inputs = inputs[start:end]
+outputs = outputs[start:end]
 
 failure = False
 errors = []
