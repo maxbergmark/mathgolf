@@ -315,7 +315,8 @@ def evaluate(
 				else:
 					raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
 			if is_list(a):
-				stack.append(max(a))
+				if len(a) > 0:
+					stack.append(max(a))
 
 		elif arg.char == "╓":
 			a = stack.pop(arg.char)
@@ -332,7 +333,8 @@ def evaluate(
 				else:
 					raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
 			if is_list(a):
-				stack.append(min(a))
+				if len(a) > 0:
+					stack.append(min(a))
 
 		elif arg.char == "α":
 			b = stack.pop(arg.char)
