@@ -19,6 +19,7 @@ from function_delegates import *
 
 Argument = namedtuple("Argument", ["char", "code"])
 DEBUG = False
+SLOW = False
 
 global loop_counter
 global loop_limit
@@ -415,7 +416,8 @@ def evaluate(
 
 		if DEBUG:
 			print(arg.char, stack)
-			time.sleep(0.1)
+			if SLOW:
+				time.sleep(0.1)
 
 	return stack
 
@@ -629,6 +631,10 @@ if __name__ == '__main__':
 	if '-d' in sys.argv:
 		DEBUG = True
 		sys.argv.remove('-d')
+
+	if '-s' in sys.argv:
+		SLOW = True
+		sys.argv.remove('-s')
 
 	if '--unittest' in sys.argv:
 		set_unittest()
