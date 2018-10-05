@@ -151,7 +151,7 @@ def evaluate(
 			a = int(stdin.pop())
 			stack.append(a)
 		elif arg.char == "l":
-			a = stdin.pop()
+			a = str(stdin.pop())
 			stack.append(a)
 
 		elif arg.char == "m":
@@ -648,16 +648,14 @@ if __name__ == '__main__':
 	commands = [code_page.index(c)+1 for c in code]
 	code_list = [Argument(char, c) for char, c in zip(code, commands)][::-1]
 	input_lines = "" if sys.stdin.isatty() else sys.stdin.read().rstrip("\n").split("\n")
-	results = []
-	for line in input_lines:
+
+	for i, line in enumerate(input_lines):
 		try:
 			stdin = StdIn(line)
 			result = evaluate(code_list[:], stdin, Stack([]))
-			results.append(print_list(result))
+			print(print_list(result), end = '\n' if i<len(input_lines)-1 else '')
 		except Exception as e:
 			exc_type, exc_obj, exc_tb = sys.exc_info()
 			print()
 			print_exc()
 			print("%s (line %d): %s" % (type(e).__name__, exc_tb.tb_lineno, e))
-
-	print('\n'.join(results), end='')

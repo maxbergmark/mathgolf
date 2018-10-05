@@ -21,11 +21,12 @@ def fibonnaci_yield(a, arg):
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
 def length_yield(a, arg):
+	yield a
+	if is_int(a):
+		yield len(str(a))
 	if is_list(a):
-		yield a
 		yield len(a)
 	elif is_str(a):
-		yield a
 		yield len(a)
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
@@ -588,7 +589,9 @@ def is_truthy_filter_yield(a, arg):
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
 def length_with_pop_yield(a, arg):
-	if is_str(a):
+	if is_int(a):
+		yield len(str(a))
+	elif is_str(a):
 		yield len(a)
 	elif is_list(a):
 		yield len(a)
