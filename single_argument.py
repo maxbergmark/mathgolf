@@ -24,7 +24,7 @@ def length_yield(a, arg):
 	yield a
 	if is_int(a):
 		yield len(str(a))
-	if is_list(a):
+	elif is_list(a):
 		yield len(a)
 	elif is_str(a):
 		yield len(a)
@@ -556,10 +556,10 @@ def wrap_in_array_yield(a, arg):
 
 def print_lines_yield(a, arg):
 	if is_list(a):
-		print('\n'.join([str(n) for n in a]))
+		yield '\n'.join([str(n) for n in a])
 	else:
-		print()
 		yield a
+		yield "\n"
 
 def print_without_popping_yield(a, arg):
 	print(a)

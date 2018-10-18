@@ -417,7 +417,7 @@ def evaluate(
 			raise ValueError("Not yet implemented: %s" % arg.char)
 
 		if DEBUG:
-			print(arg.char, stack)
+			print(arg.char, stack, file=sys.stderr)
 			if SLOW:
 				time.sleep(0.1)
 
@@ -637,6 +637,13 @@ if __name__ == '__main__':
 	if '-s' in sys.argv:
 		SLOW = True
 		sys.argv.remove('-s')
+
+	if '-e' in sys.argv:
+		code_bytes = open(sys.argv[1], 'rb').read()
+		code = parse_input(code_bytes)
+		from create_explanation import *
+		create_explanation(code)
+		quit()
 
 	if '--unittest' in sys.argv:
 		set_unittest()
