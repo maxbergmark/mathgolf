@@ -102,6 +102,18 @@ def is_not(a, b, arg):
 	else:
 		raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
 
+def zip_yield(a, b, arg):
+	if is_list(a) and is_list(b):
+		max_len = max(len(a), len(b))
+		yield [([a[i]] if i<len(a) else []) + ([b[i]] if i<len(b) else []) \
+		for i in range(max_len)]
+	elif is_str(a) and is_str(b):
+		max_len = max(len(a), len(b))
+		yield "".join([(a[i] if i<len(a) else "") + (b[i] if i<len(b) else "") \
+		for i in range(max_len)])
+	else:
+		raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
+
 def add_yield(a, b, arg):
 	if is_num(a) and is_num(b):
 		yield a+b

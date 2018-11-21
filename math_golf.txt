@@ -22,7 +22,7 @@ These are all the operations that have been defined so far. It is still very muc
 	¶ : is_prime(n)
 		§ : get from array
 ▬
-↨
+↨ : pop a, b, loop from a to b (inclusive)
 ↑ : while true without popping
 ↓ : while false without popping
 → : while true with pop
@@ -93,7 +93,7 @@ Z : push 38
 [ : start array
 \ : swap top elements
 ] : end array / wrap stack in array
-^
+		^ : zip top two elements on stack
 _ : duplicate TOS
 ` : duplicate the top two items
 a : wrap in array
@@ -128,7 +128,7 @@ v : random integer in [-2**31, 2**31-1]
 	~ : evaluate string, dump array, negate integer
 ⌂ : asterisk character (for challenges where a printable character is needed)
 		Ç : inverted filter
-ü
+	ü : ceiling with implicit map
 é
 	â : convert to binary
 	ä : convert from binary
@@ -160,7 +160,6 @@ v : random integer in [-2**31, 2**31-1]
 ₧
 ƒ : random float in range [0,1]
 	á : sort by comparator
-}
 í : get total number of iterations of for loop
 	ó : pop(a), push(2**a)
 	ú : pop(a), push(10**a)
@@ -352,3 +351,8 @@ Dinads:														|i|f|l|s|i|f|l|s|i|f|l|s|i|f|l|s|
 		Θ : decrement array/string item 					| | |x|x| | | | |x| | | |x| | | |
 		÷ : is divisible 									|x| |x| | | | | |x| | | | | | | |
 															+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+
+TODO:
+ceiling operator
+make @? work with implicit input

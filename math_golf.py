@@ -30,7 +30,7 @@ loop_limit = 0
 loop_value = None
 loop_level = 0
 
-loop_types = set("↑↓→←∟↔▲▼*")
+loop_types = set("↑↓→←∟↔▲▼*↨")
 block_creators = set("ÄÅÉæÆ{ôöò")
 string_creators = set("ûùÿ╢╖╕╣║╗")
 string_terminators = set("\"«»")
@@ -241,6 +241,28 @@ def evaluate(
 						loop_level -= 1
 					else:
 						raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+				elif loop_type.char == "↨":
+					limit_1 = stack.pop(arg.char)
+					limit_0 = stack.pop(arg.char)
+					if is_int(limit_0) and is_int(limit_1):
+						if limit_0 <= limit_1:
+							loop_limit = limit_1+1
+							loop_level += 1
+							for i in range(limit_0, limit_1+1):
+								loop_counter = i
+								stdin.set_loop_counter(loop_counter, loop_level)
+								stack = evaluate(c[:], stdin, stack, level+1)
+							loop_level -= 1
+						else:
+							loop_limit = limit_1
+							loop_level += 1
+							for i in range(limit_0, limit_1-1, -1):
+								loop_counter = i
+								stdin.set_loop_counter(loop_counter, loop_level)
+								stack = evaluate(c[:], stdin, stack, level+1)
+							loop_level -= 1
+					else:
+						raise ValueError("[%s][%s]%s is not supported" % (type(a),type(b),arg.char))
 				else:
 					for i in loop_handlers[loop_type.char](stack):
 						loop_counter = i
@@ -654,7 +676,7 @@ if __name__ == '__main__':
 	code = parse_input(code_bytes)
 	commands = [code_page.index(c)+1 for c in code]
 	code_list = [Argument(char, c) for char, c in zip(code, commands)][::-1]
-	input_lines = "" if sys.stdin.isatty() else sys.stdin.read().rstrip("\n").split("\n")
+	input_lines = [""] if sys.stdin.isatty() else sys.stdin.read().rstrip("\n").split("\n")
 
 	for i, line in enumerate(input_lines):
 		try:

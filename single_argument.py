@@ -379,6 +379,12 @@ def get_sum_yield(a, arg):
 			yield sum(a)
 		elif len(a) > 0 and is_str(a[0]):
 			yield ''.join([str(n) for n in a])
+		elif len(a) > 0 and is_list(a[0]):
+			s = 0
+			for element in a:
+				for res in get_sum_yield(element, arg):
+					s += res
+			yield s
 		else:
 			yield 0
 	else:
@@ -438,6 +444,14 @@ def decrease_twice_yield(a, arg):
 			yield ''.join([b for n in a for b in decrease_twice_yield(n, arg)])
 	elif is_list(a):
 		yield [b for n in a for b in decrease_twice_yield(n, arg)]
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+def ceiling_yield(a, arg):
+	if is_num(a):
+		yield math.ceil(a)
+	elif is_list(a):
+		yield [b for n in a for b in ceiling_yield(n, arg)]
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
@@ -505,17 +519,12 @@ def is_prime_yield(a, arg):
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-def gamma(n):
-	if is_int(n):
-		return int(math.gamma(n+1))
-	elif is_num(n):
-		return math.gamma(n+1)
-	else:
-		raise ValueError("Unsupported type for gamma: %s" % type(n))
-
 def gamma_yield(n, arg):
 	if is_int(n):
-		yield int(math.gamma(n+1))
+		p = 1
+		for i in range(1, n+1):
+			p *= i
+		yield p
 	elif is_num(n):
 		yield math.gamma(n+1)
 	else:
