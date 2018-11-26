@@ -1,6 +1,7 @@
 import math
 import datetime, time
 import random
+import string
 
 UNITTEST = False
 
@@ -152,3 +153,5 @@ def push_38(arg):
 	yield 38
 def golden_ratio_yield(arg):
 	yield (1+math.sqrt(5))/2
+def alphabet_yield(arg):
+	yield string.ascii_lowercase

@@ -119,14 +119,26 @@ def evaluate(
 			stack.append(code.pop().char)
 
 		elif arg.char == "?":
-			if len(stack.list) < 3:
-				raise IndexError("%s requires at least 3 elements on the stack" % arg.char)
-			stack.append(stack.pop(arg.char, -3))
+			c = stack.pop(arg.char)
+			b = stack.pop(arg.char)
+			a = stack.pop(arg.char)
+			stack.append(b)
+			stack.append(c)
+			stack.append(a)
+			# if len(stack.list) < 3:
+				# raise IndexError("%s requires at least 3 elements on the stack" % arg.char)
+			# stack.append(stack.pop(arg.char, -3))
 		elif arg.char == "@":
-			if len(stack.list) < 3:
-				raise IndexError("%s requires at least 3 elements on the stack" % arg.char)
-			stack.append(stack.pop(arg.char, -3))
-			stack.append(stack.pop(arg.char, -3))
+			c = stack.pop(arg.char)
+			b = stack.pop(arg.char)
+			a = stack.pop(arg.char)
+			stack.append(c)
+			stack.append(a)
+			stack.append(b)
+			# if len(stack.list) < 3:
+				# raise IndexError("%s requires at least 3 elements on the stack" % arg.char)
+			# stack.append(stack.pop(arg.char, -3))
+			# stack.append(stack.pop(arg.char, -3))
 
 		elif arg.char == "[":
 			ret = evaluate(code, stdin, Stack([]), level+1)
@@ -204,6 +216,7 @@ def evaluate(
 
 		elif arg.char in block_creators:
 			c, code = create_block(arg, code)
+			# print(c, code)
 			loop_type = code.pop() if code else Argument("*", 0)
 			if loop_type.char not in loop_types:
 				code.append(loop_type)
@@ -242,8 +255,8 @@ def evaluate(
 					else:
 						raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 				elif loop_type.char == "↨":
-					limit_1 = stack.pop(arg.char)
 					limit_0 = stack.pop(arg.char)
+					limit_1 = stack.pop(arg.char)
 					if is_int(limit_0) and is_int(limit_1):
 						if limit_0 <= limit_1:
 							loop_limit = limit_1+1

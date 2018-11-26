@@ -117,20 +117,20 @@ def zip_yield(a, b, arg):
 def add_yield(a, b, arg):
 	if is_num(a) and is_num(b):
 		yield a+b
-	elif is_num(a) and is_list(b):
-		yield [n+a for n in b]
-	elif is_list(a) and is_num(b):
-		yield [n+b for n in a]
+	# elif is_num(a) and is_list(b):
+		# yield [n+a for n in b]
+	# elif is_list(a) and is_num(b):
+		# yield [n+b for n in a]
 	elif is_list(a) and is_list(b):
 		yield a+b
 	elif is_str(a) and is_num(b):
 		yield a+str(b)
 	elif is_num(a) and is_str(b):
 		yield str(a)+b
-	elif is_str(a) and is_list(b):
-		yield [a+str(n) for n in b]
-	elif is_list(a) and is_str(b):
-		yield [str(n)+b for n in a]
+	elif is_list(a):
+		yield [c for n in a for c in add_yield(n, b, arg)]
+	elif is_list(b):
+		yield [c for n in b for c in add_yield(a, n, arg)]
 	elif is_str(a) and is_str(b):
 		yield a+b
 	else:
@@ -165,6 +165,10 @@ def mult_yield(a, b, arg):
 		yield [list(n) for n in itertools.product(a, b)]
 	else:
 		raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
+
+def reverse_multiply_yield(a, b, arg):
+	for res in mult_yield(b, a, arg):
+		yield res
 
 def divide_yield(a, b, arg):
 	if is_int(a) and is_int(b):

@@ -35,7 +35,7 @@ These are all the operations that have been defined so far. It is still very muc
 	! : gamma(n+1)
 " : string notation
 		# : pop a, b : push(a**b)
-$
+	$ : pop(a), push ord(a) or char(a)
 		% : modulo
 &
 ' : push single character
@@ -45,7 +45,7 @@ $
 		+ : pop a, b : push(a+b)
 ,
 		- : pop a, b : push(a-b)
-.
+		. : pop a, b : push(b*a)
 		/ : pop a, b : push(a/b), split strings
 0 : push 0
 1 : push 1
@@ -178,7 +178,7 @@ v : random integer in [-2**31, 2**31-1]
 	░ : convert to string (implicit map)
 	▒ : split to list of chars/digits
 	▓ : get average of list
-│
+	│ : get differences of list
 	┤ : pop from right of string/array
 	╡ : discard from right of string/array
 ╢ : start compressed string of length 2 (etaoinsrdluczbfp)
@@ -219,7 +219,7 @@ v : random integer in [-2**31, 2**31-1]
 	┘ : convert to boolean
 	┌ : convert to inverted boolean
 █
-▄
+▄ : lowercase alphabet as string
 		▌ : prepend to start of list
 		▐ : append to end of list
 	▀ : unique elements of string/list
@@ -354,5 +354,4 @@ Dinads:														|i|f|l|s|i|f|l|s|i|f|l|s|i|f|l|s|
 
 
 TODO:
-ceiling operator
-make @? work with implicit input
+make @?` work with implicit input

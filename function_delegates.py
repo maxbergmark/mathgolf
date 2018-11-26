@@ -74,12 +74,14 @@ zero_args = {
 	"X" : push_36,
 	"Y" : push_37,
 	"Z" : push_38,
-	"φ": golden_ratio_yield
+	"φ" : golden_ratio_yield,
+	"▄" : alphabet_yield
 }
 
 one_arg = {
 	"¶": is_prime_yield,
 	"!": gamma_yield,
+	"$": ord_or_char_yield,
 	"(": decrease_yield,
 	")": increase_yield,
 	";": discard_tos_yield,
@@ -148,7 +150,8 @@ one_arg = {
 	"²": get_square_yield,
 	"■": get_self_product_or_collatz_yield,
 	"±": get_absolute_value_yield,
-	"▓": get_average_of_list_yield
+	"▓": get_average_of_list_yield,
+	"│": get_diff_of_list_yield
 }
 
 two_args = {
@@ -156,6 +159,7 @@ two_args = {
 	"+": add_yield,
 	"-": subtract_yield,
 	"*": mult_yield,
+	".": reverse_multiply_yield,
 	"/": divide_yield,
 	"╠": reverse_divide_yield,
 	"#": power_yield,

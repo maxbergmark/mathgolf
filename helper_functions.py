@@ -112,3 +112,8 @@ def create_block(arg, code):
 def for_looping(n):
 	for i in range(n):
 		yield i
+
+def get_char(c):
+	return code_page[c-1]
+def get_ord(c):
+	return code_page.index(c)+1

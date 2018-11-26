@@ -3,6 +3,7 @@ import math
 import random
 import resources.dictionary
 import itertools
+from helper_functions import *
 
 words = resources.dictionary.words
 
@@ -530,6 +531,26 @@ def gamma_yield(n, arg):
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
+def ord_or_char_yield(a, arg):
+	if is_str(a):
+		res = 0
+		for c in a[::-1]:
+			res *= 256
+			res += get_ord(c)
+		yield res
+	elif is_int(a):
+		res = ""
+		while a > 0:
+			c = a % 256
+			res += get_char(c)
+			a //= 256
+		yield res
+	elif is_list(a):
+		yield [b for n in a for b in ord_or_char_yield(n, arg)]
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+
 def decrease_yield(a, arg):
 	if is_num(a):
 		yield a-1
@@ -694,5 +715,14 @@ def get_absolute_value_yield(a, arg):
 def get_average_of_list_yield(a, arg):
 	if is_list(a):
 		yield sum(a)/float(len(a))
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+def get_diff_of_list_yield(a, arg):
+	if is_list(a):
+		diffs = []
+		for i in range(len(a)-1):
+			diffs.append(a[i+1]-a[i])
+		yield diffs
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
