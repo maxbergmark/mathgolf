@@ -14,11 +14,13 @@ This is the git repo for my golfing language. It is still in early development, 
 
 This operator zips together two lists. If input is `[1,2,3]` and `[4,5]`, the result is `[[1,4],[2,5],[3]]`
 
-### `↨` range(a,b) loop
+### `↨` range(a,b) loop or list
 
 This character defined that the loop should pop two integers from the stack, and loops from the first to the second (inclusive).
 
 For example, the program `74Åïq↨` outputs `4567`. The reason for the reverse order is that input is read left to right but stack values are read top to bottom, and I prioritised preserving input order rather than stack order.
+
+You can also use it as an operator, where it also consumes two arguments from the stack or input, and pushes `list(range(a,b+1))` or `list(range(a,b-1,1))` to the stack depending on the size of a and b.
 
 ### `│` difference operator
 
@@ -27,6 +29,10 @@ Right now it only works with lists of numbers. With input `[a,b,c,d,e]`, it crea
 ### `.` reverse multiplication operator
 
 Reverses the order of the two arguments, and sends them to the multiply function. Helpful when you're multiplying numbers with lists, which can either repeat the list or implicitly map to the list depending on multiplication order. Saves a byte compared to `\*` (swap elements and multiply)
+
+### `,` reverse subtraction operator
+
+Same as the reverse multiplication, useful for skipping the swapping of elements. 
 
 ### `▄` lowercase alphabet
 
