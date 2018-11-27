@@ -92,7 +92,10 @@ This is a new function, and it's a work in progress. But if you want rudimentary
 
 #### Example
 
-    $ python3 pre_processor.py test_program.mg; printf "" | python3 math_golf.py test_program.out -e
+This example uses the same code as the ascii triangle example below. 
+
+    $ python3 pre_processor.py test_program.mg; python3 math_golf.py test_program.out -e
+    
     ╒      range(1,n+1)
      ⌂     asterisk character (for challenges where a printable character is needed)
       *    pop a, b : push(a*b)
