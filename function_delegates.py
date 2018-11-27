@@ -158,6 +158,7 @@ two_args = {
 	"§": get_list_or_string_item_or_concatenate_yield,
 	"+": add_yield,
 	"-": subtract_yield,
+	",": reverse_subtract_yield,
 	"*": mult_yield,
 	".": reverse_multiply_yield,
 	"/": divide_yield,

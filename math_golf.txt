@@ -43,7 +43,7 @@ These are all the operations that have been defined so far. It is still very muc
 	) : increment
 		* : pop a, b : push(a*b)
 		+ : pop a, b : push(a+b)
-,
+		, : pop a, b : push(b-a)
 		- : pop a, b : push(a-b)
 		. : pop a, b : push(b*a)
 		/ : pop a, b : push(a/b), split strings

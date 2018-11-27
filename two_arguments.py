@@ -148,6 +148,10 @@ def subtract_yield(a, b, arg):
 	else:
 		raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
 
+def reverse_subtract_yield(a, b, arg):
+	for res in subtract_yield(b, a, arg):
+		yield res
+
 def mult_yield(a, b, arg):
 	if is_num(a) and is_num(b):
 		yield a*b
