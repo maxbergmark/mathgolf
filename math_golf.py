@@ -144,7 +144,11 @@ def evaluate(
 			ret = evaluate(code, stdin, Stack([]), level+1)
 			stack.append(ret.list)
 		elif arg.char == "\\":
-			stack.append(stack.pop(arg.char, -2))
+			b = stack.pop(arg.char)
+			a = stack.pop(arg.char)
+			stack.append(b)
+			stack.append(a)
+			# stack.append(stack.pop(arg.char, -2))
 		elif arg.char == "]":
 			if level > 0:
 				return stack
