@@ -90,6 +90,15 @@ Please don't use this flag on TIO. It won't destroy anything, but it makes your 
 
 This is a new function, and it's a work in progress. But if you want rudimentary explanations for what your code does, you can add the `-e` flag. Then the code is not executed, but instead a markdown explanation is printed to stdout. 
 
+#### Example
+
+    $ python3 pre_processor.py test_program.mg; printf "" | python3 math_golf.py test_program.out -e
+    ╒      range(1,n+1)
+     ⌂     asterisk character (for challenges where a printable character is needed)
+      *    pop a, b : push(a*b)
+       n   newline char, or map array with newlines
+
+
 ## Examples
 
 ### Hello, world!
