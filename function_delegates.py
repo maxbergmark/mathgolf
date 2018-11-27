@@ -179,7 +179,8 @@ two_args = {
 	"÷": is_divisible_yield,
 	"%": modulo_yield,
 	"═": pad_to_equal_length,
-	"╧": contains_yield
+	"╧": contains_yield,
+	"↨": inclusive_range_yield
 }
 loop_handlers = {
 	"↑": while_true_no_pop,

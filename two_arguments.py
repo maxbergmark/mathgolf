@@ -349,3 +349,12 @@ def contains_yield(a, b, arg):
 		yield 1 if str(b) in str(a) else 0
 	else:
 		raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
+
+def inclusive_range_yield(a, b, arg):
+	if is_int(a) and is_int(b):
+		if b < a:
+			yield list(range(b, a+1))
+		else:
+			yield list(range(b, a-1, -1))
+	else:
+		raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
