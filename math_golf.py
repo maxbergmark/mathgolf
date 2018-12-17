@@ -440,11 +440,19 @@ def evaluate(
 				raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
 		elif arg.char == "┼":
-			stack.append(stack[-2])
+			b = stack.pop(arg.char)
+			a = stack.pop(arg.char)
+			stack.append(a)
+			stack.append(b)
+			stack.append(a)
 
 		elif arg.char == "`":
-			stack.append(stack[-2])
-			stack.append(stack[-2])
+			b = stack.pop(arg.char)
+			a = stack.pop(arg.char)
+			stack.append(a)
+			stack.append(b)
+			stack.append(a)
+			stack.append(b)
 
 		elif arg.char == " ":
 			stack.list = [stack.pop(arg.char)]

@@ -21,7 +21,7 @@ These are all the operations that have been defined so far. It is still very muc
 ‼
 	¶ : is_prime(n)
 		§ : get from array
-▬
+		▬ : pop a, b : push(b**a)
 ↨ : pop a, b, loop from a to b (inclusive)
 ↑ : while true without popping
 ↓ : while false without popping
@@ -47,7 +47,7 @@ These are all the operations that have been defined so far. It is still very muc
 		- : pop a, b : push(a-b)
 		. : pop a, b : push(b*a)
 		/ : pop a, b : push(a/b), split strings
-0 : push 0
+0 : push 
 1 : push 1
 2 : push 2
 3 : push 3
@@ -59,9 +59,9 @@ These are all the operations that have been defined so far. It is still very muc
 9 : push 9
 :
 ; : discard TOS
-		< : pop(a, b), push(a<b)
+		< : pop(a, b), push(a<b), slicing for lists/strings
 		= : pop(a, b), push(a==b)
-		> : pop(a, b), push(a>b)
+		> : pop(a, b), push(a>b), slicing for lists/strings
 ? : rot3
 @ : rrot3
 A : push 11
@@ -238,11 +238,11 @@ v : random integer in [-2**31, 2**31-1]
 	∞ : pop a, push 2*a
 φ : golden ratio (1.618...)
 	ε : reduce list with operator
-∩
+	∩ : pop a : push 1/a (implicit map)
 ≡
 	± : absolute value
-		≥ : greater or equal
-		≤ : lesser or equal
+		≥ : greater or equal, slicing for lists/strings
+		≤ : lesser or equal,  slicing for lists/strings
 	⌠ : increment twice
 	⌡ : decrement twice
 		÷ : is divisible
@@ -354,4 +354,5 @@ Dinads:														|i|f|l|s|i|f|l|s|i|f|l|s|i|f|l|s|
 
 
 TODO:
-make @?` work with implicit input
+make ` work with implicit input
+make dictionary fetches work with strings, and have it wrap around (perhaps one more operator for dictionary)

@@ -31,6 +31,7 @@ explanations = {
 "!" : "gamma(n+1)",
 "\"" : "string notation",
 "#" : "pop a, b : push(a**b)",
+"▬" : "pop a, b : push(b**a)",
 "$" : "pop(a), push ord(a) or char(a)",
 "%" : "modulo",
 "'" : "push single character",
@@ -120,6 +121,7 @@ explanations = {
 "~" : "evaluate string, dump array, negate integer",
 "⌂" : "asterisk character (for challenges where a printable character is needed)",
 "Ç" : "inverted filter",
+"ü" : "ceiling with implicit map",
 "â" : "convert to binary",
 "ä" : "convert from binary",
 "à" : "convert to binary string",
@@ -229,6 +231,7 @@ explanations = {
 "⌡" : "decrement twice",
 "÷" : "is divisible",
 "°" : "is perfect square",
+"∩" : "pop a : push 1/a (implicit map)",
 "∙" : "triplicate TOS",
 "·" : "quadruplicate TOS",
 "√" : "pop a : push(sqrt(a)), split string to list",
@@ -240,6 +243,11 @@ explanations = {
 
 def create_explanation(code):
 	l = len(code)
+	print('## Explanation\n')
 	for i, c in enumerate(code):
-		row = (4+i)*" " + c + (l-i+2)*" " + explanations[c]
+		if c in explanations:
+			explained = explanations[c]
+		else:
+			explained = "not implemented yet"
+		row = (4+i)*" " + c + (l-i+2)*" " + explained
 		print(row)

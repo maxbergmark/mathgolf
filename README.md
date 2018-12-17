@@ -4,6 +4,10 @@
 
 With the latest changes, these new operators have been added:
 
+### Auto golfing
+
+I have added a rudimentary script for auto-golfing. It will only work for shorter challenges, up to 3 bytes in practice. You can input test cases, and then run every possible program of a certain length to see if there's a combination of operators which satisfy all test cases. I'll continue working on this, making it more useful. Right now I'd only recommend using it if you know that a short (<5 byte) solution exists, and you want to be sure that no shorter solution exists.  
+
 ### `ü` ceiling operator
 
 This operator works just like expected. It works for all numericals and lists of numericals, where it maps implicitly.
@@ -94,7 +98,7 @@ Please don't use this flag on TIO. It won't destroy anything, but it makes your 
 
 ### Generate code explanation `-e`
 
-This is a new function, and it's a work in progress. But if you want rudimentary explanations for what your code does, you can add the `-e` flag. Then the code is not executed, but instead a markdown explanation is printed to stdout. 
+This is a new function, and it's a work in progress. But if you want rudimentary explanations for what your code does, you can add the `-e` flag. Then the code is not executed, but instead a markdown explanation is printed to stdout. Since this feature is in development, it might not include some of the newer operators. It also doesn't work properly for strings, something that I might fix in the future. 
 
 #### Example
 

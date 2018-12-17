@@ -726,3 +726,11 @@ def get_diff_of_list_yield(a, arg):
 		yield diffs
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+def invert_rational_yield(a, arg):
+	if is_num(a):
+		yield 1/a
+	elif is_list(a):
+		yield [b for n in a for b in invert_rational_yield(n, arg)]
+	else:
+		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
