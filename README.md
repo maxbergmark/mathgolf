@@ -4,6 +4,37 @@
 
 With the latest changes, these new operators have been added:
 
+### `σ` sign operator
+
+The `σ` operator removes leading zeroes for strings and lists, now it works as a sign operator for ints/floats
+
+### `½` and `¼` for strings and lists
+
+For ints and floats, these operator divides the number by 2 or 4. The new addition is:
+
+`½` + string: pushes the even-indexed characters of the string, and then the odd-indexed characters. Useful for interleaving?
+`½` + list: maps the operator across each element in the list
+`¼` + string: discards the second half of the string
+`¼` + list: discards the second half of the list
+
+### `─` flatten now works as intended
+
+Previously, flatten only worked with 2D lists. Now, it works regardless of the depth.
+
+### `!` lowercase operator
+
+`!` is the gamma function operator for ints, floats and lists. Now it also works as a lowercase operator for strings. 
+
+### `‼` apply next two operators to stack separately
+
+This is a new kind of operator. Basically, it pops two commands from the code, and 1-2 items from the stack, and applies the two commands separately to the stack items, and pushes them one after the other. This could be useful if you want to check if a number either contains the number 3, or is divisible by 3. Previously, this was `3╧\3÷` (5 bytes), but now it is `3‼╧÷` (4 bytes). 
+
+### `×` and `Þ`
+
+These aren't new commands, but rather changes to the code page. `Þ` replaces the non-breaking space character, which discards everything but TOS. `×` replaces the NULL character in Code Page 437, giving us the full 256 possible characters for usage. 
+
+## Old news
+
 ### Auto golfing
 
 I have added a rudimentary script for auto-golfing. It will only work for shorter challenges, up to 3 bytes in practice. You can input test cases, and then run every possible program of a certain length to see if there's a combination of operators which satisfy all test cases. I'll continue working on this, making it more useful. Right now I'd only recommend using it if you know that a short (<5 byte) solution exists, and you want to be sure that no shorter solution exists.  

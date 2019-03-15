@@ -140,8 +140,11 @@ def halve_yield(a, arg):
 			yield a//2
 		else:
 			yield a/2
+	elif is_str(a):
+		yield a[::2]
+		yield a[1::2]
 	elif is_list(a):
-		yield [n//2 if is_int(n) else n/2 for n in a]
+		yield [n for b in a for n in halve_yield(a, arg)]
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
@@ -151,8 +154,11 @@ def quarter_yield(a, arg):
 			yield a//4
 		else:
 			yield a/4
+	elif is_str(a):
+		yield a[:len(a)//2]
 	elif is_list(a):
-		yield [n//4 if is_int(n) else n/4 for n in a]
+		yield a[:len(a)//2]
+		# yield [n//4 if is_int(n) else n/4 for n in a]
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
@@ -170,7 +176,7 @@ def split_string_or_int_yield(a, arg):
 	elif is_str(a):
 		yield list(a)
 	elif is_list(a):
-		yield [v for n in a for v in split_string_or_int_yield(n)]
+		yield 2*a
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
@@ -268,9 +274,19 @@ def flatten_or_get_divisors_yield(a, arg):
 	if is_int(a):
 		yield [n for n in range(1, a+1) if a%n == 0]
 	elif is_list(a):
-		yield [n for l in a for n in l]
+		res = [n for b in a for n in flatten_yield(b, arg)]
+		# print(res)
+		yield res
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+
+def flatten_yield(a, arg):
+	# print(a)
+	if is_list(a):
+		for v in [n for b in a for n in flatten_yield(b, arg)]:
+			yield v
+	else:
+		yield a
 
 def get_symmetric_range_yield(a, arg):
 	if is_num(a):
@@ -392,7 +408,11 @@ def get_sum_yield(a, arg):
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
 def remove_leading_zeroes_yield(a, arg):
-	if is_str(a):
+	if is_int(a):
+		yield 0 if a == 0 else a // abs(a)
+	elif is_num(a):
+		yield 0 if a == 0 else a / abs(a)
+	elif is_str(a):
 		yield a.lstrip("0")
 	elif is_list(a):
 		if len(a) > 0 and is_int(a[0]):
@@ -520,14 +540,18 @@ def is_prime_yield(a, arg):
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
-def gamma_yield(n, arg):
-	if is_int(n):
+def gamma_yield(a, arg):
+	if is_int(a):
 		p = 1
-		for i in range(1, n+1):
+		for i in range(1, a+1):
 			p *= i
 		yield p
-	elif is_num(n):
-		yield math.gamma(n+1)
+	elif is_num(a):
+		yield math.gamma(a+1)
+	elif is_str(a):
+		yield a.lower()
+	elif is_list(a):
+		yield [b for n in a for b in gamma_yield(n, arg)]
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 

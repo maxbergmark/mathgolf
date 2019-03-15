@@ -29,16 +29,17 @@ def check_int():
 			print("New best result:", best_code, best_result)
 	# print(print_list(result), end = '\n' if i<len(input_lines)-1 else '')
 
-input_lines = ["10 1", "50 2", "52.22 4", "3.4 0.08", "12.5663 0.9999"]
-output_lines = ["2", "4", "3", "7", "3"]
+input_lines = ["1", "2", "3", "4", "5", "6", "27", "28"]
+output_lines = ["0", "0", "0", "0", "0", "1", "0", "1"]
 # goal = int(input("Desired output: "))
 code_length = int(input("Desired length: "))
 best_result = 0
 best_code = ""
-# forbidden = "opq►◄↕()â bcdt↨v~à!"
-forbidden = "opqtv►◄☼↕àâ Aaw"
+forbidden = "opq►◄↕()â t↨v~à!☺☻♥♦♣♠•◘○◙♂♀♪♫☼►◄↕‼¶§ABCDEFGHIJKLMNOPQRSTUVWXYZÄÅÉæÆôöòûùÿ╢╖╕╣║╗╟╚╔óú{"
+# forbidden = "opqtv►◄☼↕àâ Aaw"
 # forbidden = ""
-# code_page = "abcdes="
+# code_page = "ÿùû_∙·@?'$"
+# code_page = "{îïíìk\\-+,@?xr(╒┐└01"
 code_page_copy = code_page[:]
 timeouts = []
 exceptions = []
@@ -55,6 +56,7 @@ soft, hard = resource.getrlimit(resource.RLIMIT_AS)
 resource.setrlimit(resource.RLIMIT_AS, (1*2**30, 2*2**30))
 t0 = time.time()
 for i, code in enumerate(all_codes):
+	# code = ('{',) + code
 	elapsed = time.time() - t0
 	est = estimate_remaining(elapsed, i+1, total_iters)
 	print("\r\t%6d/%6d: %s %12s" % (i+1, total_iters, ''.join(code), est), end="")
@@ -64,12 +66,13 @@ for i, code in enumerate(all_codes):
 	correct_count = 0
 	for j, line in enumerate(input_lines):
 		signal.signal(signal.SIGVTALRM, signal_handler)
-		signal.setitimer(signal.ITIMER_VIRTUAL, 0.1)
+		signal.setitimer(signal.ITIMER_VIRTUAL, 0.2)
 		stdin = StdIn(line)
 		try:
 			result = evaluate(code_list[:], stdin, Stack([]))
 			res_str = print_list(result)
 			if res_str == output_lines[j]:
+			# if res_str == ''.join(code):
 			# if 0x20 <= ord(code[0]) <= 0x7e and len(res_str) == 1 and res_str != code[0]:
 				correct_count += 1
 		except MemoryError:

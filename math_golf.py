@@ -118,6 +118,38 @@ def evaluate(
 		elif arg.char == "'":
 			stack.append(code.pop().char)
 
+		elif arg.char == "‼":
+			arg_0 = code.pop()
+			arg_1 = code.pop()
+			arg_0_correct = (arg_0.char in one_arg or arg_0.char in two_args)
+			arg_1_correct = (arg_1.char in one_arg or arg_1.char in two_args)
+			should_pop_2 = (arg_0.char in two_args or arg_1.char in two_args)
+			if not (arg_0_correct and arg_1_correct):
+				raise ValueError("%s%s%s is not supported" % (arg.char, arg_0.char, arg_1.char))
+			elif should_pop_2:
+				b = stack.pop(arg.char)
+				a = stack.pop(arg.char, -1, type(b))
+				if arg_0.char in two_args:
+					for val in two_args[arg_0.char](a, b, arg_0):
+						stack.append(val)
+				else:
+					for val in one_arg[arg_0.char](a, arg_0):
+						stack.append(val)
+
+				if arg_1.char in two_args:
+					for val in two_args[arg_1.char](a, b, arg_1):
+						stack.append(val)
+				else:
+					for val in one_arg[arg_1.char](a, arg_1):
+						stack.append(val)
+			else:
+				a = stack.pop(arg.char)
+				for val in one_arg[arg_0.char](a, arg_0):
+					stack.append(val)
+				for val in one_arg[arg_1.char](a, arg_1):
+					stack.append(val)
+
+
 		elif arg.char == "?":
 			c = stack.pop(arg.char)
 			b = stack.pop(arg.char)
@@ -196,7 +228,7 @@ def evaluate(
 			elif is_list(a):
 				[stack.append(n) for n in a]
 			elif is_str(a):
-				str_commands = [code_page.index(c)+1 for c in a]
+				str_commands = [code_page.index(c) for c in a]
 				str_code_list = [Argument(char, c) for char, c in zip(a, str_commands)][::-1]
 				stack.list = evaluate(str_code_list, stdin, stack, level+1).list
 			else:
@@ -454,7 +486,7 @@ def evaluate(
 			stack.append(a)
 			stack.append(b)
 
-		elif arg.char == " ":
+		elif arg.char == "Þ":
 			stack.list = [stack.pop(arg.char)]
 
 		elif arg.char == "╘":
@@ -699,7 +731,7 @@ if __name__ == '__main__':
 
 	code_bytes = open(sys.argv[1], 'rb').read()
 	code = parse_input(code_bytes)
-	commands = [code_page.index(c)+1 for c in code]
+	commands = [code_page.index(c) for c in code]
 	code_list = [Argument(char, c) for char, c in zip(code, commands)][::-1]
 	input_lines = [""] if sys.stdin.isatty() else sys.stdin.read().rstrip("\n").split("\n")
 

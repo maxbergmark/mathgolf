@@ -60,7 +60,7 @@ def do_while_false_pop(stack):
 def decompress(string, compressed):
 	decompressed = ""
 	for i in range(len(string)):
-		letter_idx = code_page.index(string[i])+1
+		letter_idx = code_page.index(string[i])
 		string_idx = (letter_idx >> 4) & 0xf
 		decompressed += compressed[string_idx]
 		string_idx = (letter_idx >> 0) & 0xf
@@ -114,6 +114,6 @@ def for_looping(n):
 		yield i
 
 def get_char(c):
-	return code_page[c-1]
+	return code_page[c]
 def get_ord(c):
-	return code_page.index(c)+1
+	return code_page.index(c)

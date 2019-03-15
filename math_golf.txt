@@ -1,5 +1,6 @@
 These are all the operations that have been defined so far. It is still very much a work in progress.
 
+×
 ☺
 ☻ : push 16
 ♥ : push 32
@@ -18,7 +19,7 @@ These are all the operations that have been defined so far. It is still very muc
 ► : push 1000000
 ◄ : push 10000000
 ↕ : push 100000000
-‼
+‼ : apply next 2 operators to the stack separately
 	¶ : is_prime(n)
 		§ : get from array
 		▬ : pop a, b : push(b**a)
@@ -32,7 +33,7 @@ These are all the operations that have been defined so far. It is still very muc
 ▲ : do while true with pop
 ▼ : do while false with pop
   : space character
-	! : gamma(n+1)
+	! : gamma(n+1), lowercase for strings
 " : string notation
 		# : pop a, b : push(a**b)
 	$ : pop(a), push ord(a) or char(a)
@@ -254,7 +255,7 @@ v : random integer in [-2**31, 2**31-1]
 	ⁿ : pop a : push(a*a*a)
 	² : pop a : push(a*a)
 	■ : cartesian product with itself for lists, next collatz item for numbers
-  : discard everything but TOS
+Þ : discard everything but TOS
 
 
 
@@ -267,7 +268,7 @@ s: string
 Monads:														|i|f|l|s|
 															+-+-+-+-+
 	¶ : is_prime(n)/split string 							|x| |x|x| x
-	! : gamma(n+1)											|x|x|x| | x
+	! : gamma(n+1), lowercase for strings					|x|x|x|x| x
 	( : decrement											|x|x|x| | x
 	) : increment											|x|x|x| | x
 	f : pop a, push fibonacci(a)							|x| |x| | x
@@ -294,7 +295,7 @@ Monads:														|i|f|l|s|
 	½ : pop a : push(a//2 if int else a/2)					|x|x|x| | x
 	¼ : pop a : push(a//4 if int else a/4)					|x|x|x| | x
 	░ : convert to string (implicit map) 					|x|x|x| | x
-	▒ : split to list of chars/digits 						| | |x|x| x
+	▒ : split to list of chars/digits 						|x| |x|x| x
 	┤ : pop from right of string/array						| | |x|x| x
 	╡ : discard from right of string/array					| | |x|x| x
 	┐ : push TOS-1 without popping							|x|x|x|x| x
@@ -313,7 +314,7 @@ Monads:														|i|f|l|s|
 	┌ : convert to inverted boolean 						|x|x|x|x| x
 	▀ : unique elements of string/list 						| | |x|x| x
 	Σ : sum(list), digit sum(int)							|x| |x| | x
-	σ : remove leading zeroes 								| | |x|x| x
+	σ : remove leading zeroes, sign of int/float			| | |x|x| x
 	δ : capitalize string 									| | |x|x| x
 	∞ : pop a, push 2*a 									|x|x|x| | x
 	ε : reduce list with operator 							| | |x| |
@@ -356,3 +357,14 @@ Dinads:														|i|f|l|s|i|f|l|s|i|f|l|s|i|f|l|s|
 TODO:
 make ` work with implicit input
 make dictionary fetches work with strings, and have it wrap around (perhaps one more operator for dictionary)
+equality operators without popping?
+add more flags for different behavior (double math, non-popping, etc)?
+Make loop operators close loops (will only work for while/do-while)
+Restructure input operators, just one to read next input
+
+DONE:
+	implement sign operator
+	make halve/quarter work with strings/lists
+	fix flatten operator to work with deeper nesting
+	lowercase mapping for strings
+	Operator which applies next 2 commands to TOS
