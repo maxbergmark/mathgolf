@@ -144,7 +144,7 @@ def halve_yield(a, arg):
 		yield a[::2]
 		yield a[1::2]
 	elif is_list(a):
-		yield [n for b in a for n in halve_yield(a, arg)]
+		yield [n for b in a for n in halve_yield(b, arg)]
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
