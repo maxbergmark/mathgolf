@@ -303,7 +303,22 @@ data = [
 		["acegbdf", "abcdef", "[0, 0, 1, 1, 2, 2, 3]"],
 	"¼",
 		["'abcdef'", "'abcdefg'", "[1,2,3,4,1,2,3,4]", "[1,2,3,1,2,3,4]"],
-		["abc", "abc", "[1, 2, 3, 4]", "[1, 2, 3]"]
+		["abc", "abc", "[1, 2, 3, 4]", "[1, 2, 3]"],
+	"[1[2]3[4[56]7]8[9]0]─",
+		[""],
+		["[1, 2, 3, 4, 5, 6, 7, 8, 9, 0]"],
+	"!",
+		["'Test'", "'tEsT'", "'t3sT'", "'l0NG3R TEST!'"],
+		["test", "test", "t3st", "l0ng3r test!"],
+	"‼+*]",
+		["3 5", "4 6"],
+		["[8, 15]", "[10, 24]"],
+	"▒",
+		["[1,2,3]", "[5,-1,'test']"],
+		["[1, 2, 3, 1, 2, 3]", "[5, -1, 'test', 5, -1, 'test']"],
+	"\"×Þ\"$_$]", 
+		[""],
+		["[65280, '×Þ']"]
 ]
 
 
@@ -312,7 +327,7 @@ programs = data[::3]
 inputs = data[1::3]
 outputs = data[2::3]
 
-start = len(programs)-5
+start = len(programs)*0
 end = len(programs)
 programs = programs[start:end]
 inputs = inputs[start:end]
