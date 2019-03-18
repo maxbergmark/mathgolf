@@ -33,6 +33,11 @@ This is a new kind of operator. Basically, it pops two commands from the code, a
 
 These aren't new commands, but rather changes to the code page. `Þ` replaces the non-breaking space character, which discards everything but TOS. `×` replaces the NULL character in Code Page 437, giving us the full 256 possible characters for usage. 
 
+### `▒` duplicates lists
+
+The `▒` operator splits strings and lists into a list of digits/chars. Now it works for lists by duplicating them, meaning `[1, 2, 3]▒ => [1, 2, 3, 1, 2, 3]`.
+
+
 ## Old news
 
 ### Auto golfing
