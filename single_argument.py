@@ -748,7 +748,7 @@ def get_diff_of_list_yield(a, arg):
 		for i in range(len(a)-1):
 			diffs.append(a[i+1]-a[i])
 		yield diffs
-	if is_int(a):
+	elif is_int(a):
 		diffs = []
 		for i in range(len(str(a))-1):
 			diffs.append(int(str(a)[i+1])-int(str(a)[i]))

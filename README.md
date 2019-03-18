@@ -37,6 +37,10 @@ These aren't new commands, but rather changes to the code page. `Þ` replaces th
 
 The `▒` operator splits strings and lists into a list of digits/chars. Now it works for lists by duplicating them, meaning `[1, 2, 3]▒ => [1, 2, 3, 1, 2, 3]`.
 
+### `│` for ints
+
+The `│` operator calculates pairwise differences for lists. Now it also works for integers, creating pairwise digit differences. E.g. `12430]y│ => [1, 2, -1, -3]`.
+
 
 ## Old news
 
