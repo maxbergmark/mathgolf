@@ -1,5 +1,16 @@
 from code_page import *
 from check_type import *
+from collections import namedtuple
+
+Argument = namedtuple("Argument", ["char", "code"])
+
+loop_types = set("↑↓→←∟↔▲▼↨")
+block_creators = set("ÄÅÉæÆ{ôöò")
+string_creators = set("ûùÿ╢╖╕╣║╗")
+string_terminators = set("\"«»")
+compressed_letters_0 = "etaoinsrdluczbfp"
+compressed_letters_1 = "gwymvkxjqh ?*#.,"
+
 
 def while_true_no_pop(stack):
 	i = 0
@@ -96,7 +107,8 @@ def create_block(arg, code):
 		c = []
 		temp = [] if not code else code.pop()
 		bracket_counter = 0
-		while (bracket_counter > 0 or temp.char != "}") and code:
+		while bracket_counter > 0 or temp.char != "}" and code:
+			# print(temp)
 			if temp.char == "{":
 				bracket_counter += 1
 			if temp.char == "}":
@@ -104,10 +116,26 @@ def create_block(arg, code):
 			c.append(temp)
 			temp = code.pop()
 		if not code and temp.char != "}":
+			# print("temp:", temp)
 			c.append(temp)
+		# else:
+			# code.append(temp)
 
 		c = c[::-1]
 	return c, code
+
+def find_blocks(code):
+	level = 0
+	for i, arg in enumerate(code[::-1]):
+		if arg.char in block_creators:
+			level += 1
+		elif arg.char in loop_types or arg.char == "}":
+			level -= 1
+	while level < 0:
+		code.append(Argument("{", 0))
+		code.insert(1, Argument("}", 0))
+		level += 1
+	# print(''.join(c.char for c in code[::-1]))
 
 def for_looping(n):
 	for i in range(n):

@@ -4,6 +4,10 @@
 
 With the latest changes, these new operators have been added:
 
+### Better handling of implicit loops
+
+If your entire program consists of one loop, you can now save 1-2 bytes. Previously, you'd write `ö)_3‼╧÷+▲` or `{)_3‼╧÷+}▲`, but now it can be `)_3‼╧÷+▲`. This is a rudimentary implementation, which works by finding the loop type `▲` and inserting `{}` around the rest of the code implicitly before executing the code. If this breaks anything, or if you have suggestions for further improvements, contact me on PPCG.
+
 ### `σ` sign operator
 
 The `σ` operator removes leading zeroes for strings and lists, now it works as a sign operator for ints/floats
@@ -14,8 +18,8 @@ For ints and floats, these operator divides the number by 2 or 4. The new additi
 
 `½` + string: pushes the even-indexed characters of the string, and then the odd-indexed characters. Useful for interleaving?
 `½` + list: maps the operator across each element in the list
-`¼` + string: discards the second half of the string
-`¼` + list: discards the second half of the list
+`¼` + string: discards the second half of the string (keeps the first n//2 elements)
+`¼` + list: discards the second half of the list (keeps the first n//2 elements)
 
 ### `─` flatten now works as intended
 

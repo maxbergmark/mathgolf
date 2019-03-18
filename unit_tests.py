@@ -318,7 +318,10 @@ data = [
 		["[1, 2, 3, 1, 2, 3]", "[5, -1, 'test', 5, -1, 'test']"],
 	"\"×Þ\"$_$]", 
 		[""],
-		["[65280, '×Þ']"]
+		["[65280, '×Þ']"],
+	")_3‼╧÷+▲",
+		["1", "2", "11", "299"],
+		["2", "4", "14", "400"]
 ]
 
 
@@ -328,7 +331,7 @@ inputs = data[1::3]
 outputs = data[2::3]
 
 start = len(programs)*0
-end = len(programs)
+end = len(programs)*1
 programs = programs[start:end]
 inputs = inputs[start:end]
 outputs = outputs[start:end]

@@ -17,7 +17,6 @@ from zero_arguments import *
 from check_type import *
 from function_delegates import *
 
-Argument = namedtuple("Argument", ["char", "code"])
 DEBUG = False
 SLOW = False
 
@@ -30,12 +29,6 @@ loop_limit = 0
 loop_value = None
 loop_level = 0
 
-loop_types = set("↑↓→←∟↔▲▼*↨")
-block_creators = set("ÄÅÉæÆ{ôöò")
-string_creators = set("ûùÿ╢╖╕╣║╗")
-string_terminators = set("\"«»")
-compressed_letters_0 = "etaoinsrdluczbfp"
-compressed_letters_1 = "gwymvkxjqh ?*#.,"
 
 def evaluate(
 	code,
@@ -50,6 +43,9 @@ def evaluate(
 	global loop_limit
 	global loop_value
 	global loop_level
+
+	if level == 0:
+		find_blocks(code)
 
 	while code:
 		arg = code.pop()
@@ -252,12 +248,12 @@ def evaluate(
 
 		elif arg.char in block_creators:
 			c, code = create_block(arg, code)
-			# print(c, code)
+			# print("block:", ''.join(i.char for i in c[::-1]), code)
 			loop_type = code.pop() if code else Argument("*", 0)
-			if loop_type.char not in loop_types:
+			if loop_type.char not in loop_types and loop_type.char != "*":
 				code.append(loop_type)
 				loop_type = Argument("*", 0)
-			if loop_type.char in loop_types:
+			if loop_type.char in loop_types or loop_type.char == "*":
 				if loop_type.char == "*":
 					limit = stack.pop(arg.char)
 					if is_int(limit):
