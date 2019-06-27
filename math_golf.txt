@@ -361,6 +361,7 @@ equality operators without popping?
 add more flags for different behavior (double math, non-popping, etc)?
 Make loop operators close loops (will only work for while/do-while)
 Restructure input operators, just one to read next input
+transpose operator for 2D lists and lists of strings/2D strings
 
 DONE:
 	implement sign operator
