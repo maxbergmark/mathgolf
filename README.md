@@ -4,6 +4,14 @@
 
 With the latest changes, these new operators have been added:
 
+### Implicit popping after loops bug fix
+
+Previously, the loop counter would be implicitly popped after the completion of a loop block. That has been fixed, and now the input is popped implicitly instead.
+
+### Subtraction for strings
+
+Just like the subtraction operator works for pairs of lists, it now works for pairs of strings, or combinations of strings and lists of characters. As and example, `"abcde""def"-` returns `abc`, all the characters of the first string that are not in the second. You could also do `['a'b'c'd'e]"abc"-`, which returns `['d', 'e']`, or `"abcde"['a'b'c]-`, which returns `'de'`. Reverse subtraction work the very same way, but in opposite order. 
+
 ### Better handling of implicit loops
 
 If your entire program consists of one loop, you can now save 1-2 bytes. Previously, you'd write `ö)_3‼╧÷+▲` or `{)_3‼╧÷+}▲`, but now it can be `)_3‼╧÷+▲`. This is a rudimentary implementation, which works by finding the loop type `▲` and inserting `{}` around the rest of the code implicitly before executing the code. If this breaks anything, or if you have suggestions for further improvements, contact me on PPCG.

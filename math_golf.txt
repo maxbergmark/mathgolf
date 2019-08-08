@@ -355,7 +355,6 @@ Dinads:														|i|f|l|s|i|f|l|s|i|f|l|s|i|f|l|s|
 
 
 TODO:
-make ` work with implicit input
 make dictionary fetches work with strings, and have it wrap around (perhaps one more operator for dictionary)
 equality operators without popping?
 add more flags for different behavior (double math, non-popping, etc)?
@@ -364,6 +363,7 @@ Restructure input operators, just one to read next input
 transpose operator for 2D lists and lists of strings/2D strings
 
 DONE:
+	make ` work with implicit input
 	implement sign operator
 	make halve/quarter work with strings/lists
 	fix flatten operator to work with deeper nesting

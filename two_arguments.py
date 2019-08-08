@@ -145,6 +145,12 @@ def subtract_yield(a, b, arg):
 		yield [n-b for n in a]
 	elif is_list(a) and is_list(b):
 		yield [n for n in a if n not in set(b)]
+	elif is_list(a) and is_str(b):
+		yield [n for n in a if n not in set(b)]
+	elif is_str(a) and is_list(b):
+		yield ''.join([n for n in a if n not in set(b)])
+	elif is_str(a) and is_str(b):
+		yield ''.join([n for n in a if n not in set(b)])
 	else:
 		raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
 

@@ -29,16 +29,16 @@ def check_int():
 			print("New best result:", best_code, best_result)
 	# print(print_list(result), end = '\n' if i<len(input_lines)-1 else '')
 
-input_lines = ["1", "2", "3", "4", "5", "6", "27", "28"]
-output_lines = ["0", "0", "0", "0", "0", "1", "0", "1"]
+input_lines = ["3 1", "6 1", "0 1", "3 3"]
+output_lines = ["6", "720", "1", "3"]
 # goal = int(input("Desired output: "))
 code_length = int(input("Desired length: "))
 best_result = 0
 best_code = ""
-forbidden = "opq►◄↕()â t↨v~à!☺☻♥♦♣♠•◘○◙♂♀♪♫☼►◄↕‼¶§ABCDEFGHIJKLMNOPQRSTUVWXYZÄÅÉæÆôöòûùÿ╢╖╕╣║╗╟╚╔óú{"
+forbidden = "opq►◄↕()â t↨v~à!☺☻♥♦♣♠•◘○◙♂♀♪♫☼►◄↕‼¶§ABCDEFGHIJKLMNOPQRSTUVWXYZÄÅÉæÆôöòûùÿ╢╖╕╣║╗╟╚╔óú{}" + "╒ε*■.r"
 # forbidden = "opqtv►◄☼↕àâ Aaw"
-# forbidden = ""
-# code_page = "ÿùû_∙·@?'$"
+# forbidden = "╒ε*"
+# code_page = "╒x%ª+ε*"
 # code_page = "{îïíìk\\-+,@?xr(╒┐└01"
 code_page_copy = code_page[:]
 timeouts = []
@@ -56,10 +56,10 @@ soft, hard = resource.getrlimit(resource.RLIMIT_AS)
 resource.setrlimit(resource.RLIMIT_AS, (1*2**30, 2*2**30))
 t0 = time.time()
 for i, code in enumerate(all_codes):
-	# code = ('{',) + code
+	code = ('╒',) + code + ('ε', '*')
 	elapsed = time.time() - t0
 	est = estimate_remaining(elapsed, i+1, total_iters)
-	print("\r\t%6d/%6d: %s %12s" % (i+1, total_iters, ''.join(code), est), end="")
+	print("\r\t%6d/%6d: %s %12s" % (i+1, total_iters, ''.join(code), est), end = "")
 
 	commands = [code_page.index(c)+1 for c in code]
 	code_list = [Argument(char, c) for char, c in zip(code, commands)][::-1]
@@ -91,5 +91,5 @@ print('\n'.join(["%s: %s" % s for s in correct]))
 print("Number of correct programs:", len(correct))
 print("Exceptions:", len(exceptions))
 print("Memory errors:", len(memory_errors))
-print("Timeouts:", len(timeouts))
+print("Timeouts:", len(timeouts), timeouts)
 # print(timeouts)

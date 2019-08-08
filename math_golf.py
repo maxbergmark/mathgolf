@@ -209,8 +209,10 @@ def evaluate(
 			else:
 				map_block = [map_arg]
 			loop_level += 1
+			stdin.set_loop_counter(loop_counter, loop_level)
 			mapped = [evaluate(map_block[:], stdin, Stack([n]), level+1) for n in a]
 			loop_level -= 1
+			stdin.set_loop_counter(loop_counter, loop_level)
 			b = [n[1] for n in sorted(enumerate(a), key=lambda v:mapped[v[0]][0])]
 			if is_str(a):
 				stack.append(''.join(b))
@@ -264,6 +266,7 @@ def evaluate(
 							stdin.set_loop_counter(loop_counter, loop_level)
 							stack = evaluate(c[:], stdin, stack, level+1)
 						loop_level -= 1
+						stdin.set_loop_counter(loop_counter, loop_level)
 					elif is_list(limit):
 						loop_limit = len(limit)
 						loop_level += 1
@@ -274,6 +277,7 @@ def evaluate(
 							stack.append(loop_value)
 							stack = evaluate(c[:], stdin, stack, level+1)
 						loop_level -= 1
+						stdin.set_loop_counter(loop_counter, loop_level)
 					elif is_str(limit):
 						loop_limit = len(limit)
 						loop_level += 1
@@ -284,6 +288,7 @@ def evaluate(
 							stack.append(loop_value)
 							stack = evaluate(c[:], stdin, stack, level+1)
 						loop_level -= 1
+						stdin.set_loop_counter(loop_counter, loop_level)
 					else:
 						raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 				elif loop_type.char == "↨":
@@ -298,6 +303,7 @@ def evaluate(
 								stdin.set_loop_counter(loop_counter, loop_level)
 								stack = evaluate(c[:], stdin, stack, level+1)
 							loop_level -= 1
+							stdin.set_loop_counter(loop_counter, loop_level)
 						else:
 							loop_limit = limit_1
 							loop_level += 1
@@ -306,6 +312,7 @@ def evaluate(
 								stdin.set_loop_counter(loop_counter, loop_level)
 								stack = evaluate(c[:], stdin, stack, level+1)
 							loop_level -= 1
+							stdin.set_loop_counter(loop_counter, loop_level)
 					else:
 						raise ValueError("[%s][%s]%s is not supported" % (type(a),type(b),arg.char))
 				else:
@@ -544,6 +551,7 @@ def filter_list_or_string(code, stdin, stack, level, arg):
 			if any(evaluate(c[:], stdin, Stack([n]), level+1)):
 				res.append(n)
 		loop_level -= 1
+		stdin.set_loop_counter(loop_counter, loop_level)
 		stack.append(res)
 
 	elif op.char in block_creators and is_str(a):
@@ -558,6 +566,7 @@ def filter_list_or_string(code, stdin, stack, level, arg):
 			if any(evaluate(c[:], stdin, Stack([n]), level+1)):
 				res.append(n)
 		loop_level -= 1
+		stdin.set_loop_counter(loop_counter, loop_level)
 		stack.append(''.join(res))
 	else:
 		raise ValueError("[%s]%s%s is not supported" % (type(a),arg.char, op.char))
@@ -609,6 +618,7 @@ def inverted_filter_list_or_string(code, stdin, stack, level, arg):
 			if not any(evaluate(c[:], stdin, Stack([n]), level+1)):
 				res.append(n)
 		loop_level -= 1
+		stdin.set_loop_counter(loop_counter, loop_level)
 		stack.append(res)
 
 	elif op.char in block_creators and is_str(a):
@@ -623,6 +633,7 @@ def inverted_filter_list_or_string(code, stdin, stack, level, arg):
 			if not any(evaluate(c[:], stdin, Stack([n]), level+1)):
 				res.append(n)
 		loop_level -= 1
+		stdin.set_loop_counter(loop_counter, loop_level)
 		stack.append(''.join(res))
 	else:
 		raise ValueError("[%s]%s%s is not supported" % (type(a),arg.char, op.char))
@@ -674,6 +685,7 @@ def map_list_or_string(code, stdin, stack, level, arg):
 			for v in evaluate(c[:], stdin, Stack([n]), level+1):
 				res.append(v)
 		loop_level -= 1
+		stdin.set_loop_counter(loop_counter, loop_level)
 		stack.append(res)
 
 	elif op.char in block_creators and is_str(a):
@@ -688,6 +700,7 @@ def map_list_or_string(code, stdin, stack, level, arg):
 			for v in evaluate(c[:], stdin, Stack([n]), level+1):
 				res.append(str(v))
 		loop_level -= 1
+		stdin.set_loop_counter(loop_counter, loop_level)
 		stack.append(''.join(res))
 	else:
 		raise ValueError("[%s]%s%s is not supported" % (type(a),arg.char, op.char))
