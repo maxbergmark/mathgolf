@@ -1,5 +1,10 @@
 # MathGolf
 
+<p align="center">
+	<img src="/icons/mathgolf_small.png" width="30%" />
+</p>
+
+
 ## News
 
 With the latest changes, these new operators have been added:
