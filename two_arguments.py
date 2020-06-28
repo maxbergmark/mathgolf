@@ -117,10 +117,10 @@ def zip_yield(a, b, arg):
 def add_yield(a, b, arg):
 	if is_num(a) and is_num(b):
 		yield a+b
-	# elif is_num(a) and is_list(b):
-		# yield [n+a for n in b]
-	# elif is_list(a) and is_num(b):
-		# yield [n+b for n in a]
+	elif is_num(a) and is_list(b):
+		yield [n+a for n in b]
+	elif is_list(a) and is_num(b):
+		yield [n+b for n in a]
 	elif is_list(a) and is_list(b):
 		yield a+b
 	elif is_str(a) and is_num(b):
@@ -168,11 +168,18 @@ def mult_yield(a, b, arg):
 	elif is_num(a) and is_list(b):
 		yield a*b
 	elif is_list(a) and is_num(b):
-		yield [n*b for n in a]
+		yield [n2 for n in a for n2 in mult_yield(n, b, arg)]
 	elif is_list(a) and is_str(b):
-		yield [n*b for n in a]
+		yield [n2 for n in a for n2 in mult_yield(n, b, arg)]
 	elif is_list(a) and is_list(b):
 		yield [list(n) for n in itertools.product(a, b)]
+	elif is_str(a) and is_list(b):
+		if all(isinstance(item, str) for item in b):
+			yield ''.join([''.join(n) for n in itertools.product(a, b)])
+		else:
+			yield [list(n) for n in itertools.product(a, b)]
+	elif is_str(a) and is_str(b):
+		yield ''.join([''.join(n) for n in itertools.product(a, b)])
 	else:
 		raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
 
@@ -190,9 +197,22 @@ def divide_yield(a, b, arg):
 	elif is_list(a) and is_num(b):
 		yield [n//b if is_int(b) and is_int(n) else n/b for n in a]
 	elif is_list(a) and is_list(b):
-		yield [n2 for n2 in b if n2 not in set([n for n in a if n not in set(b)])]
+		yield [n for n in a if n  in set(b)]
 	elif is_str(a) and is_int(b):
 		yield [a[i*b:(i+1)*b] for i in range(math.ceil(len(a)/b))]
+	elif is_str(a) and is_str(b):
+		yield a.split(b)
+	elif is_list(a) and is_str(b):
+		yield [n for n in a if n != b]
+	elif is_str(a) and is_list(b):
+		if all(isinstance(item, str) for item in b):
+			for n in b:
+				a = a.replace(n, "")
+			yield a
+		elif all(isinstance(item, int) for item in b):
+			yield [a[b[i]:b[i+1]] for i in range(len(b)-1)]
+		else:
+			raise ValueError("[%s][%s]%s is only supported for single type string or int arrays" % (type(a), type(b), arg.char))
 	else:
 		raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
 
@@ -255,6 +275,8 @@ def prepend_list_or_string_yield(a, b, arg):
 		yield b + a
 	elif is_int(a) and is_int(b):
 		yield int(str(b)+str(a))
+	elif is_list(a) and is_list(b):
+		yield b + a
 	else:
 		raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
 
@@ -275,6 +297,8 @@ def append_list_or_string_yield(a, b, arg):
 		yield a + b
 	elif is_int(a) and is_int(b):
 		yield int(str(a)+str(b))
+	elif is_list(a) and is_list(b):
+		yield a + b
 	else:
 		raise ValueError("[%s][%s]%s is not supported" % (type(a), type(b), arg.char))
 
@@ -355,6 +379,11 @@ def contains_yield(a, b, arg):
 		yield 1 if b in a else 0
 	elif is_list(b):
 		yield 1 if a in b else 0
+	elif is_str(a) and is_str(b):
+		if len(a) < len(b):
+			yield 1 if a in b else 0
+		else:
+			yield 1 if b in a else 0
 	elif is_str(a):
 		yield 1 if str(b) in a else 0
 	elif is_str(b):

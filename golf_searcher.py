@@ -29,13 +29,17 @@ def check_int():
 			print("New best result:", best_code, best_result)
 	# print(print_list(result), end = '\n' if i<len(input_lines)-1 else '')
 
-input_lines = ["3 1", "6 1", "0 1", "3 3"]
-output_lines = ["6", "720", "1", "3"]
+input_lines = ["7 6 0","5 6 1","8 11 3","1 11 3","2 10 3","11 1 2","6 1 4","12 1 3"]
+output_lines = ["0", "1", "1", "1", "0", "1", "0", "1"]
+# output_lines = list("!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~")
+# input_lines = ["" for _ in output_lines]
+corrects = {}
+
 # goal = int(input("Desired output: "))
 code_length = int(input("Desired length: "))
 best_result = 0
 best_code = ""
-forbidden = "opq►◄↕()â t↨v~à!☺☻♥♦♣♠•◘○◙♂♀♪♫☼►◄↕‼¶§ABCDEFGHIJKLMNOPQRSTUVWXYZÄÅÉæÆôöòûùÿ╢╖╕╣║╗╟╚╔óú{}" + "╒ε*■.r"
+forbidden = "opq►◄↕()â t↨v~à!☺☻♥♦♣♠•◘○◙♂♀♪♫☼►◄↕‼¶§ABCDEFGHIJKLMNOPQRSTUVWXYZÄÅÉæÆôöòûùÿ╢╖╕╣║╗╟╚╔óú{}" + "ε*■.r∟→←▲▼↔"
 # forbidden = "opqtv►◄☼↕àâ Aaw"
 # forbidden = "╒ε*"
 # code_page = "╒x%ª+ε*"
@@ -56,7 +60,7 @@ soft, hard = resource.getrlimit(resource.RLIMIT_AS)
 resource.setrlimit(resource.RLIMIT_AS, (1*2**30, 2*2**30))
 t0 = time.time()
 for i, code in enumerate(all_codes):
-	code = ('╒',) + code + ('ε', '*')
+	code = ('-','±') + code + ('≥',)
 	elapsed = time.time() - t0
 	est = estimate_remaining(elapsed, i+1, total_iters)
 	print("\r\t%6d/%6d: %s %12s" % (i+1, total_iters, ''.join(code), est), end = "")
@@ -72,6 +76,8 @@ for i, code in enumerate(all_codes):
 			result = evaluate(code_list[:], stdin, Stack([]))
 			res_str = print_list(result)
 			if res_str == output_lines[j]:
+				if (output_lines[j] not in code):
+					corrects[output_lines[j]] = ''.join(code)
 			# if res_str == ''.join(code):
 			# if 0x20 <= ord(code[0]) <= 0x7e and len(res_str) == 1 and res_str != code[0]:
 				correct_count += 1
@@ -93,3 +99,4 @@ print("Exceptions:", len(exceptions))
 print("Memory errors:", len(memory_errors))
 print("Timeouts:", len(timeouts), timeouts)
 # print(timeouts)
+print(corrects)

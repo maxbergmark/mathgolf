@@ -290,7 +290,7 @@ def evaluate(
 						loop_level -= 1
 						stdin.set_loop_counter(loop_counter, loop_level)
 					else:
-						raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
+						raise ValueError("[%s]%s is not supported" % (type(a), arg.char))
 				elif loop_type.char == "↨":
 					limit_0 = stack.pop(arg.char)
 					limit_1 = stack.pop(arg.char)
@@ -314,7 +314,7 @@ def evaluate(
 							loop_level -= 1
 							stdin.set_loop_counter(loop_counter, loop_level)
 					else:
-						raise ValueError("[%s][%s]%s is not supported" % (type(a),type(b),arg.char))
+						raise ValueError("[%s][%s]%s is not supported" % (type(limit_0),type(limit_1), arg.char))
 				else:
 					for i in loop_handlers[loop_type.char](stack):
 						loop_counter = i

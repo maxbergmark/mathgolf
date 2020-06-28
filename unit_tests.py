@@ -330,7 +330,13 @@ data = [
 		["de", "['d', 'e']", "de"],
 	"╒môk(É∙Σ+=╠)",
 		["3", "117", "11"],
-		["3", "9", "5"]
+		["3", "9", "5"],
+	"*p/",
+		["'abc' 'def'", "[1 2 3] 'abc'", "['a' 'b' 'c'] 'cde'", "'abc' [1 2 3]", "'cde' ['a' 'b' 'c' 'cde']"],
+		["dadbdceaebecfafbfc\n['def']", "[['a', 1], ['a', 2], ['a', 3], ['b', 1], ['b', 2], ['b', 3], ['c', 1], ['c', 2], ['c', 3]]\n['b', 'c']", "cacbccdadbdceaebec\nde", "['abc', 'abcabc', 'abcabcabc']\n[1, 2, 3]", "['acadae', 'bcbdbe', 'cccdce', 'cccdcedcdddeecedee']\n['a', 'b', 'c']"],
+	"╦",
+		["0", "100", "60000", "123123", "'a'", "'abc'", "[1 2 3 'abc' 'a' 'testtest']"],
+		["the", "et", "Frobisher", "languorous", "see", "revising", "['of', 'and', 'to', 'revising', 'see', 'Groot']"]
 ]
 
 

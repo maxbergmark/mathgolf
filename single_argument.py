@@ -264,9 +264,13 @@ def check_if_0_yield(a, arg):
 
 def get_dictionary_words_yield(a, arg):
 	if is_int(a):
-		yield words[a]
+		yield words[a % len(words)]
+	elif is_str(a):
+		idx = char_to_ord(a)
+		yield words[idx % len(words)]
 	elif is_list(a):
-		yield [words[n] if is_int(n) else n for n in a]
+		yield [v for n in a for v in get_dictionary_words_yield(n, arg)]
+		# yield [words[n] if is_int(n) else n for n in a]
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
@@ -555,20 +559,26 @@ def gamma_yield(a, arg):
 	else:
 		raise ValueError("[%s]%s is not supported" % (type(a),arg.char))
 
+def char_to_ord(a):
+	res = 0
+	for c in a[::-1]:
+		res *= 256
+		res += get_ord(c)
+	return res
+
+def ord_to_char(a):
+	res = ""
+	while a > 0:
+		c = a % 256
+		res += get_char(c)
+		a //= 256
+	return res
+
 def ord_or_char_yield(a, arg):
 	if is_str(a):
-		res = 0
-		for c in a[::-1]:
-			res *= 256
-			res += get_ord(c)
-		yield res
+		yield char_to_ord(a)
 	elif is_int(a):
-		res = ""
-		while a > 0:
-			c = a % 256
-			res += get_char(c)
-			a //= 256
-		yield res
+		yield ord_to_char(a)
 	elif is_list(a):
 		yield [b for n in a for b in ord_or_char_yield(n, arg)]
 	else:

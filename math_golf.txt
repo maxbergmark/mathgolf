@@ -355,7 +355,8 @@ Dinads:														|i|f|l|s|i|f|l|s|i|f|l|s|i|f|l|s|
 
 
 TODO:
-make dictionary fetches work with strings, and have it wrap around (perhaps one more operator for dictionary)
+fix bug with ↨ : pop a, b, loop from a to b (inclusive) (input 2, 6, program ↨)
+loop operators inside strings cause issues
 equality operators without popping?
 add more flags for different behavior (double math, non-popping, etc)?
 Make loop operators close loops (will only work for while/do-while)
@@ -363,6 +364,8 @@ Restructure input operators, just one to read next input
 transpose operator for 2D lists and lists of strings/2D strings
 
 DONE:
+	cartesian product for strings
+	make dictionary fetches work with strings, and have it wrap around (perhaps one more operator for dictionary)
 	make ` work with implicit input
 	implement sign operator
 	make halve/quarter work with strings/lists
